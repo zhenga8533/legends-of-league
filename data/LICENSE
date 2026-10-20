@@ -1,0 +1,17 @@
+The contents of this data/ directory are licensed under the Creative Commons
+Attribution-ShareAlike 3.0 Unported License (CC BY-SA 3.0).
+
+  Summary:    https://creativecommons.org/licenses/by-sa/3.0/
+  Legal code: https://creativecommons.org/licenses/by-sa/3.0/legalcode
+
+Attribution
+-----------
+This dataset is derived from Leaguepedia (https://lol.fandom.com/), whose
+content is licensed under CC BY-SA 3.0. Per-record source references are kept
+in each edition's provenance.json.
+
+If you redistribute or adapt this data, you must credit Leaguepedia and
+Legends of League and release your adaptation under the same license.
+
+Legends of League is a fan project and is not endorsed by or affiliated with
+Riot Games. League of Legends is a trademark of Riot Games, Inc.

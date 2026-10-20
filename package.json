@@ -1,0 +1,31 @@
+{
+  "name": "legends-of-league",
+  "private": true,
+  "type": "module",
+  "packageManager": "pnpm@11.28.6",
+  "engines": {
+    "node": ">=24.11.0"
+  },
+  "scripts": {
+    "dev": "pnpm --filter @lol/web dev",
+    "build": "pnpm -r build",
+    "typecheck": "pnpm -r typecheck",
+    "test": "pnpm -r test",
+    "lint": "eslint .",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "schema:gen": "uv run --project ingest lol-ingest schema export --out packages/schema/json/canonical.schema.json && pnpm --filter @lol/schema generate",
+    "schema:check": "pnpm schema:gen && git diff --exit-code -- packages/schema"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@types/node": "^24.0.0",
+    "eslint": "^10.10.0",
+    "eslint-plugin-astro": "^3.2.1",
+    "globals": "^17.0.0",
+    "prettier": "^3.9.0",
+    "prettier-plugin-astro": "^1.1.0",
+    "typescript": "~6.0.3",
+    "typescript-eslint": "^8.70.0"
+  }
+}

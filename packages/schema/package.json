@@ -1,0 +1,17 @@
+{
+  "name": "@lol/schema",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./canonical.schema.json": "./json/canonical.schema.json"
+  },
+  "scripts": {
+    "generate": "node scripts/generate.mjs",
+    "typecheck": "tsc -p tsconfig.json"
+  },
+  "devDependencies": {
+    "json-schema-to-typescript": "^16.0.0"
+  }
+}
