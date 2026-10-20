@@ -1,0 +1,62 @@
+---
+import "../styles/global.css";
+import { withBase } from "../lib/paths";
+
+interface Props {
+  title: string;
+  description?: string;
+}
+
+const {
+  title,
+  description = "History and simulation of international League of Legends tournaments.",
+} = Astro.props;
+const pageTitle = title === "Legends of League" ? title : `${title} · Legends of League`;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={description} />
+    <link rel="icon" type="image/svg+xml" href={withBase("favicon.svg")} />
+    <title>{pageTitle}</title>
+  </head>
+  <body class="flex min-h-screen flex-col font-sans antialiased">
+    <a
+      href="#main"
+      class="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:rounded focus:bg-surface focus:px-3 focus:py-2"
+    >
+      Skip to content
+    </a>
+    <header class="border-b border-border bg-surface">
+      <nav class="mx-auto flex max-w-6xl items-center px-4 py-3" aria-label="Primary">
+        <a href={withBase("/")} class="text-lg font-semibold tracking-tight">
+          Legends of League
+        </a>
+      </nav>
+    </header>
+    <main id="main" class="mx-auto w-full max-w-6xl flex-1 px-4 py-10">
+      <slot />
+    </main>
+    <footer class="border-t border-border px-4 py-6 text-sm text-muted">
+      <div class="mx-auto max-w-6xl space-y-1">
+        <p>
+          Tournament data from{" "}
+          <a class="underline" href="https://lol.fandom.com/">
+            Leaguepedia
+          </a>
+          , licensed under{" "}
+          <a class="underline" href="https://creativecommons.org/licenses/by-sa/3.0/">
+            CC BY-SA 3.0
+          </a>
+          .
+        </p>
+        <p>
+          Legends of League is a fan project and is not endorsed by or affiliated with Riot Games.
+        </p>
+      </div>
+    </footer>
+  </body>
+</html>

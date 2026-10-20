@@ -1,0 +1,343 @@
+{
+  "$defs": {
+    "DateRange": {
+      "additionalProperties": false,
+      "description": "Inclusive date range; a missing bound means unknown or still ongoing.",
+      "properties": {
+        "start": {
+          "anyOf": [
+            {
+              "format": "date",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "end": {
+          "anyOf": [
+            {
+              "format": "date",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        }
+      },
+      "title": "DateRange",
+      "type": "object"
+    },
+    "ExternalRef": {
+      "additionalProperties": false,
+      "description": "A provider's identifier for a canonical record, e.g. a Leaguepedia OverviewPage.",
+      "properties": {
+        "provider": {
+          "enum": [
+            "leaguepedia",
+            "lolesports"
+          ],
+          "type": "string"
+        },
+        "key": {
+          "description": "Provider field the value comes from, e.g. 'OverviewPage'.",
+          "type": "string"
+        },
+        "value": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "provider",
+        "key",
+        "value"
+      ],
+      "title": "ExternalRef",
+      "type": "object"
+    },
+    "OrgLink": {
+      "additionalProperties": false,
+      "description": "Relationship to another organization, e.g. KSV acquiring Samsung Galaxy's spot.",
+      "properties": {
+        "org": {
+          "pattern": "^org:[a-z0-9]+(?:-[a-z0-9]+)*$",
+          "type": "string"
+        },
+        "relation": {
+          "enum": [
+            "acquisition",
+            "merger",
+            "spin-off"
+          ],
+          "type": "string"
+        },
+        "date": {
+          "anyOf": [
+            {
+              "format": "date",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "note": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        }
+      },
+      "required": [
+        "org",
+        "relation"
+      ],
+      "title": "OrgLink",
+      "type": "object"
+    },
+    "Organization": {
+      "additionalProperties": false,
+      "description": "The persistent organization behind one or more team identities.",
+      "properties": {
+        "id": {
+          "pattern": "^org:[a-z0-9]+(?:-[a-z0-9]+)*$",
+          "type": "string"
+        },
+        "name": {
+          "description": "Canonical display name; historical names live on TeamIdentity.",
+          "type": "string"
+        },
+        "lineage": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/OrgLink"
+          },
+          "type": "array"
+        },
+        "externalRefs": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/ExternalRef"
+          },
+          "type": "array"
+        }
+      },
+      "required": [
+        "id",
+        "name"
+      ],
+      "title": "Organization",
+      "type": "object"
+    },
+    "Player": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "pattern": "^player:[a-z0-9]+(?:-[a-z0-9]+)*$",
+          "type": "string"
+        },
+        "handles": {
+          "items": {
+            "$ref": "#/$defs/PlayerHandle"
+          },
+          "minItems": 1,
+          "type": "array"
+        },
+        "realName": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "country": {
+          "anyOf": [
+            {
+              "pattern": "^[A-Z]{2}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "ISO 3166-1 alpha-2."
+        },
+        "externalRefs": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/ExternalRef"
+          },
+          "type": "array"
+        }
+      },
+      "required": [
+        "id",
+        "handles"
+      ],
+      "title": "Player",
+      "type": "object"
+    },
+    "PlayerHandle": {
+      "additionalProperties": false,
+      "properties": {
+        "handle": {
+          "type": "string"
+        },
+        "active": {
+          "$ref": "#/$defs/DateRange"
+        }
+      },
+      "required": [
+        "handle",
+        "active"
+      ],
+      "title": "PlayerHandle",
+      "type": "object"
+    },
+    "Region": {
+      "additionalProperties": false,
+      "description": "A competitive region during one era. Splits and merges (e.g. NA + BR + LAT into LTA)\nare modelled as separate regions linked by predecessors/successors, so historical\nrecords keep pointing at the region that existed at the time.",
+      "properties": {
+        "id": {
+          "pattern": "^region:[a-z0-9]+(?:-[a-z0-9]+)*$",
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "abbreviation": {
+          "type": "string"
+        },
+        "active": {
+          "$ref": "#/$defs/DateRange"
+        },
+        "predecessors": {
+          "default": [],
+          "items": {
+            "pattern": "^region:[a-z0-9]+(?:-[a-z0-9]+)*$",
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "successors": {
+          "default": [],
+          "items": {
+            "pattern": "^region:[a-z0-9]+(?:-[a-z0-9]+)*$",
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "externalRefs": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/ExternalRef"
+          },
+          "type": "array"
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "abbreviation",
+        "active"
+      ],
+      "title": "Region",
+      "type": "object"
+    },
+    "TeamIdentity": {
+      "additionalProperties": false,
+      "description": "How an organization appeared over a period: name, tag and region (SKT T1 -> T1).",
+      "properties": {
+        "id": {
+          "pattern": "^team:[a-z0-9]+(?:-[a-z0-9]+)*$",
+          "type": "string"
+        },
+        "org": {
+          "pattern": "^org:[a-z0-9]+(?:-[a-z0-9]+)*$",
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "shortName": {
+          "type": "string"
+        },
+        "region": {
+          "pattern": "^region:[a-z0-9]+(?:-[a-z0-9]+)*$",
+          "type": "string"
+        },
+        "active": {
+          "$ref": "#/$defs/DateRange"
+        },
+        "externalRefs": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/ExternalRef"
+          },
+          "type": "array"
+        }
+      },
+      "required": [
+        "id",
+        "org",
+        "name",
+        "shortName",
+        "region",
+        "active"
+      ],
+      "title": "TeamIdentity",
+      "type": "object"
+    },
+    "Tournament": {
+      "additionalProperties": false,
+      "description": "A tournament series such as Worlds; individual years are editions.",
+      "properties": {
+        "id": {
+          "pattern": "^tour:[a-z0-9]+(?:-[a-z0-9]+)*$",
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "shortName": {
+          "type": "string"
+        },
+        "active": {
+          "$ref": "#/$defs/DateRange"
+        },
+        "externalRefs": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/ExternalRef"
+          },
+          "type": "array"
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "shortName",
+        "active"
+      ],
+      "title": "Tournament",
+      "type": "object"
+    }
+  },
+  "title": "LegendsOfLeagueCanonical"
+}

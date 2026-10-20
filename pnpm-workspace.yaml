@@ -1,0 +1,6 @@
+packages:
+  - apps/*
+  - packages/*
+
+# Supply-chain guard: don't resolve package versions published less than 7 days ago.
+minimumReleaseAge: 10080
