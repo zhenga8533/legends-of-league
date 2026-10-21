@@ -1,0 +1,107 @@
+{
+  "run": "worlds-2018-20261021T175014Z",
+  "at": "2026-10-21T17:50:14.272381+00:00",
+  "operation": "import",
+  "force": false,
+  "summary": {
+    "edition": "worlds-2018",
+    "operation": "import",
+    "provider": "leaguepedia",
+    "snapshotSha256": "9945f4b345f72baa62999a1674d6dea7ad0c680aabff10ef01c3df0dd6bba99c",
+    "filesChanged": true,
+    "counts": {
+      "edition": {
+        "added": 1
+      },
+      "series": {
+        "added": 88
+      },
+      "game": {
+        "added": 119
+      },
+      "stats": {
+        "added": 1190
+      },
+      "roster": {
+        "added": 155
+      },
+      "placement": {
+        "added": 24
+      }
+    },
+    "unchanged": 0,
+    "blocked": [],
+    "errors": [],
+    "warnings": 0,
+    "gaps": 0,
+    "newEntities": [
+      "org:afreeca-freecs",
+      "org:g-rex",
+      "org:infinity",
+      "org:mad-team",
+      "org:phong-vu-buffalo",
+      "org:team-vitality",
+      "player:anda",
+      "player:aphromoo",
+      "player:arce",
+      "player:attila",
+      "player:baolan",
+      "player:baybay",
+      "player:benny-lien-hsiu-chi",
+      "player:biopanther",
+      "player:breeze",
+      "player:cabochard",
+      "player:candy-kim-seung-ju",
+      "player:ceros",
+      "player:chainarin",
+      "player:comet",
+      "player:cotopaco",
+      "player:duke-lee-ho-seong",
+      "player:empt2y",
+      "player:haro",
+      "player:hiro-lee-woo-suk",
+      "player:hjarnan",
+      "player:jactroll",
+      "player:jankos",
+      "player:jiizuke",
+      "player:k",
+      "player:kikis",
+      "player:kongyue",
+      "player:kramer",
+      "player:kuro",
+      "player:liang",
+      "player:meliodas-hoang-tien-nhat",
+      "player:niksar",
+      "player:ning",
+      "player:noex",
+      "player:pk",
+      "player:pr0lly",
+      "player:ray",
+      "player:relic",
+      "player:renyu",
+      "player:rikara",
+      "player:smeb",
+      "player:solid-diego-vallejo",
+      "player:soren-carlos-ibarra",
+      "player:spirit",
+      "player:ssumday",
+      "player:stitch",
+      "player:tusin",
+      "player:ucal",
+      "player:udysof",
+      "player:vivid",
+      "player:wadid",
+      "player:wunder",
+      "player:xuhao",
+      "player:yamatocannon",
+      "player:zeros",
+      "player:zeyzal",
+      "team:afreeca-freecs",
+      "team:g-rex",
+      "team:infinity",
+      "team:mad-team",
+      "team:phong-vu-buffalo",
+      "team:team-vitality"
+    ]
+  }
+}

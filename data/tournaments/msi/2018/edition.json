@@ -1,0 +1,108 @@
+{
+  "id": "ed:msi-2018",
+  "tournament": "tour:msi",
+  "year": 2018,
+  "name": "2018 Mid-Season Invitational",
+  "status": "completed",
+  "dates": {
+    "start": "2018-05-03",
+    "end": "2018-05-20"
+  },
+  "stages": [
+    {
+      "id": "play-in",
+      "name": "Play-In Groups"
+    },
+    {
+      "id": "play-in-knockout",
+      "name": "Play-In Knockout"
+    },
+    {
+      "id": "groups",
+      "name": "Group Stage"
+    },
+    {
+      "id": "knockout",
+      "name": "Knockout Stage"
+    }
+  ],
+  "participants": [
+    {
+      "team": "team:ascension-gaming",
+      "region": "region:sea",
+      "entryStage": "play-in"
+    },
+    {
+      "team": "team:dire-wolves",
+      "region": "region:opl",
+      "entryStage": "play-in"
+    },
+    {
+      "team": "team:evos-esports",
+      "region": "region:vcs",
+      "entryStage": "play-in-knockout"
+    },
+    {
+      "team": "team:flash-wolves",
+      "region": "region:lms",
+      "entryStage": "play-in-knockout"
+    },
+    {
+      "team": "team:fnatic",
+      "region": "region:eu-lcs",
+      "entryStage": "groups"
+    },
+    {
+      "team": "team:gambit-esports",
+      "region": "region:lcl",
+      "entryStage": "play-in"
+    },
+    {
+      "team": "team:kabum-esports",
+      "region": "region:cblol",
+      "entryStage": "play-in"
+    },
+    {
+      "team": "team:kaos-latin-gamers",
+      "region": "region:cls",
+      "entryStage": "play-in"
+    },
+    {
+      "team": "team:kingzone-dragonx",
+      "region": "region:lck",
+      "entryStage": "groups"
+    },
+    {
+      "team": "team:pentagram",
+      "region": "region:ljl",
+      "entryStage": "play-in"
+    },
+    {
+      "team": "team:rainbow7",
+      "region": "region:lln",
+      "entryStage": "play-in"
+    },
+    {
+      "team": "team:royal-never-give-up",
+      "region": "region:lpl",
+      "entryStage": "groups"
+    },
+    {
+      "team": "team:supermassive-esports",
+      "region": "region:tcl",
+      "entryStage": "play-in"
+    },
+    {
+      "team": "team:team-liquid",
+      "region": "region:lcs",
+      "entryStage": "groups"
+    }
+  ],
+  "externalRefs": [
+    {
+      "provider": "leaguepedia",
+      "key": "OverviewPage",
+      "value": "2018 Mid-Season Invitational"
+    }
+  ]
+}

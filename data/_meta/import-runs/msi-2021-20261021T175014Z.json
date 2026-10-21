@@ -1,0 +1,63 @@
+{
+  "run": "msi-2021-20261021T175014Z",
+  "at": "2026-10-21T17:50:14.272381+00:00",
+  "operation": "import",
+  "force": false,
+  "summary": {
+    "edition": "msi-2021",
+    "operation": "import",
+    "provider": "leaguepedia",
+    "snapshotSha256": "0e2f04792d9eaba7900944a4392877b90b7612c47fde841771a78c0770fb064a",
+    "filesChanged": true,
+    "counts": {
+      "edition": {
+        "added": 1
+      },
+      "series": {
+        "added": 70
+      },
+      "game": {
+        "added": 81
+      },
+      "stats": {
+        "added": 810
+      },
+      "roster": {
+        "added": 77
+      },
+      "placement": {
+        "added": 11
+      }
+    },
+    "unchanged": 0,
+    "blocked": [],
+    "errors": [],
+    "warnings": 0,
+    "gaps": 0,
+    "newEntities": [
+      "org:dwg-kia",
+      "org:istanbul-wildcats",
+      "org:pentanet-gg",
+      "player:chazz",
+      "player:cryin",
+      "player:decoy",
+      "player:dionrray",
+      "player:farfetch",
+      "player:ferret",
+      "player:holyphoenix",
+      "player:janus-ozcan-gurbuz",
+      "player:max-waldo",
+      "player:pabu",
+      "player:poohmandu",
+      "player:praedyth",
+      "player:robogod",
+      "player:serin",
+      "player:starscreen",
+      "player:winged",
+      "player:yang-yang-gwang-pyo",
+      "team:dwg-kia",
+      "team:istanbul-wildcats",
+      "team:pentanet-gg"
+    ]
+  }
+}

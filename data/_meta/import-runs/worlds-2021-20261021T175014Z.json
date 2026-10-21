@@ -1,0 +1,78 @@
+{
+  "run": "worlds-2021-20261021T175014Z",
+  "at": "2026-10-21T17:50:14.272381+00:00",
+  "operation": "import",
+  "force": false,
+  "summary": {
+    "edition": "worlds-2021",
+    "operation": "import",
+    "provider": "leaguepedia",
+    "snapshotSha256": "23a0f70c767e3fb42f42340cba7cb07fd688b418d2376a7239e6a3ce4d8918a9",
+    "filesChanged": true,
+    "counts": {
+      "edition": {
+        "added": 1
+      },
+      "series": {
+        "added": 87
+      },
+      "game": {
+        "added": 121
+      },
+      "stats": {
+        "added": 1210
+      },
+      "roster": {
+        "added": 154
+      },
+      "placement": {
+        "added": 22
+      }
+    },
+    "unchanged": 0,
+    "blocked": [],
+    "errors": [],
+    "warnings": 0,
+    "gaps": 0,
+    "newEntities": [
+      "org:beyond-gaming",
+      "org:galatasaray-esports",
+      "org:peace",
+      "player:1116",
+      "player:abbedagge",
+      "player:aegis-gabriel-lemos",
+      "player:aladoric",
+      "player:ale",
+      "player:alive",
+      "player:avenger-adriano-perassoli",
+      "player:bean-louis-schmitz",
+      "player:burdol",
+      "player:coach-daniel",
+      "player:coelho",
+      "player:colla",
+      "player:crazy-kim-jae-hee",
+      "player:freeze",
+      "player:grevthar",
+      "player:h4xdefender",
+      "player:husha",
+      "player:icon",
+      "player:iwandy",
+      "player:jiejie",
+      "player:kenzhu",
+      "player:kezman",
+      "player:kino",
+      "player:kold",
+      "player:mdb",
+      "player:mojito",
+      "player:moment",
+      "player:odoamne",
+      "player:sudal",
+      "player:violet-vincent-wong",
+      "player:willer",
+      "player:zergsting",
+      "team:beyond-gaming",
+      "team:galatasaray-esports",
+      "team:peace"
+    ]
+  }
+}

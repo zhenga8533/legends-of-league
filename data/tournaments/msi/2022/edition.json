@@ -1,0 +1,89 @@
+{
+  "id": "ed:msi-2022",
+  "tournament": "tour:msi",
+  "year": 2022,
+  "name": "2022 Mid-Season Invitational",
+  "status": "completed",
+  "dates": {
+    "start": "2022-05-10",
+    "end": "2022-05-29"
+  },
+  "stages": [
+    {
+      "id": "groups",
+      "name": "Group Stage"
+    },
+    {
+      "id": "rumble",
+      "name": "Rumble Stage"
+    },
+    {
+      "id": "knockout",
+      "name": "Knockout Stage"
+    }
+  ],
+  "participants": [
+    {
+      "team": "team:detonation-focusme",
+      "region": "region:ljl",
+      "entryStage": "groups"
+    },
+    {
+      "team": "team:evil-geniuses",
+      "region": "region:lcs",
+      "entryStage": "groups"
+    },
+    {
+      "team": "team:g2-esports",
+      "region": "region:lec",
+      "entryStage": "groups"
+    },
+    {
+      "team": "team:istanbul-wildcats",
+      "region": "region:tcl",
+      "entryStage": "groups"
+    },
+    {
+      "team": "team:order",
+      "region": "region:lco",
+      "entryStage": "groups"
+    },
+    {
+      "team": "team:psg-talon",
+      "region": "region:pcs",
+      "entryStage": "groups"
+    },
+    {
+      "team": "team:red-canids",
+      "region": "region:cblol",
+      "entryStage": "groups"
+    },
+    {
+      "team": "team:royal-never-give-up",
+      "region": "region:lpl",
+      "entryStage": "groups"
+    },
+    {
+      "team": "team:saigon-buffalo",
+      "region": "region:vcs",
+      "entryStage": "groups"
+    },
+    {
+      "team": "team:t1",
+      "region": "region:lck",
+      "entryStage": "groups"
+    },
+    {
+      "team": "team:team-aze",
+      "region": "region:lla",
+      "entryStage": "groups"
+    }
+  ],
+  "externalRefs": [
+    {
+      "provider": "leaguepedia",
+      "key": "OverviewPage",
+      "value": "2022 Mid-Season Invitational"
+    }
+  ]
+}

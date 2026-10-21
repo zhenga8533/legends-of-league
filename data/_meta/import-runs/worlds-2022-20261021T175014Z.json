@@ -1,0 +1,66 @@
+{
+  "run": "worlds-2022-20261021T175014Z",
+  "at": "2026-10-21T17:50:14.272381+00:00",
+  "operation": "import",
+  "force": false,
+  "summary": {
+    "edition": "worlds-2022",
+    "operation": "import",
+    "provider": "leaguepedia",
+    "snapshotSha256": "f36c55818ada7b156fbfcfb422bc598227b4558cdad30608cd6520e76ab9f024",
+    "filesChanged": true,
+    "counts": {
+      "edition": {
+        "added": 1
+      },
+      "series": {
+        "added": 94
+      },
+      "game": {
+        "added": 127
+      },
+      "stats": {
+        "added": 1270
+      },
+      "roster": {
+        "added": 168
+      },
+      "placement": {
+        "added": 24
+      }
+    },
+    "unchanged": 0,
+    "blocked": [],
+    "errors": [],
+    "warnings": 0,
+    "gaps": 0,
+    "newEntities": [
+      "org:chiefs-esports-club",
+      "player:add",
+      "player:aiden-hiko",
+      "player:atlen",
+      "player:bob-chang-shao-tzu",
+      "player:brance",
+      "player:byg97",
+      "player:comp",
+      "player:gavotto",
+      "player:grell",
+      "player:jackiewind",
+      "player:jelly-son-ho-gyeong",
+      "player:kaori",
+      "player:likai",
+      "player:malrang",
+      "player:minji",
+      "player:mir-park-mi-reu",
+      "player:mni",
+      "player:nick-bobir",
+      "player:nunuzera",
+      "player:reven-seong-sang-hyeon",
+      "player:rhuckz",
+      "player:unf0rgiven",
+      "player:vus5o",
+      "player:wayward",
+      "team:chiefs-esports-club"
+    ]
+  }
+}

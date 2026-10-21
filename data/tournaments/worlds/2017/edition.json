@@ -1,0 +1,158 @@
+{
+  "id": "ed:worlds-2017",
+  "tournament": "tour:worlds",
+  "year": 2017,
+  "name": "2017 World Championship",
+  "status": "completed",
+  "dates": {
+    "start": "2017-09-23",
+    "end": "2017-11-04"
+  },
+  "stages": [
+    {
+      "id": "play-in",
+      "name": "Play-In Groups"
+    },
+    {
+      "id": "play-in-knockout",
+      "name": "Play-In Knockout"
+    },
+    {
+      "id": "groups",
+      "name": "Group Stage"
+    },
+    {
+      "id": "knockout",
+      "name": "Knockout Stage"
+    }
+  ],
+  "participants": [
+    {
+      "team": "team:ahq-esports-club",
+      "region": "region:lms",
+      "entryStage": "groups"
+    },
+    {
+      "team": "team:cloud9",
+      "region": "region:lcs",
+      "entryStage": "play-in"
+    },
+    {
+      "team": "team:dire-wolves",
+      "region": "region:opl",
+      "entryStage": "play-in"
+    },
+    {
+      "team": "team:edward-gaming",
+      "region": "region:lpl",
+      "entryStage": "groups"
+    },
+    {
+      "team": "team:fenerbahce-esports",
+      "region": "region:tcl",
+      "entryStage": "play-in"
+    },
+    {
+      "team": "team:flash-wolves",
+      "region": "region:lms",
+      "entryStage": "groups"
+    },
+    {
+      "team": "team:fnatic",
+      "region": "region:eu-lcs",
+      "entryStage": "play-in"
+    },
+    {
+      "team": "team:g2-esports",
+      "region": "region:eu-lcs",
+      "entryStage": "groups"
+    },
+    {
+      "team": "team:gambit-esports",
+      "region": "region:lcl",
+      "entryStage": "play-in"
+    },
+    {
+      "team": "team:gigabyte-marines",
+      "region": "region:sea",
+      "entryStage": "groups"
+    },
+    {
+      "team": "team:hong-kong-attitude",
+      "region": "region:lms",
+      "entryStage": "play-in"
+    },
+    {
+      "team": "team:immortals",
+      "region": "region:lcs",
+      "entryStage": "groups"
+    },
+    {
+      "team": "team:kaos-latin-gamers",
+      "region": "region:cls",
+      "entryStage": "play-in"
+    },
+    {
+      "team": "team:longzhu-gaming",
+      "region": "region:lck",
+      "entryStage": "groups"
+    },
+    {
+      "team": "team:lyon-gaming",
+      "region": "region:lln",
+      "entryStage": "play-in"
+    },
+    {
+      "team": "team:misfits-gaming",
+      "region": "region:eu-lcs",
+      "entryStage": "groups"
+    },
+    {
+      "team": "team:rampage",
+      "region": "region:ljl",
+      "entryStage": "play-in"
+    },
+    {
+      "team": "team:royal-never-give-up",
+      "region": "region:lpl",
+      "entryStage": "groups"
+    },
+    {
+      "team": "team:samsung-galaxy",
+      "region": "region:lck",
+      "entryStage": "groups"
+    },
+    {
+      "team": "team:sk-telecom-t1",
+      "region": "region:lck",
+      "entryStage": "groups"
+    },
+    {
+      "team": "team:team-one-esports",
+      "region": "region:cblol",
+      "entryStage": "play-in"
+    },
+    {
+      "team": "team:team-we",
+      "region": "region:lpl",
+      "entryStage": "play-in"
+    },
+    {
+      "team": "team:tsm",
+      "region": "region:lcs",
+      "entryStage": "groups"
+    },
+    {
+      "team": "team:young-generation",
+      "region": "region:sea",
+      "entryStage": "play-in"
+    }
+  ],
+  "externalRefs": [
+    {
+      "provider": "leaguepedia",
+      "key": "OverviewPage",
+      "value": "2017 Season World Championship"
+    }
+  ]
+}

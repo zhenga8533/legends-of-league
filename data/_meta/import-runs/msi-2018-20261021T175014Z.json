@@ -1,0 +1,82 @@
+{
+  "run": "msi-2018-20261021T175014Z",
+  "at": "2026-10-21T17:50:14.272381+00:00",
+  "operation": "import",
+  "force": false,
+  "summary": {
+    "edition": "msi-2018",
+    "operation": "import",
+    "provider": "leaguepedia",
+    "snapshotSha256": "6e0df4c73963579e943ab2297630f75a255faec9ff69de9dbe67609fba552d63",
+    "filesChanged": true,
+    "counts": {
+      "edition": {
+        "added": 1
+      },
+      "series": {
+        "added": 61
+      },
+      "game": {
+        "added": 74
+      },
+      "stats": {
+        "added": 740
+      },
+      "roster": {
+        "added": 88
+      },
+      "placement": {
+        "added": 14
+      }
+    },
+    "unchanged": 0,
+    "blocked": [],
+    "errors": [],
+    "warnings": 0,
+    "gaps": 0,
+    "newEntities": [
+      "org:ascension-gaming",
+      "org:evos-esports",
+      "org:kabum-esports",
+      "org:kingzone-dragonx",
+      "org:pentagram",
+      "org:rainbow7",
+      "player:atremains",
+      "player:cabbage",
+      "player:cain",
+      "player:cupcake",
+      "player:g4",
+      "player:gaeng",
+      "player:gbm",
+      "player:hanabi-su-chia-hsiang",
+      "player:heart",
+      "player:intreso",
+      "player:irean",
+      "player:joey",
+      "player:lloyd",
+      "player:lodik",
+      "player:moojin",
+      "player:nate",
+      "player:nuddle",
+      "player:once",
+      "player:paz",
+      "player:ranger",
+      "player:rich-warich-kittiwattanawong",
+      "player:riyev",
+      "player:rockky",
+      "player:ronop",
+      "player:snowflower",
+      "player:triple",
+      "player:violet-ngo-manh-quyen",
+      "player:warzone",
+      "player:yijin",
+      "player:zantins",
+      "team:ascension-gaming",
+      "team:evos-esports",
+      "team:kabum-esports",
+      "team:kingzone-dragonx",
+      "team:pentagram",
+      "team:rainbow7"
+    ]
+  }
+}

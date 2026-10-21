@@ -1,0 +1,107 @@
+{
+  "id": "ed:msi-2019",
+  "tournament": "tour:msi",
+  "year": 2019,
+  "name": "2019 Mid-Season Invitational",
+  "status": "completed",
+  "dates": {
+    "start": "2019-05-01",
+    "end": "2019-05-19"
+  },
+  "stages": [
+    {
+      "id": "play-in",
+      "name": "Play-In Groups"
+    },
+    {
+      "id": "play-in-round-2",
+      "name": "Play-In Round 2"
+    },
+    {
+      "id": "play-in-round-3",
+      "name": "Play-In Round 3"
+    },
+    {
+      "id": "groups",
+      "name": "Group Stage"
+    },
+    {
+      "id": "knockout",
+      "name": "Knockout Stage"
+    }
+  ],
+  "participants": [
+    {
+      "team": "team:bombers",
+      "region": "region:opl",
+      "entryStage": "play-in"
+    },
+    {
+      "team": "team:detonation-focusme",
+      "region": "region:ljl",
+      "entryStage": "play-in"
+    },
+    {
+      "team": "team:fenerbahce-esports",
+      "region": "region:tcl",
+      "entryStage": "play-in"
+    },
+    {
+      "team": "team:flash-wolves",
+      "region": "region:lms",
+      "entryStage": "play-in-round-2"
+    },
+    {
+      "team": "team:g2-esports",
+      "region": "region:lec",
+      "entryStage": "groups"
+    },
+    {
+      "team": "team:intz",
+      "region": "region:cblol",
+      "entryStage": "play-in"
+    },
+    {
+      "team": "team:invictus-gaming",
+      "region": "region:lpl",
+      "entryStage": "groups"
+    },
+    {
+      "team": "team:isurus",
+      "region": "region:lla",
+      "entryStage": "play-in"
+    },
+    {
+      "team": "team:mega",
+      "region": "region:sea",
+      "entryStage": "play-in"
+    },
+    {
+      "team": "team:phong-vu-buffalo",
+      "region": "region:vcs",
+      "entryStage": "play-in"
+    },
+    {
+      "team": "team:sk-telecom-t1",
+      "region": "region:lck",
+      "entryStage": "groups"
+    },
+    {
+      "team": "team:team-liquid",
+      "region": "region:lcs",
+      "entryStage": "play-in-round-2"
+    },
+    {
+      "team": "team:vega-squadron",
+      "region": "region:lcl",
+      "entryStage": "play-in"
+    }
+  ],
+  "externalRefs": [
+    {
+      "provider": "leaguepedia",
+      "key": "OverviewPage",
+      "value": "2019 Mid-Season Invitational"
+    }
+  ]
+}

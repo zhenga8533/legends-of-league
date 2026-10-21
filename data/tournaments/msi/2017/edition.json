@@ -1,0 +1,107 @@
+{
+  "id": "ed:msi-2017",
+  "tournament": "tour:msi",
+  "year": 2017,
+  "name": "2017 Mid-Season Invitational",
+  "status": "completed",
+  "dates": {
+    "start": "2017-04-28",
+    "end": "2017-05-21"
+  },
+  "stages": [
+    {
+      "id": "play-in",
+      "name": "Play-In Groups"
+    },
+    {
+      "id": "play-in-round-2",
+      "name": "Play-In Round 2"
+    },
+    {
+      "id": "play-in-round-3",
+      "name": "Play-In Round 3"
+    },
+    {
+      "id": "groups",
+      "name": "Group Stage"
+    },
+    {
+      "id": "knockout",
+      "name": "Knockout Stage"
+    }
+  ],
+  "participants": [
+    {
+      "team": "team:dire-wolves",
+      "region": "region:opl",
+      "entryStage": "play-in"
+    },
+    {
+      "team": "team:flash-wolves",
+      "region": "region:lms",
+      "entryStage": "play-in-round-2"
+    },
+    {
+      "team": "team:g2-esports",
+      "region": "region:eu-lcs",
+      "entryStage": "groups"
+    },
+    {
+      "team": "team:gigabyte-marines",
+      "region": "region:sea",
+      "entryStage": "play-in"
+    },
+    {
+      "team": "team:isurus",
+      "region": "region:cls",
+      "entryStage": "play-in"
+    },
+    {
+      "team": "team:lyon-gaming",
+      "region": "region:lln",
+      "entryStage": "play-in"
+    },
+    {
+      "team": "team:rampage",
+      "region": "region:ljl",
+      "entryStage": "play-in"
+    },
+    {
+      "team": "team:red-canids",
+      "region": "region:cblol",
+      "entryStage": "play-in"
+    },
+    {
+      "team": "team:sk-telecom-t1",
+      "region": "region:lck",
+      "entryStage": "groups"
+    },
+    {
+      "team": "team:supermassive-esports",
+      "region": "region:tcl",
+      "entryStage": "play-in"
+    },
+    {
+      "team": "team:team-we",
+      "region": "region:lpl",
+      "entryStage": "groups"
+    },
+    {
+      "team": "team:tsm",
+      "region": "region:lcs",
+      "entryStage": "play-in-round-2"
+    },
+    {
+      "team": "team:virtus-pro",
+      "region": "region:lcl",
+      "entryStage": "play-in"
+    }
+  ],
+  "externalRefs": [
+    {
+      "provider": "leaguepedia",
+      "key": "OverviewPage",
+      "value": "2017 Mid-Season Invitational"
+    }
+  ]
+}

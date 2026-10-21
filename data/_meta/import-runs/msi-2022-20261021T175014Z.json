@@ -1,0 +1,67 @@
+{
+  "run": "msi-2022-20261021T175014Z",
+  "at": "2026-10-21T17:50:14.272381+00:00",
+  "operation": "import",
+  "force": false,
+  "summary": {
+    "edition": "msi-2022",
+    "operation": "import",
+    "provider": "leaguepedia",
+    "snapshotSha256": "0b82b658686728d6cbb35ff76a354c613a538675cba5e5b5bd14af2c743f51bb",
+    "filesChanged": true,
+    "counts": {
+      "edition": {
+        "added": 1
+      },
+      "series": {
+        "added": 69
+      },
+      "game": {
+        "added": 77
+      },
+      "stats": {
+        "added": 770
+      },
+      "roster": {
+        "added": 73
+      },
+      "placement": {
+        "added": 11
+      }
+    },
+    "unchanged": 0,
+    "blocked": [],
+    "errors": [],
+    "warnings": 3,
+    "gaps": 0,
+    "newEntities": [
+      "org:evil-geniuses",
+      "org:order",
+      "org:saigon-buffalo",
+      "org:team-aze",
+      "player:5kid",
+      "player:bay",
+      "player:corporal",
+      "player:danny-kyle-sakamaki",
+      "player:dimitry",
+      "player:flakked",
+      "player:froggy",
+      "player:hasmed",
+      "player:juhan",
+      "player:kevy",
+      "player:kisee",
+      "player:loki-laughlin-norney",
+      "player:lonely-han-gyu-joon",
+      "player:polt",
+      "player:puma",
+      "player:stray-roberto-guallichico",
+      "player:theqep",
+      "player:turtle-gabriel-peixoto",
+      "player:yaharong",
+      "team:evil-geniuses",
+      "team:order",
+      "team:saigon-buffalo",
+      "team:team-aze"
+    ]
+  }
+}

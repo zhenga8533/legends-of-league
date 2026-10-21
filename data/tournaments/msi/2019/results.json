@@ -1,0 +1,15 @@
+[
+{"team":"team:bombers","placeFrom":10,"placeTo":12,"prizeUsd":11670.0},
+{"team":"team:detonation-focusme","placeFrom":8,"placeTo":9,"prizeUsd":15000.0},
+{"team":"team:fenerbahce-esports","placeFrom":8,"placeTo":9,"prizeUsd":15000.0},
+{"team":"team:flash-wolves","placeFrom":5,"placeTo":5,"prizeUsd":50000.0},
+{"team":"team:g2-esports","placeFrom":1,"placeTo":1,"prizeUsd":400000.0},
+{"team":"team:intz","placeFrom":13,"placeTo":13,"prizeUsd":10000.0},
+{"team":"team:invictus-gaming","placeFrom":3,"placeTo":4,"prizeUsd":100000.0},
+{"team":"team:isurus","placeFrom":10,"placeTo":12,"prizeUsd":11670.0},
+{"team":"team:mega","placeFrom":10,"placeTo":12,"prizeUsd":11670.0},
+{"team":"team:phong-vu-buffalo","placeFrom":6,"placeTo":6,"prizeUsd":50000.0},
+{"team":"team:sk-telecom-t1","placeFrom":3,"placeTo":4,"prizeUsd":100000.0},
+{"team":"team:team-liquid","placeFrom":2,"placeTo":2,"prizeUsd":200000.0},
+{"team":"team:vega-squadron","placeFrom":7,"placeTo":7,"prizeUsd":25000.0}
+]

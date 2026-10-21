@@ -1,0 +1,158 @@
+{
+  "id": "ed:worlds-2019",
+  "tournament": "tour:worlds",
+  "year": 2019,
+  "name": "2019 World Championship",
+  "status": "completed",
+  "dates": {
+    "start": "2019-10-02",
+    "end": "2019-11-10"
+  },
+  "stages": [
+    {
+      "id": "play-in",
+      "name": "Play-In Groups"
+    },
+    {
+      "id": "play-in-knockout",
+      "name": "Play-In Knockout"
+    },
+    {
+      "id": "groups",
+      "name": "Group Stage"
+    },
+    {
+      "id": "knockout",
+      "name": "Knockout Stage"
+    }
+  ],
+  "participants": [
+    {
+      "team": "team:ahq-esports-club",
+      "region": "region:lms",
+      "entryStage": "groups"
+    },
+    {
+      "team": "team:cloud9",
+      "region": "region:lcs",
+      "entryStage": "groups"
+    },
+    {
+      "team": "team:clutch-gaming",
+      "region": "region:lcs",
+      "entryStage": "play-in"
+    },
+    {
+      "team": "team:damwon-gaming",
+      "region": "region:lck",
+      "entryStage": "play-in"
+    },
+    {
+      "team": "team:detonation-focusme",
+      "region": "region:ljl",
+      "entryStage": "play-in"
+    },
+    {
+      "team": "team:flamengo-esports",
+      "region": "region:cblol",
+      "entryStage": "play-in"
+    },
+    {
+      "team": "team:fnatic",
+      "region": "region:lec",
+      "entryStage": "groups"
+    },
+    {
+      "team": "team:funplus-phoenix",
+      "region": "region:lpl",
+      "entryStage": "groups"
+    },
+    {
+      "team": "team:g2-esports",
+      "region": "region:lec",
+      "entryStage": "groups"
+    },
+    {
+      "team": "team:gam-esports",
+      "region": "region:vcs",
+      "entryStage": "groups"
+    },
+    {
+      "team": "team:griffin",
+      "region": "region:lck",
+      "entryStage": "groups"
+    },
+    {
+      "team": "team:hong-kong-attitude",
+      "region": "region:lms",
+      "entryStage": "play-in"
+    },
+    {
+      "team": "team:invictus-gaming",
+      "region": "region:lpl",
+      "entryStage": "groups"
+    },
+    {
+      "team": "team:isurus",
+      "region": "region:lla",
+      "entryStage": "play-in"
+    },
+    {
+      "team": "team:j-team",
+      "region": "region:lms",
+      "entryStage": "groups"
+    },
+    {
+      "team": "team:lowkey-esports-vietnam",
+      "region": "region:vcs",
+      "entryStage": "play-in"
+    },
+    {
+      "team": "team:mammoth",
+      "region": "region:opl",
+      "entryStage": "play-in"
+    },
+    {
+      "team": "team:mega",
+      "region": "region:sea",
+      "entryStage": "play-in"
+    },
+    {
+      "team": "team:royal-never-give-up",
+      "region": "region:lpl",
+      "entryStage": "groups"
+    },
+    {
+      "team": "team:royal-youth",
+      "region": "region:tcl",
+      "entryStage": "play-in"
+    },
+    {
+      "team": "team:sk-telecom-t1",
+      "region": "region:lck",
+      "entryStage": "groups"
+    },
+    {
+      "team": "team:splyce",
+      "region": "region:lec",
+      "entryStage": "play-in"
+    },
+    {
+      "team": "team:team-liquid",
+      "region": "region:lcs",
+      "entryStage": "groups"
+    },
+    {
+      "team": "team:unicorns-of-love-cis",
+      "region": "region:lcl",
+      "entryStage": "play-in"
+    }
+  ],
+  "externalRefs": [
+    {
+      "provider": "leaguepedia",
+      "key": "OverviewPage",
+      "value": "2019 Season World Championship"
+    }
+  ]
+}

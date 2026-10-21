@@ -1,0 +1,89 @@
+{
+  "id": "ed:msi-2021",
+  "tournament": "tour:msi",
+  "year": 2021,
+  "name": "2021 Mid-Season Invitational",
+  "status": "completed",
+  "dates": {
+    "start": "2021-05-06",
+    "end": "2021-05-23"
+  },
+  "stages": [
+    {
+      "id": "groups",
+      "name": "Group Stage"
+    },
+    {
+      "id": "rumble",
+      "name": "Rumble Stage"
+    },
+    {
+      "id": "knockout",
+      "name": "Knockout Stage"
+    }
+  ],
+  "participants": [
+    {
+      "team": "team:cloud9",
+      "region": "region:lcs",
+      "entryStage": "groups"
+    },
+    {
+      "team": "team:detonation-focusme",
+      "region": "region:ljl",
+      "entryStage": "groups"
+    },
+    {
+      "team": "team:dwg-kia",
+      "region": "region:lck",
+      "entryStage": "groups"
+    },
+    {
+      "team": "team:infinity",
+      "region": "region:lla",
+      "entryStage": "groups"
+    },
+    {
+      "team": "team:istanbul-wildcats",
+      "region": "region:tcl",
+      "entryStage": "groups"
+    },
+    {
+      "team": "team:mad-lions",
+      "region": "region:lec",
+      "entryStage": "groups"
+    },
+    {
+      "team": "team:pain-gaming",
+      "region": "region:cblol",
+      "entryStage": "groups"
+    },
+    {
+      "team": "team:pentanet-gg",
+      "region": "region:lco",
+      "entryStage": "groups"
+    },
+    {
+      "team": "team:psg-talon",
+      "region": "region:pcs",
+      "entryStage": "groups"
+    },
+    {
+      "team": "team:royal-never-give-up",
+      "region": "region:lpl",
+      "entryStage": "groups"
+    },
+    {
+      "team": "team:unicorns-of-love-cis",
+      "region": "region:lcl",
+      "entryStage": "groups"
+    }
+  ],
+  "externalRefs": [
+    {
+      "provider": "leaguepedia",
+      "key": "OverviewPage",
+      "value": "2021 Mid-Season Invitational"
+    }
+  ]
+}
