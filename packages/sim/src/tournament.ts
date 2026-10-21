@@ -1,4 +1,4 @@
-import { Context, SimulationError, type SimulationOptions } from "./context";
+import { Context, SimulationError, type SimulationOptions, at } from "./context";
 import { runDoubleElimination, runSingleElimination } from "./formats/elimination";
 import { runGroups } from "./formats/groups";
 import { runGsl } from "./formats/gsl";
@@ -76,11 +76,12 @@ export function simulateTournament(
 
   const placements = new Map<TeamId, [number, number]>();
   for (const rule of input.ruleset.placements) {
-    for (const { team } of stages[rule.stage]?.buckets[rule.bucket] ?? []) {
+    const teams = stages[rule.stage]?.buckets[rule.bucket] ?? [];
+    for (const [team, place] of placeBucket(rule, teams)) {
       if (placements.has(team)) {
         throw new SimulationError(`${team} matches more than one placement rule`);
       }
-      placements.set(team, rule.place);
+      placements.set(team, place);
     }
   }
   const unplaced = input.participants.filter((p) => !placements.has(p.team));
@@ -93,6 +94,40 @@ export function simulateTournament(
     stages,
     placements,
   };
+}
+
+function placeBucket(
+  rule: Ruleset["placements"][number],
+  teams: readonly Entrant[],
+): [TeamId, [number, number]][] {
+  if (rule.split === undefined) return teams.map((e) => [e.team, rule.place]);
+  // Teams in the same tier share consecutive places; better tiers come first.
+  const tierKey = (e: Entrant): [number, number] =>
+    rule.split === "wins"
+      ? [-(e.record?.wins ?? 0), 0]
+      : (e.rank ?? [Number.MAX_SAFE_INTEGER, Number.MAX_SAFE_INTEGER]);
+  const tiers = new Map<string, Entrant[]>();
+  for (const entrant of teams) {
+    const key = tierKey(entrant).join("|");
+    tiers.set(key, [...(tiers.get(key) ?? []), entrant]);
+  }
+  const ordered = [...tiers.values()].sort((a, b) => {
+    const [ka, kb] = [tierKey(at(a, 0)), tierKey(at(b, 0))];
+    return ka[0] - kb[0] || ka[1] - kb[1];
+  });
+  const result: [TeamId, [number, number]][] = [];
+  let next = rule.place[0];
+  for (const tier of ordered) {
+    const place: [number, number] = [next, next + tier.length - 1];
+    for (const entrant of tier) result.push([entrant.team, place]);
+    next += tier.length;
+  }
+  if (next - 1 !== rule.place[1]) {
+    throw new SimulationError(
+      `${rule.stage} ${rule.bucket}: ${teams.length} teams do not fill places ${rule.place.join("-")}`,
+    );
+  }
+  return result;
 }
 
 export function placeLabel([from, to]: readonly [number, number]): string {

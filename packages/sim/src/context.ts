@@ -98,6 +98,18 @@ export class Context {
     return pairs;
   }
 
+  tiebreakerSeeds(stage: string, teams: TeamId[]): TeamId[] {
+    const fixed = this.resolver.tiebreakerSeeds?.({ stage, teams });
+    if (!fixed && this.strict) {
+      throw new SimulationError(`${stage}: no tiebreaker order for ${teams.join(", ")}`);
+    }
+    const seeds = fixed ?? this.rng.shuffle(teams);
+    if (seeds.length !== teams.length || !teams.every((team) => seeds.includes(team))) {
+      throw new SimulationError(`${stage}: tiebreaker order must list exactly the tied teams`);
+    }
+    return seeds;
+  }
+
   groups(request: GroupsRequest, draw: () => TeamId[][]): TeamId[][] {
     const fixed = this.resolver.groups?.(request);
     if (!fixed && this.strict) {

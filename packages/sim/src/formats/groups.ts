@@ -28,13 +28,15 @@ export function runGroups(
   const matches: PlayedMatch[] = [];
   const buckets: StageOutcome["buckets"] = {};
   groups.forEach((members, index) => {
-    const groupEntrants = members.map((team) =>
-      must(
+    const group = letter(index);
+    const groupEntrants = members.map((team): Entrant => ({
+      ...must(
         entrants.find((e) => e.team === team),
         team,
       ),
-    );
-    const label = `Group ${letter(index)}`;
+      group,
+    }));
+    const label = `Group ${group}`;
     const outcome =
       format.format.type === "gsl"
         ? runGsl(format.format, stage, groupEntrants, ctx, label)

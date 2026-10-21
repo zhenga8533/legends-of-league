@@ -144,6 +144,7 @@ describe("round robin standings", () => {
     const format: Extract<Format, { type: "roundRobin" }> = {
       type: "roundRobin",
       legs: 2,
+      legsBySize: {},
       bestOf: 1,
       tiebreakers: [],
       advance: 2,
@@ -231,6 +232,7 @@ describe("standalone series", () => {
         [0, 3],
         [1, 2],
       ],
+      draw: "fixed",
     };
     const outcome = runSeries(
       format,
@@ -251,6 +253,7 @@ describe("standalone series", () => {
       type: "series",
       bestOf: 5,
       pairs: [[0, 1]],
+      draw: "fixed",
     };
     expect(() => runSeries(format, "qualifiers", entrants(teams(3)), context(1))).toThrow(
       SimulationError,

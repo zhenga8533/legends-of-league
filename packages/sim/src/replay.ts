@@ -96,7 +96,44 @@ export class ReplayResolver implements Resolver {
       paired.add(team).add(partner);
       pairs.push([next, next.teams]);
     }
-    return pairs.sort(([a], [b]) => pending.indexOf(a) - pending.indexOf(b)).map(([, p]) => p);
+    const ordered = pairs
+      .sort(([a], [b]) => pending.indexOf(a) - pending.indexOf(b))
+      .map(([s]) => s);
+    // A bracket's first round must be in bracket order (neighbours' winners meet next), which
+    // the schedule order does not always follow; recover it from who met whom afterwards.
+    const bracket = /^(upper-)?round-1$/.test(request.purpose)
+      ? bracketOrder(
+          ordered,
+          pending.filter((s) => !ordered.includes(s)),
+        )
+      : ordered;
+    return bracket.map((s) => s.teams);
+  }
+
+  /**
+   * A tiebreaker bracket's order from the tied teams' remaining series: the first series is
+   * the opening game; with three teams, the team not in it had the bye.
+   */
+  tiebreakerSeeds(request: { stage: string; teams: TeamId[] }): TeamId[] | undefined {
+    const tied = new Set(request.teams);
+    const pending = this.pending(request.stage).filter(
+      (s) => tied.has(s.teams[0]) && tied.has(s.teams[1]),
+    );
+    const openers = request.teams.length === 4 ? pending.slice(0, 2) : pending.slice(0, 1);
+    const seeded = openers.flatMap((s) => s.teams);
+    const byes = request.teams.filter((team) => !seeded.includes(team));
+    const valid =
+      openers.length === (request.teams.length === 4 ? 2 : 1) &&
+      new Set(seeded).size === seeded.length &&
+      byes.length === request.teams.length - seeded.length &&
+      byes.length <= 1;
+    if (!valid) {
+      if (this.options.lenient) return undefined;
+      throw new SimulationError(
+        `${request.stage}: no recorded tiebreaker games between ${request.teams.join(", ")}`,
+      );
+    }
+    return [...byes, ...seeded];
   }
 
   /** Groups are the connected components of who played whom in the stage. */
@@ -126,6 +163,46 @@ export class ReplayResolver implements Resolver {
     }
     return groups;
   }
+}
+
+const winnerOf = (s: ActualSeries): TeamId => s.teams[s.score[0] > s.score[1] ? 0 : 1];
+
+/**
+ * Orders a round's series so that the winners of series 2k and 2k+1 meet in a later series,
+ * recursively. Returns the input order if the later rounds don't pin it down.
+ */
+function bracketOrder(round: ActualSeries[], later: ActualSeries[]): ActualSeries[] {
+  if (round.length <= 1) return round;
+  const meeting = (a: ActualSeries, b: ActualSeries) =>
+    later.find((s) => pairKey(...s.teams) === pairKey(winnerOf(a), winnerOf(b)));
+  const remaining = [...round];
+  const pairs: [ActualSeries, ActualSeries, ActualSeries][] = [];
+  while (remaining.length > 0) {
+    const first = remaining.shift();
+    if (!first) break;
+    // Winners can meet more than once (a semifinal, then a final): neighbours are the ones whose
+    // winners meet earliest.
+    const candidates = remaining
+      .map((other) => ({ other, met: meeting(first, other) }))
+      .filter((c): c is { other: ActualSeries; met: ActualSeries } => c.met !== undefined)
+      .sort((a, b) => (a.met.start ?? "").localeCompare(b.met.start ?? ""));
+    const best = candidates[0];
+    if (!best) return round;
+    remaining.splice(remaining.indexOf(best.other), 1);
+    pairs.push([first, best.other, best.met]);
+  }
+  const next = pairs.map(([, , meetingSeries]) => meetingSeries);
+  const nextOrdered = bracketOrder(
+    next,
+    later.filter((s) => !next.includes(s)),
+  );
+  return nextOrdered.flatMap((series) => {
+    const pair = must(
+      pairs.find(([, , m]) => m === series),
+      "pair",
+    );
+    return [pair[0], pair[1]];
+  });
 }
 
 export interface ReplayResult {

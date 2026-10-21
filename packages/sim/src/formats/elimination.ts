@@ -36,6 +36,7 @@ export function seedBracket(
 ): [TeamId, TeamId][] {
   const teams = entrants.map((e) => e.team);
   if (method === "random") return toPairs(rng.shuffle(teams));
+  if (method === "groupDraw") return groupDraw(entrants, rng);
   if (method === "standard") {
     return toPairs(standardBracket(teams.length).map((seed) => at(teams, seed - 1)));
   }
@@ -61,6 +62,31 @@ export function seedBracket(
     ...others,
   ];
   return ordered;
+}
+
+/**
+ * Group winners (first half of the entrants) against runners-up (second half) from other
+ * groups, with each group's two teams in opposite halves of the bracket, as at Worlds before
+ * the Swiss era. Retries random draws until the constraints hold.
+ */
+function groupDraw(entrants: readonly Entrant[], rng: Rng): [TeamId, TeamId][] {
+  const half = entrants.length / 2;
+  const winners = entrants.slice(0, half);
+  const runnersUp = entrants.slice(half);
+  let pairs: [Entrant, Entrant][] = [];
+  for (let attempt = 0; attempt < 200; attempt++) {
+    const drawn = rng.shuffle(runnersUp);
+    pairs = rng.shuffle(winners).map((w, i): [Entrant, Entrant] => [w, at(drawn, i)]);
+    const sameGroup = pairs.some(([w, r]) => w.group !== undefined && w.group === r.group);
+    const halfOf = (team: TeamId) =>
+      Math.floor(pairs.findIndex((p) => p.some((e) => e.team === team)) / (half / 2));
+    const sameHalf = pairs.some(([w]) => {
+      const mate = runnersUp.find((r) => r.group !== undefined && r.group === w.group);
+      return mate !== undefined && halfOf(mate.team) === halfOf(w.team);
+    });
+    if (!sameGroup && !sameHalf) break;
+  }
+  return pairs.map(([w, r]) => [w.team, r.team]);
 }
 
 function roundName(roundsFromEnd: number): string {

@@ -1,0 +1,148 @@
+{
+  "id": "msi-2017",
+  "name": "Mid-Season Invitational 2017",
+  "editions": ["ed:msi-2017"],
+  "sources": ["https://lol.fandom.com/wiki/2017_Mid-Season_Invitational"],
+  "notes": [
+    "Play-In: two groups of four, double round robin, Bo1; group winners face the two invited teams in Bo5s (round 2); round 2 winners join the group stage and the losers play a final Bo5 (round 3) for the last spot. Group stage: six teams, double round robin, Bo1; the top four advance. Ties spanning 1st/2nd or 4th/5th are played off with Bo1 games, without head-to-head first: at MSI 2017 G2 took 3rd from a three-way tie and only FW and TSM played for 4th, although head-to-head ranked TSM above FW. Knockout: Bo5 semifinals (1st vs 4th, 2nd vs 3rd) and final.",
+    "Formats, series lengths, tiebreaker games and placements are verified by replaying the recorded results.",
+    "Not modelled: the play-in draw rules (seeds, region separation). Forward simulations draw these randomly."
+  ],
+  "stages": [
+    {
+      "id": "play-in",
+      "name": "Play-In Groups",
+      "format": {
+        "type": "groups",
+        "count": 2,
+        "format": {
+          "type": "roundRobin",
+          "legs": 2,
+          "bestOf": 1,
+          "tiebreakers": [],
+          "tiebreakerGames": {
+            "positions": [1]
+          },
+          "advance": 1
+        }
+      },
+      "entrants": [
+        {
+          "entry": true
+        }
+      ]
+    },
+    {
+      "id": "play-in-round-2",
+      "name": "Play-In Round 2",
+      "format": {
+        "type": "series",
+        "bestOf": 5,
+        "pairs": [
+          [0, 2],
+          [1, 3]
+        ],
+        "draw": "halves"
+      },
+      "entrants": [
+        {
+          "entry": true
+        },
+        {
+          "stage": "play-in",
+          "bucket": "qualified"
+        }
+      ]
+    },
+    {
+      "id": "play-in-round-3",
+      "name": "Play-In Round 3",
+      "format": {
+        "type": "series",
+        "bestOf": 5
+      },
+      "entrants": [
+        {
+          "stage": "play-in-round-2",
+          "bucket": "losers"
+        }
+      ]
+    },
+    {
+      "id": "groups",
+      "name": "Group Stage",
+      "format": {
+        "type": "roundRobin",
+        "legs": 2,
+        "bestOf": 1,
+        "tiebreakers": [],
+        "tiebreakerGames": {
+          "positions": [1, 4]
+        },
+        "advance": 4
+      },
+      "entrants": [
+        {
+          "entry": true
+        },
+        {
+          "stage": "play-in-round-2",
+          "bucket": "winners"
+        },
+        {
+          "stage": "play-in-round-3",
+          "bucket": "winners"
+        }
+      ]
+    },
+    {
+      "id": "knockout",
+      "name": "Knockout Stage",
+      "format": {
+        "type": "singleElimination",
+        "bestOf": [5, 5],
+        "seeding": "standard"
+      },
+      "entrants": [
+        {
+          "stage": "groups",
+          "bucket": "qualified"
+        }
+      ]
+    }
+  ],
+  "placements": [
+    {
+      "stage": "knockout",
+      "bucket": "champion",
+      "place": [1, 1]
+    },
+    {
+      "stage": "knockout",
+      "bucket": "eliminated:final",
+      "place": [2, 2]
+    },
+    {
+      "stage": "knockout",
+      "bucket": "eliminated:semifinal",
+      "place": [3, 4]
+    },
+    {
+      "stage": "groups",
+      "bucket": "eliminated",
+      "place": [5, 6],
+      "split": "rank"
+    },
+    {
+      "stage": "play-in-round-3",
+      "bucket": "losers",
+      "place": [7, 7]
+    },
+    {
+      "stage": "play-in",
+      "bucket": "eliminated",
+      "place": [8, 13],
+      "split": "rank"
+    }
+  ]
+}

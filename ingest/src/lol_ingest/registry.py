@@ -19,7 +19,11 @@ class LeaguepediaPage(CanonicalModel):
     page: str
     stage: StageId | None = Field(default=None, description="Stage for every tab on the page.")
     tabs: dict[str, StageId] = Field(
-        default={}, description="Tab-name glob -> stage. The first matching glob wins."
+        default={},
+        description=(
+            "Tab-name glob -> stage. The first matching glob wins. A glob containing '#' is "
+            "matched against 'Tab#N' (N = match number in the tab), for tabs mixing two stages."
+        ),
     )
 
     @model_validator(mode="after")
@@ -28,10 +32,18 @@ class LeaguepediaPage(CanonicalModel):
             raise ValueError(f"{self.page}: set exactly one of 'stage' or 'tabs'")
         return self
 
-    def stage_for_tab(self, tab: str) -> StageId | None:
+    def stage_for_tab(self, tab: str, number: int | None = None) -> StageId | None:
         if self.stage is not None:
             return self.stage
-        return next((stage for glob, stage in self.tabs.items() if fnmatchcase(tab, glob)), None)
+        numbered = f"{tab}#{number}"
+        return next(
+            (
+                stage
+                for glob, stage in self.tabs.items()
+                if fnmatchcase(numbered if "#" in glob else tab, glob)
+            ),
+            None,
+        )
 
 
 class LeaguepediaSource(CanonicalModel):

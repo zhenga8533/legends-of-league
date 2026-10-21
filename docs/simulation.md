@@ -44,6 +44,38 @@ applies its `tiebreakers` after series wins: `headToHead`, `headToHeadGameDiff`,
 `gameWins`. Whenever a tie splits, each smaller group restarts the list. Ties that survive
 every tiebreaker are drawn at random, which is an error in replays.
 
+### Tiebreaker games (2017–2022 groups)
+
+With `tiebreakerGames.positions`, a tie that spans one of those positions (`2` means a tie
+across 2nd/3rd) is played off with Bo1 games. Other ties stay **shared**, and entrants carry a
+`rank` range such as `[3, 4]`. The bracket depends on how many teams are tied:
+
+- **Two teams:** one game.
+- **Three teams:** if the tie's top spot matters, a bye bracket (two play, the winner meets
+  the bye team, and the first loser finishes last). If only the lower cut-off matters, the
+  top seed takes the higher spot and the other two play once.
+- **Four teams:** two games and a final, with the losers sharing the remaining places.
+
+Who gets the bye was decided by game times, which Leaguepedia doesn't record. Replays read it
+from the recorded tiebreaker games, and forward simulations draw it at random.
+`legsBySize` lets a smaller group meet more often (MSI 2021–2022's three-team group played
+each opponent four times).
+
+### Draws and placements
+
+- **`series` with `draw: "halves"`** draws the first half of the entrants against the second
+  half, keeping group mates apart. Example: play-in group winners against the other groups'
+  runners-up.
+- **`singleElimination` with `groupDraw`** puts group winners against other groups'
+  runners-up, with each group's teams in opposite halves.
+- **A placement rule with `split: "rank"`** hands out its range in tiers of finishing
+  position, so tied teams share places (Worlds 2017: 3rd places 9th–11th, a 3rd/4th tie
+  12th–13th, 4th places 14th–16th). **`split: "wins"`** tiers by wins instead, which matches
+  how Leaguepedia placed the MSI 2019 play-in.
+- **Bracket order in replays:** when a replay starts a bracket, it orders the first round by
+  who met whom later, using each winner's earliest later meeting. Schedule order is not always
+  bracket order (Worlds 2017, 2020).
+
 ## Replays: how rulesets are verified
 
 `packages/data/test/replay.test.ts` replays **every imported edition** against its ruleset in
