@@ -1,4 +1,19 @@
 from lol_ingest.models.common import DateRange, ExternalRef
+from lol_ingest.models.edition import (
+    Draft,
+    Edition,
+    Game,
+    Gap,
+    Participant,
+    Placement,
+    PlayerGameStats,
+    Provenance,
+    ProvenanceRecord,
+    RosterEntry,
+    Series,
+    Stage,
+    TeamDraft,
+)
 from lol_ingest.models.entities import (
     Organization,
     OrgLink,
@@ -10,17 +25,43 @@ from lol_ingest.models.entities import (
 )
 
 # Top-level records exported to JSON Schema / TypeScript; nested models come along as $defs.
-CANONICAL_MODELS = (Region, Organization, TeamIdentity, Player, Tournament)
+CANONICAL_MODELS = (
+    Region,
+    Organization,
+    TeamIdentity,
+    Player,
+    Tournament,
+    Edition,
+    Series,
+    Game,
+    PlayerGameStats,
+    RosterEntry,
+    Placement,
+    Provenance,
+)
 
 __all__ = [
     "CANONICAL_MODELS",
     "DateRange",
+    "Draft",
+    "Edition",
     "ExternalRef",
+    "Game",
+    "Gap",
     "OrgLink",
     "Organization",
+    "Participant",
+    "Placement",
     "Player",
+    "PlayerGameStats",
     "PlayerHandle",
+    "Provenance",
+    "ProvenanceRecord",
     "Region",
+    "RosterEntry",
+    "Series",
+    "Stage",
+    "TeamDraft",
     "TeamIdentity",
     "Tournament",
 ]

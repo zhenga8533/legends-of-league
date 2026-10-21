@@ -1,0 +1,5 @@
+[
+{"id":"tour:first-stand","name":"First Stand","shortName":"First Stand","active":{},"externalRefs":[{"provider":"leaguepedia","key":"League","value":"First Stand"}]},
+{"id":"tour:msi","name":"Mid-Season Invitational","shortName":"MSI","active":{},"externalRefs":[{"provider":"leaguepedia","key":"League","value":"Mid-Season Invitational"}]},
+{"id":"tour:worlds","name":"World Championship","shortName":"Worlds","active":{},"externalRefs":[{"provider":"leaguepedia","key":"League","value":"World Championship"}]}
+]

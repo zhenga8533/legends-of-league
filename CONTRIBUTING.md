@@ -21,8 +21,11 @@
 
 - Everything in `data/` is CC BY-SA 3.0. Contribute only data you are allowed to release under
   that license.
-- Never hand-edit provider-derived records. Fix them upstream (on Leaguepedia), or add a reviewed
-  correction in `data/overrides/` with an author and reason.
+- Never hand-edit provider-derived records. Fix them upstream (on Leaguepedia) and re-import.
+  Reviewed corrections in `data/overrides/` are planned for records that can't be fixed upstream.
+- Curated files can be edited by hand: `data/editions.yaml`, `data/entities/regions.json` and
+  `data/entities/tournaments.json`. Organization lineage in `organizations.json` can be too.
+  See [docs/ingestion.md](docs/ingestion.md).
 - Previously verified records must never change silently. PRs that modify or remove them need
   explicit review.
 

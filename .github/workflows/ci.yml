@@ -29,6 +29,8 @@ jobs:
       - run: uv run ruff format --check
       - run: uv run mypy
       - run: uv run pytest
+      - name: Committed data passes validation
+        run: uv run lol-ingest run --op validate
 
   web:
     name: TypeScript (web, packages)

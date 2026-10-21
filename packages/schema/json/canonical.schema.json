@@ -32,6 +32,84 @@
       "title": "DateRange",
       "type": "object"
     },
+    "Draft": {
+      "additionalProperties": false,
+      "properties": {
+        "blue": {
+          "$ref": "#/$defs/TeamDraft"
+        },
+        "red": {
+          "$ref": "#/$defs/TeamDraft"
+        }
+      },
+      "required": [
+        "blue",
+        "red"
+      ],
+      "title": "Draft",
+      "type": "object"
+    },
+    "Edition": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "pattern": "^ed:[a-z0-9]+(?:-[a-z0-9]+)*$",
+          "type": "string"
+        },
+        "tournament": {
+          "pattern": "^tour:[a-z0-9]+(?:-[a-z0-9]+)*$",
+          "type": "string"
+        },
+        "year": {
+          "type": "integer"
+        },
+        "name": {
+          "type": "string"
+        },
+        "status": {
+          "enum": [
+            "upcoming",
+            "live",
+            "completed"
+          ],
+          "type": "string"
+        },
+        "dates": {
+          "$ref": "#/$defs/DateRange"
+        },
+        "stages": {
+          "items": {
+            "$ref": "#/$defs/Stage"
+          },
+          "type": "array"
+        },
+        "participants": {
+          "items": {
+            "$ref": "#/$defs/Participant"
+          },
+          "type": "array"
+        },
+        "externalRefs": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/ExternalRef"
+          },
+          "type": "array"
+        }
+      },
+      "required": [
+        "id",
+        "tournament",
+        "year",
+        "name",
+        "status",
+        "dates",
+        "stages",
+        "participants"
+      ],
+      "title": "Edition",
+      "type": "object"
+    },
     "ExternalRef": {
       "additionalProperties": false,
       "description": "A provider's identifier for a canonical record, e.g. a Leaguepedia OverviewPage.",
@@ -57,6 +135,116 @@
         "value"
       ],
       "title": "ExternalRef",
+      "type": "object"
+    },
+    "Game": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "pattern": "^game:[a-z0-9]+(?:-[a-z0-9]+)*$",
+          "type": "string"
+        },
+        "series": {
+          "pattern": "^ser:[a-z0-9]+(?:-[a-z0-9]+)*$",
+          "type": "string"
+        },
+        "number": {
+          "minimum": 1,
+          "type": "integer"
+        },
+        "blue": {
+          "pattern": "^team:[a-z0-9]+(?:-[a-z0-9]+)*$",
+          "type": "string"
+        },
+        "red": {
+          "pattern": "^team:[a-z0-9]+(?:-[a-z0-9]+)*$",
+          "type": "string"
+        },
+        "winner": {
+          "pattern": "^team:[a-z0-9]+(?:-[a-z0-9]+)*$",
+          "type": "string"
+        },
+        "durationSeconds": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "patch": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "start": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "draft": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Draft"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "externalRefs": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/ExternalRef"
+          },
+          "type": "array"
+        }
+      },
+      "required": [
+        "id",
+        "series",
+        "number",
+        "blue",
+        "red",
+        "winner"
+      ],
+      "title": "Game",
+      "type": "object"
+    },
+    "Gap": {
+      "additionalProperties": false,
+      "description": "Data the edition should have but the provider does not supply.",
+      "properties": {
+        "record": {
+          "type": "string"
+        },
+        "reason": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "record",
+        "reason"
+      ],
+      "title": "Gap",
       "type": "object"
     },
     "OrgLink": {
@@ -140,6 +328,68 @@
       "title": "Organization",
       "type": "object"
     },
+    "Participant": {
+      "additionalProperties": false,
+      "properties": {
+        "team": {
+          "pattern": "^team:[a-z0-9]+(?:-[a-z0-9]+)*$",
+          "type": "string"
+        },
+        "region": {
+          "description": "The team's region at the time of this edition.",
+          "pattern": "^region:[a-z0-9]+(?:-[a-z0-9]+)*$",
+          "type": "string"
+        },
+        "entryStage": {
+          "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$",
+          "type": "string"
+        }
+      },
+      "required": [
+        "team",
+        "region",
+        "entryStage"
+      ],
+      "title": "Participant",
+      "type": "object"
+    },
+    "Placement": {
+      "additionalProperties": false,
+      "properties": {
+        "team": {
+          "pattern": "^team:[a-z0-9]+(?:-[a-z0-9]+)*$",
+          "type": "string"
+        },
+        "placeFrom": {
+          "minimum": 1,
+          "type": "integer"
+        },
+        "placeTo": {
+          "description": "Equal to place_from unless the place is shared.",
+          "minimum": 1,
+          "type": "integer"
+        },
+        "prizeUsd": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        }
+      },
+      "required": [
+        "team",
+        "placeFrom",
+        "placeTo"
+      ],
+      "title": "Placement",
+      "type": "object"
+    },
     "Player": {
       "additionalProperties": false,
       "properties": {
@@ -155,6 +405,17 @@
           "type": "array"
         },
         "realName": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "nativeName": {
           "anyOf": [
             {
               "type": "string"
@@ -193,6 +454,181 @@
       "title": "Player",
       "type": "object"
     },
+    "PlayerGameStats": {
+      "additionalProperties": false,
+      "properties": {
+        "game": {
+          "pattern": "^game:[a-z0-9]+(?:-[a-z0-9]+)*$",
+          "type": "string"
+        },
+        "team": {
+          "pattern": "^team:[a-z0-9]+(?:-[a-z0-9]+)*$",
+          "type": "string"
+        },
+        "player": {
+          "pattern": "^player:[a-z0-9]+(?:-[a-z0-9]+)*$",
+          "type": "string"
+        },
+        "side": {
+          "enum": [
+            "blue",
+            "red"
+          ],
+          "type": "string"
+        },
+        "role": {
+          "enum": [
+            "top",
+            "jungle",
+            "mid",
+            "bot",
+            "support"
+          ],
+          "type": "string"
+        },
+        "champion": {
+          "type": "string"
+        },
+        "kills": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "deaths": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "assists": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "gold": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "cs": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "damageToChampions": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "visionScore": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "summonerSpells": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "items": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "trinket": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "keystone": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "primaryTree": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "secondaryTree": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "runes": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        }
+      },
+      "required": [
+        "game",
+        "team",
+        "player",
+        "side",
+        "role",
+        "champion",
+        "kills",
+        "deaths",
+        "assists"
+      ],
+      "title": "PlayerGameStats",
+      "type": "object"
+    },
     "PlayerHandle": {
       "additionalProperties": false,
       "properties": {
@@ -208,6 +644,72 @@
         "active"
       ],
       "title": "PlayerHandle",
+      "type": "object"
+    },
+    "Provenance": {
+      "additionalProperties": false,
+      "properties": {
+        "gaps": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/Gap"
+          },
+          "type": "array"
+        },
+        "records": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/ProvenanceRecord"
+          },
+          "type": "array"
+        }
+      },
+      "title": "Provenance",
+      "type": "object"
+    },
+    "ProvenanceRecord": {
+      "additionalProperties": false,
+      "properties": {
+        "key": {
+          "description": "Record key, e.g. 'series:ser:worlds-2024-swiss-round-1-01'.",
+          "type": "string"
+        },
+        "provider": {
+          "enum": [
+            "leaguepedia",
+            "lolesports"
+          ],
+          "type": "string"
+        },
+        "ref": {
+          "description": "Provider identifier of the source row(s).",
+          "type": "string"
+        },
+        "hash": {
+          "description": "Truncated SHA-256 of the normalized record.",
+          "type": "string"
+        },
+        "importRun": {
+          "description": "Run that last wrote the record; see data/_meta.",
+          "type": "string"
+        },
+        "status": {
+          "enum": [
+            "verified",
+            "provisional"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "key",
+        "provider",
+        "ref",
+        "hash",
+        "importRun",
+        "status"
+      ],
+      "title": "ProvenanceRecord",
       "type": "object"
     },
     "Region": {
@@ -260,6 +762,223 @@
       "title": "Region",
       "type": "object"
     },
+    "RosterEntry": {
+      "additionalProperties": false,
+      "properties": {
+        "team": {
+          "pattern": "^team:[a-z0-9]+(?:-[a-z0-9]+)*$",
+          "type": "string"
+        },
+        "player": {
+          "pattern": "^player:[a-z0-9]+(?:-[a-z0-9]+)*$",
+          "type": "string"
+        },
+        "role": {
+          "enum": [
+            "top",
+            "jungle",
+            "mid",
+            "bot",
+            "support",
+            "coach"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "team",
+        "player",
+        "role"
+      ],
+      "title": "RosterEntry",
+      "type": "object"
+    },
+    "Series": {
+      "additionalProperties": false,
+      "description": "A match between two teams: one Bo1 game, or a Bo3/Bo5 set of games.",
+      "properties": {
+        "id": {
+          "pattern": "^ser:[a-z0-9]+(?:-[a-z0-9]+)*$",
+          "type": "string"
+        },
+        "stage": {
+          "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$",
+          "type": "string"
+        },
+        "round": {
+          "description": "Round label within the stage, e.g. 'Round 3', 'Finals'.",
+          "type": "string"
+        },
+        "number": {
+          "description": "Order of the series within its round.",
+          "minimum": 1,
+          "type": "integer"
+        },
+        "bestOf": {
+          "maximum": 7,
+          "minimum": 1,
+          "type": "integer"
+        },
+        "teams": {
+          "maxItems": 2,
+          "minItems": 2,
+          "type": "array",
+          "items": [
+            {
+              "pattern": "^team:[a-z0-9]+(?:-[a-z0-9]+)*$",
+              "type": "string"
+            },
+            {
+              "pattern": "^team:[a-z0-9]+(?:-[a-z0-9]+)*$",
+              "type": "string"
+            }
+          ]
+        },
+        "score": {
+          "anyOf": [
+            {
+              "maxItems": 2,
+              "minItems": 2,
+              "type": "array",
+              "items": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "winner": {
+          "anyOf": [
+            {
+              "pattern": "^team:[a-z0-9]+(?:-[a-z0-9]+)*$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "forfeit": {
+          "default": false,
+          "type": "boolean"
+        },
+        "tiebreaker": {
+          "default": false,
+          "type": "boolean"
+        },
+        "start": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "patch": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "mvp": {
+          "anyOf": [
+            {
+              "pattern": "^player:[a-z0-9]+(?:-[a-z0-9]+)*$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "externalRefs": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/ExternalRef"
+          },
+          "type": "array"
+        }
+      },
+      "required": [
+        "id",
+        "stage",
+        "round",
+        "number",
+        "bestOf",
+        "teams"
+      ],
+      "title": "Series",
+      "type": "object"
+    },
+    "Stage": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$",
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "name"
+      ],
+      "title": "Stage",
+      "type": "object"
+    },
+    "TeamDraft": {
+      "additionalProperties": false,
+      "properties": {
+        "bans": {
+          "description": "Champion bans in draft order; null = no ban.",
+          "items": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "type": "array"
+        },
+        "picks": {
+          "description": "Champion picks in draft order.",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        }
+      },
+      "required": [
+        "bans",
+        "picks"
+      ],
+      "title": "TeamDraft",
+      "type": "object"
+    },
     "TeamIdentity": {
       "additionalProperties": false,
       "description": "How an organization appeared over a period: name, tag and region (SKT T1 -> T1).",
@@ -276,7 +995,16 @@
           "type": "string"
         },
         "shortName": {
-          "type": "string"
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Tag, e.g. 'BLG'; unknown for some."
         },
         "region": {
           "pattern": "^region:[a-z0-9]+(?:-[a-z0-9]+)*$",
@@ -297,7 +1025,6 @@
         "id",
         "org",
         "name",
-        "shortName",
         "region",
         "active"
       ],

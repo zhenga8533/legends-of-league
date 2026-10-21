@@ -18,6 +18,11 @@ OrgId = Annotated[str, Field(pattern=_id_pattern("org"))]
 TeamId = Annotated[str, Field(pattern=_id_pattern("team"))]
 PlayerId = Annotated[str, Field(pattern=_id_pattern("player"))]
 TournamentId = Annotated[str, Field(pattern=_id_pattern("tour"))]
+EditionId = Annotated[str, Field(pattern=_id_pattern("ed"))]
+SeriesId = Annotated[str, Field(pattern=_id_pattern("ser"))]
+GameId = Annotated[str, Field(pattern=_id_pattern("game"))]
+# Stages are scoped to their edition, so they are bare slugs ("play-in", "swiss").
+StageId = Annotated[str, Field(pattern=rf"^{_SLUG}$")]
 
 Provider = Literal["leaguepedia", "lolesports"]
 

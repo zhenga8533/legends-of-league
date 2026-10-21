@@ -16,13 +16,26 @@ class _NoFieldTitles(GenerateJsonSchema):
         return False
 
 
+def _draft7_tuples(node: Any) -> Any:
+    # Pydantic emits tuples as 2020-12 `prefixItems`, which json-schema-to-typescript renders
+    # as [unknown, unknown]; the draft-07 `items: [...]` form gives properly typed tuples.
+    if isinstance(node, dict):
+        if "prefixItems" in node:
+            node["items"] = node.pop("prefixItems")
+        return {key: _draft7_tuples(value) for key, value in node.items()}
+    if isinstance(node, list):
+        return [_draft7_tuples(item) for item in node]
+    return node
+
+
 def canonical_json_schema() -> dict[str, Any]:
     _, schema = models_json_schema(
         [(model, "validation") for model in CANONICAL_MODELS],
         title=SCHEMA_TITLE,
         schema_generator=_NoFieldTitles,
     )
-    return schema
+    result: dict[str, Any] = _draft7_tuples(schema)
+    return result
 
 
 def render_schema() -> str:
