@@ -1,0 +1,22 @@
+[
+{"id":"org:100-thieves","name":"100 Thieves","lineage":[],"externalRefs":[{"provider":"leaguepedia","key":"OrganizationPage","value":"100 Thieves (Organization)"}]},
+{"id":"org:bilibili-gaming","name":"Bilibili Gaming","lineage":[],"externalRefs":[]},
+{"id":"org:dplus-kia","name":"Dplus Kia","lineage":[],"externalRefs":[]},
+{"id":"org:flyquest","name":"FlyQuest","lineage":[],"externalRefs":[]},
+{"id":"org:fnatic","name":"Fnatic","lineage":[],"externalRefs":[]},
+{"id":"org:fukuoka-softbank-hawks-gaming","name":"Fukuoka SoftBank HAWKS gaming","lineage":[],"externalRefs":[]},
+{"id":"org:g2-esports","name":"G2 Esports","lineage":[],"externalRefs":[]},
+{"id":"org:gam-esports","name":"GAM Esports","lineage":[],"externalRefs":[]},
+{"id":"org:gen-g","name":"Gen.G","lineage":[],"externalRefs":[]},
+{"id":"org:hanwha-life-esports","name":"Hanwha Life Esports","lineage":[],"externalRefs":[]},
+{"id":"org:lng-esports","name":"LNG Esports","lineage":[],"externalRefs":[]},
+{"id":"org:mad-lions-koi","name":"MAD Lions KOI","lineage":[],"externalRefs":[]},
+{"id":"org:movistar-r7","name":"Movistar R7","lineage":[],"externalRefs":[]},
+{"id":"org:pain-gaming","name":"paiN Gaming","lineage":[],"externalRefs":[]},
+{"id":"org:psg-talon","name":"PSG Talon","lineage":[],"externalRefs":[]},
+{"id":"org:t1","name":"T1","lineage":[],"externalRefs":[{"provider":"leaguepedia","key":"OrganizationPage","value":"T1 (Organization)"}]},
+{"id":"org:team-liquid","name":"Team Liquid","lineage":[],"externalRefs":[{"provider":"leaguepedia","key":"OrganizationPage","value":"Team Liquid (Organization)"}]},
+{"id":"org:top-esports","name":"Top Esports","lineage":[],"externalRefs":[{"provider":"leaguepedia","key":"OrganizationPage","value":"Topsports Gaming (Organization)"}]},
+{"id":"org:vikings-esports","name":"Vikings Esports","lineage":[],"externalRefs":[]},
+{"id":"org:weibo-gaming","name":"Weibo Gaming","lineage":[],"externalRefs":[]}
+]
