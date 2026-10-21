@@ -4,7 +4,7 @@ An archive of every international League of Legends tournament (Worlds, the Mid-
 Invitational and First Stand), plus a simulation engine for replaying history and forecasting
 what comes next.
 
-> **Status:** early development (milestone M1, data ingestion). See the
+> **Status:** early development (milestone M2, simulation engine). See the
 > [implementation plan](docs/plan.md) for the roadmap.
 
 ## Repository layout
@@ -13,6 +13,9 @@ what comes next.
 | ----------------- | --------------------------------------------------------------------- |
 | `apps/web`        | Astro static site, deployed to GitHub Pages                           |
 | `packages/schema` | TypeScript types and JSON Schema generated from the Python models     |
+| `packages/sim`    | Tournament simulation engine (formats, Elo, Monte Carlo, replays)     |
+| `packages/data`   | Loaders for the dataset and rulesets; replay and calibration tests    |
+| `rulesets`        | Tournament format definitions, verified by replaying history          |
 | `ingest`          | Python CLI (`lol-ingest`) that fetches, normalizes and validates data |
 | `data`            | Canonical dataset (CC BY-SA 3.0)                                      |
 | `docs`            | Plan, data model and architecture decision records                    |

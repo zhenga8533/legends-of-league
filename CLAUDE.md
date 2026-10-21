@@ -8,6 +8,10 @@ A static archive and simulator for international LoL tournaments. The plan and r
 - `apps/web`: Astro static site (GitHub Pages). Build links with `withBase()` from
   `src/lib/paths.ts`, because the site is served under a base path.
 - `packages/schema`: generated TS types and JSON Schema. **Never edit by hand.**
+- `packages/sim`: pure TS simulation engine (no DOM, no I/O, seeded `Rng` only). See `docs/simulation.md`.
+- `packages/data`: Node loaders for `data/` and `rulesets/`, plus adapters into engine inputs. Its tests
+  replay every imported edition against its ruleset.
+- `rulesets/*.json`: per-edition tournament formats. Every imported edition needs one, verified by replay.
 - `ingest`: Python (uv) CLI `lol-ingest`. Its Pydantic models in `src/lol_ingest/models/` are the
   schema source of truth.
 - `data`: canonical dataset (CC BY-SA 3.0). Provider-derived records change only through
