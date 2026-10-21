@@ -1,0 +1,55 @@
+{
+  "id": "ed:first-stand-2025",
+  "tournament": "tour:first-stand",
+  "year": 2025,
+  "name": "2025 First Stand",
+  "status": "completed",
+  "dates": {
+    "start": "2025-03-10",
+    "end": "2025-03-16"
+  },
+  "stages": [
+    {
+      "id": "groups",
+      "name": "Group Stage"
+    },
+    {
+      "id": "knockout",
+      "name": "Knockout Stage"
+    }
+  ],
+  "participants": [
+    {
+      "team": "team:ctbc-flying-oyster",
+      "region": "region:lcp",
+      "entryStage": "groups"
+    },
+    {
+      "team": "team:hanwha-life-esports",
+      "region": "region:lck",
+      "entryStage": "groups"
+    },
+    {
+      "team": "team:karmine-corp",
+      "region": "region:lec",
+      "entryStage": "groups"
+    },
+    {
+      "team": "team:team-liquid",
+      "region": "region:lta",
+      "entryStage": "groups"
+    },
+    {
+      "team": "team:top-esports",
+      "region": "region:lpl",
+      "entryStage": "groups"
+    }
+  ],
+  "externalRefs": [
+    {
+      "provider": "leaguepedia",
+      "key": "OverviewPage",
+      "value": "2025 First Stand"
+    }
+  ]
+}

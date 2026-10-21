@@ -1,0 +1,60 @@
+{
+  "run": "msi-2024-20261021T032510Z",
+  "at": "2026-10-21T03:25:10.215709+00:00",
+  "operation": "import",
+  "force": false,
+  "summary": {
+    "edition": "msi-2024",
+    "operation": "import",
+    "provider": "leaguepedia",
+    "snapshotSha256": "03d3f91c76bf856cc15eebc2c88a7dded0e868e5b3ff6bf29171ab55acc65ae5",
+    "filesChanged": true,
+    "counts": {
+      "edition": {
+        "added": 1
+      },
+      "series": {
+        "added": 24
+      },
+      "game": {
+        "added": 78
+      },
+      "stats": {
+        "added": 780
+      },
+      "roster": {
+        "added": 84
+      },
+      "placement": {
+        "added": 12
+      }
+    },
+    "unchanged": 0,
+    "blocked": [],
+    "errors": [],
+    "warnings": 0,
+    "gaps": 0,
+    "newEntities": [
+      "org:estral-esports",
+      "org:loud",
+      "player:ackerman-gabriel-aparicio",
+      "player:cody",
+      "player:croc",
+      "player:jensen",
+      "player:josedeodo",
+      "player:leon-kevinn-leon",
+      "player:redbert",
+      "player:river-wang-yang",
+      "player:robo",
+      "player:route",
+      "player:snaker",
+      "player:snok",
+      "player:srvenancio",
+      "player:stardust-son-seok-hee",
+      "player:tinowns",
+      "player:zothve",
+      "team:estral-esports",
+      "team:loud"
+    ]
+  }
+}
