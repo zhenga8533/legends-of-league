@@ -1,0 +1,45 @@
+{
+  "run": "msi-2016-20261021T183608Z",
+  "at": "2026-10-21T18:36:08.456315+00:00",
+  "operation": "import",
+  "force": false,
+  "summary": {
+    "edition": "msi-2016",
+    "operation": "import",
+    "provider": "leaguepedia",
+    "snapshotSha256": "a9184bc7b4eb790c1ec6b50f1c5315441fea35ded742e950a9469ae7799f5d93",
+    "filesChanged": true,
+    "counts": {
+      "edition": {
+        "added": 1
+      },
+      "series": {
+        "added": 33
+      },
+      "game": {
+        "added": 41
+      },
+      "stats": {
+        "added": 410
+      },
+      "roster": {
+        "added": 37
+      },
+      "placement": {
+        "added": 6
+      }
+    },
+    "unchanged": 0,
+    "blocked": [],
+    "errors": [],
+    "warnings": 0,
+    "gaps": 41,
+    "newEntities": [
+      "player:achuu",
+      "player:emperor-kim-jin-hyun",
+      "player:hatchy",
+      "player:hybrid-glenn-doornenbal",
+      "player:wuxx"
+    ]
+  }
+}

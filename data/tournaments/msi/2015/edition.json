@@ -1,0 +1,60 @@
+{
+  "id": "ed:msi-2015",
+  "tournament": "tour:msi",
+  "year": 2015,
+  "name": "2015 Mid-Season Invitational",
+  "status": "completed",
+  "dates": {
+    "start": "2015-05-07",
+    "end": "2015-05-10"
+  },
+  "stages": [
+    {
+      "id": "groups",
+      "name": "Group Stage"
+    },
+    {
+      "id": "knockout",
+      "name": "Knockout Stage"
+    }
+  ],
+  "participants": [
+    {
+      "team": "team:ahq-esports-club",
+      "region": "region:lms",
+      "entryStage": "groups"
+    },
+    {
+      "team": "team:besiktas-esports",
+      "region": "region:tcl",
+      "entryStage": "groups"
+    },
+    {
+      "team": "team:edward-gaming",
+      "region": "region:lpl",
+      "entryStage": "groups"
+    },
+    {
+      "team": "team:fnatic",
+      "region": "region:eu-lcs",
+      "entryStage": "groups"
+    },
+    {
+      "team": "team:sk-telecom-t1",
+      "region": "region:lck",
+      "entryStage": "groups"
+    },
+    {
+      "team": "team:tsm",
+      "region": "region:lcs",
+      "entryStage": "groups"
+    }
+  ],
+  "externalRefs": [
+    {
+      "provider": "leaguepedia",
+      "key": "OverviewPage",
+      "value": "2015 Mid-Season Invitational"
+    }
+  ]
+}

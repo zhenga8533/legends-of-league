@@ -1,0 +1,91 @@
+{
+  "run": "worlds-2011-20261021T183608Z",
+  "at": "2026-10-21T18:36:08.456315+00:00",
+  "operation": "import",
+  "force": false,
+  "summary": {
+    "edition": "worlds-2011",
+    "operation": "import",
+    "provider": "leaguepedia",
+    "snapshotSha256": "e17898e785e98e70f0876a8c6ed6b4bbdd4bb7fc9fa8eb11def3e3b760b32b73",
+    "filesChanged": true,
+    "counts": {
+      "edition": {
+        "added": 1
+      },
+      "series": {
+        "added": 21
+      },
+      "game": {
+        "added": 28
+      },
+      "stats": {
+        "added": 280
+      },
+      "roster": {
+        "added": 41
+      },
+      "placement": {
+        "added": 8
+      }
+    },
+    "unchanged": 0,
+    "blocked": [],
+    "errors": [],
+    "warnings": 20,
+    "gaps": 32,
+    "newEntities": [
+      "org:against-all-authority",
+      "org:counter-logic-gaming",
+      "org:epik-gamer",
+      "org:team-gamed-de",
+      "org:team-pacific",
+      "org:xan",
+      "player:astarte-judge-cruz",
+      "player:axion",
+      "player:bigfatlp",
+      "player:candypanda",
+      "player:chaox",
+      "player:chauster",
+      "player:cyanide",
+      "player:dabe",
+      "player:dan-dinh",
+      "player:dyrus",
+      "player:elementz",
+      "player:gibo",
+      "player:hotshotgg",
+      "player:intrigued",
+      "player:kev1n",
+      "player:kujaa",
+      "player:lamiazealot",
+      "player:linak",
+      "player:mellisan",
+      "player:moma",
+      "player:nyph",
+      "player:radeon6870",
+      "player:reginaid",
+      "player:reyk",
+      "player:saintvicious",
+      "player:salce",
+      "player:shushei",
+      "player:the-rain-man",
+      "player:theoddone",
+      "player:vech",
+      "player:vyy",
+      "player:westrice",
+      "player:wewillfailer",
+      "player:wormy",
+      "player:xpecial",
+      "player:xpeke",
+      "player:yellowstar",
+      "player:zappy",
+      "player:zylor",
+      "team:against-all-authority",
+      "team:counter-logic-gaming",
+      "team:epik-gamer",
+      "team:team-gamed-de",
+      "team:team-pacific",
+      "team:xan"
+    ]
+  }
+}

@@ -1,0 +1,110 @@
+{
+  "id": "ed:worlds-2016",
+  "tournament": "tour:worlds",
+  "year": 2016,
+  "name": "2016 World Championship",
+  "status": "completed",
+  "dates": {
+    "start": "2016-09-29",
+    "end": "2016-10-29"
+  },
+  "stages": [
+    {
+      "id": "groups",
+      "name": "Group Stage"
+    },
+    {
+      "id": "knockout",
+      "name": "Knockout Stage"
+    }
+  ],
+  "participants": [
+    {
+      "team": "team:ahq-esports-club",
+      "region": "region:lms",
+      "entryStage": "groups"
+    },
+    {
+      "team": "team:albus-nox-luna",
+      "region": "region:lcl",
+      "entryStage": "groups"
+    },
+    {
+      "team": "team:cloud9",
+      "region": "region:lcs",
+      "entryStage": "groups"
+    },
+    {
+      "team": "team:counter-logic-gaming",
+      "region": "region:lcs",
+      "entryStage": "groups"
+    },
+    {
+      "team": "team:edward-gaming",
+      "region": "region:lpl",
+      "entryStage": "groups"
+    },
+    {
+      "team": "team:flash-wolves",
+      "region": "region:lms",
+      "entryStage": "groups"
+    },
+    {
+      "team": "team:g2-esports",
+      "region": "region:eu-lcs",
+      "entryStage": "groups"
+    },
+    {
+      "team": "team:h2k-gaming",
+      "region": "region:eu-lcs",
+      "entryStage": "groups"
+    },
+    {
+      "team": "team:i-may",
+      "region": "region:lpl",
+      "entryStage": "groups"
+    },
+    {
+      "team": "team:intz",
+      "region": "region:cblol",
+      "entryStage": "groups"
+    },
+    {
+      "team": "team:rox-tigers",
+      "region": "region:lck",
+      "entryStage": "groups"
+    },
+    {
+      "team": "team:royal-never-give-up",
+      "region": "region:lpl",
+      "entryStage": "groups"
+    },
+    {
+      "team": "team:samsung-galaxy",
+      "region": "region:lck",
+      "entryStage": "groups"
+    },
+    {
+      "team": "team:sk-telecom-t1",
+      "region": "region:lck",
+      "entryStage": "groups"
+    },
+    {
+      "team": "team:splyce",
+      "region": "region:eu-lcs",
+      "entryStage": "groups"
+    },
+    {
+      "team": "team:tsm",
+      "region": "region:lcs",
+      "entryStage": "groups"
+    }
+  ],
+  "externalRefs": [
+    {
+      "provider": "leaguepedia",
+      "key": "OverviewPage",
+      "value": "2016 Season World Championship"
+    }
+  ]
+}

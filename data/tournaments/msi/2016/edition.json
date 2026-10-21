@@ -1,0 +1,60 @@
+{
+  "id": "ed:msi-2016",
+  "tournament": "tour:msi",
+  "year": 2016,
+  "name": "2016 Mid-Season Invitational",
+  "status": "completed",
+  "dates": {
+    "start": "2016-05-04",
+    "end": "2016-05-15"
+  },
+  "stages": [
+    {
+      "id": "groups",
+      "name": "Group Stage"
+    },
+    {
+      "id": "knockout",
+      "name": "Knockout Stage"
+    }
+  ],
+  "participants": [
+    {
+      "team": "team:counter-logic-gaming",
+      "region": "region:lcs",
+      "entryStage": "groups"
+    },
+    {
+      "team": "team:flash-wolves",
+      "region": "region:lms",
+      "entryStage": "groups"
+    },
+    {
+      "team": "team:g2-esports",
+      "region": "region:eu-lcs",
+      "entryStage": "groups"
+    },
+    {
+      "team": "team:royal-never-give-up",
+      "region": "region:lpl",
+      "entryStage": "groups"
+    },
+    {
+      "team": "team:sk-telecom-t1",
+      "region": "region:lck",
+      "entryStage": "groups"
+    },
+    {
+      "team": "team:supermassive-esports",
+      "region": "region:tcl",
+      "entryStage": "groups"
+    }
+  ],
+  "externalRefs": [
+    {
+      "provider": "leaguepedia",
+      "key": "OverviewPage",
+      "value": "2016 Mid-Season Invitational"
+    }
+  ]
+}

@@ -1,0 +1,79 @@
+{
+  "run": "worlds-2014-20261021T183608Z",
+  "at": "2026-10-21T18:36:08.456315+00:00",
+  "operation": "import",
+  "force": false,
+  "summary": {
+    "edition": "worlds-2014",
+    "operation": "import",
+    "provider": "leaguepedia",
+    "snapshotSha256": "e2ca2198c4b6d3921272c38ba14328103698acb77773c0094f99584b33020c47",
+    "filesChanged": true,
+    "counts": {
+      "edition": {
+        "added": 1
+      },
+      "series": {
+        "added": 57
+      },
+      "game": {
+        "added": 78
+      },
+      "stats": {
+        "added": 780
+      },
+      "roster": {
+        "added": 83
+      },
+      "placement": {
+        "added": 16
+      }
+    },
+    "unchanged": 0,
+    "blocked": [],
+    "errors": [],
+    "warnings": 0,
+    "gaps": 78,
+    "newEntities": [
+      "org:alliance",
+      "org:dark-passage",
+      "org:lmq",
+      "org:najin-white-shield",
+      "org:star-horn-royal-club",
+      "player:amazing-maurice-stuckenschneider",
+      "player:cl0ud",
+      "player:cola-jiang-nan",
+      "player:corn-lei-wen",
+      "player:crystal",
+      "player:danagorn",
+      "player:dans",
+      "player:garnetdevil",
+      "player:gilius",
+      "player:insec",
+      "player:korol",
+      "player:lep",
+      "player:lustboy",
+      "player:minerva",
+      "player:mor",
+      "player:morning",
+      "player:namei",
+      "player:naz-chen-tien-chih",
+      "player:noname-zhou-qi-lin",
+      "player:nrated",
+      "player:pawn",
+      "player:prydz",
+      "player:save",
+      "player:shook",
+      "player:touch",
+      "player:vas1lii",
+      "player:xiaoweixiao",
+      "team:alliance",
+      "team:dark-passage",
+      "team:lmq",
+      "team:najin-white-shield",
+      "team:samsung-blue",
+      "team:samsung-white",
+      "team:star-horn-royal-club"
+    ]
+  }
+}

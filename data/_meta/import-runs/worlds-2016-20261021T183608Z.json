@@ -1,0 +1,63 @@
+{
+  "run": "worlds-2016-20261021T183608Z",
+  "at": "2026-10-21T18:36:08.456315+00:00",
+  "operation": "import",
+  "force": false,
+  "summary": {
+    "edition": "worlds-2016",
+    "operation": "import",
+    "provider": "leaguepedia",
+    "snapshotSha256": "7402f6904929d807aab835b3f97c5a345aefc6efa2c85f30a1bd281cbbabb18d",
+    "filesChanged": true,
+    "counts": {
+      "edition": {
+        "added": 1
+      },
+      "series": {
+        "added": 57
+      },
+      "game": {
+        "added": 77
+      },
+      "stats": {
+        "added": 770
+      },
+      "roster": {
+        "added": 103
+      },
+      "placement": {
+        "added": 16
+      }
+    },
+    "unchanged": 0,
+    "blocked": [],
+    "errors": [],
+    "warnings": 0,
+    "gaps": 77,
+    "newEntities": [
+      "org:albus-nox-luna",
+      "org:i-may",
+      "org:rox-tigers",
+      "player:abaxial",
+      "player:ansva",
+      "player:athena",
+      "player:avoidless",
+      "player:baeme",
+      "player:fly-kim-sang-cheol",
+      "player:forg1ven",
+      "player:jinjiao",
+      "player:jockster",
+      "player:likkrit",
+      "player:onesh0tiq",
+      "player:revolta",
+      "player:road-yun-han-gil",
+      "player:sencux",
+      "player:smurf-dmitri-ivanov",
+      "player:wraith",
+      "player:yang-felipe-zhao",
+      "team:albus-nox-luna",
+      "team:i-may",
+      "team:rox-tigers"
+    ]
+  }
+}

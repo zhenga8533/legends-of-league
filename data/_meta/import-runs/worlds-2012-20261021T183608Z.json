@@ -1,0 +1,96 @@
+{
+  "run": "worlds-2012-20261021T183608Z",
+  "at": "2026-10-21T18:36:08.456315+00:00",
+  "operation": "import",
+  "force": false,
+  "summary": {
+    "edition": "worlds-2012",
+    "operation": "import",
+    "provider": "leaguepedia",
+    "snapshotSha256": "431f2a2e51b69f4d40722992a0d8578958f6c39184d7da7527e2682cdd89f937",
+    "filesChanged": true,
+    "counts": {
+      "edition": {
+        "added": 1
+      },
+      "series": {
+        "added": 19
+      },
+      "game": {
+        "added": 31
+      },
+      "stats": {
+        "added": 310
+      },
+      "roster": {
+        "added": 60
+      },
+      "placement": {
+        "added": 12
+      }
+    },
+    "unchanged": 0,
+    "blocked": [],
+    "errors": [],
+    "warnings": 0,
+    "gaps": 31,
+    "newEntities": [
+      "org:azubu-frost",
+      "org:clg-prime",
+      "org:counter-logic-gaming-europe",
+      "org:dignitas",
+      "org:moscow-5",
+      "org:najin-sword",
+      "org:saigon-jokers",
+      "org:sk-gaming",
+      "org:taipei-assassins",
+      "player:alex-ich",
+      "player:araneae",
+      "player:bebe-chang-bo-wei",
+      "player:caomei",
+      "player:cloudtemplar",
+      "player:crumbz",
+      "player:darien",
+      "player:froggen",
+      "player:fzzf",
+      "player:genja",
+      "player:illusion-chen-xin-lin",
+      "player:imaqtpie",
+      "player:iwdominate",
+      "player:junie",
+      "player:kid",
+      "player:krepo",
+      "player:lilballz",
+      "player:madlife",
+      "player:maknoon",
+      "player:misaya",
+      "player:mistake",
+      "player:ocelote",
+      "player:patoy",
+      "player:pdd",
+      "player:qtv",
+      "player:scarra",
+      "player:shy",
+      "player:snoopeh",
+      "player:stanley",
+      "player:toyz",
+      "player:voyboy",
+      "player:watch",
+      "player:wickd",
+      "player:woong-jang-gun-woong",
+      "player:wx",
+      "player:xiaoxiao",
+      "player:yellowpete",
+      "player:zz1tai",
+      "team:azubu-frost",
+      "team:clg-prime",
+      "team:counter-logic-gaming-europe",
+      "team:dignitas",
+      "team:moscow-5",
+      "team:najin-sword",
+      "team:saigon-jokers",
+      "team:sk-gaming",
+      "team:taipei-assassins"
+    ]
+  }
+}

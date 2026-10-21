@@ -1,0 +1,90 @@
+{
+  "id": "ed:worlds-2012",
+  "tournament": "tour:worlds",
+  "year": 2012,
+  "name": "2012 World Championship",
+  "status": "completed",
+  "dates": {
+    "start": "2012-10-04",
+    "end": "2012-10-13"
+  },
+  "stages": [
+    {
+      "id": "groups",
+      "name": "Group Stage"
+    },
+    {
+      "id": "knockout",
+      "name": "Knockout Stage"
+    }
+  ],
+  "participants": [
+    {
+      "team": "team:azubu-frost",
+      "region": "region:lck",
+      "entryStage": "groups"
+    },
+    {
+      "team": "team:clg-prime",
+      "region": "region:na",
+      "entryStage": "groups"
+    },
+    {
+      "team": "team:counter-logic-gaming-europe",
+      "region": "region:eu",
+      "entryStage": "groups"
+    },
+    {
+      "team": "team:dignitas",
+      "region": "region:na",
+      "entryStage": "groups"
+    },
+    {
+      "team": "team:invictus-gaming",
+      "region": "region:lpl",
+      "entryStage": "groups"
+    },
+    {
+      "team": "team:moscow-5",
+      "region": "region:eu",
+      "entryStage": "knockout"
+    },
+    {
+      "team": "team:najin-sword",
+      "region": "region:lck",
+      "entryStage": "groups"
+    },
+    {
+      "team": "team:saigon-jokers",
+      "region": "region:sea",
+      "entryStage": "groups"
+    },
+    {
+      "team": "team:sk-gaming",
+      "region": "region:eu",
+      "entryStage": "groups"
+    },
+    {
+      "team": "team:taipei-assassins",
+      "region": "region:lms",
+      "entryStage": "knockout"
+    },
+    {
+      "team": "team:team-we",
+      "region": "region:lpl",
+      "entryStage": "knockout"
+    },
+    {
+      "team": "team:tsm",
+      "region": "region:na",
+      "entryStage": "knockout"
+    }
+  ],
+  "externalRefs": [
+    {
+      "provider": "leaguepedia",
+      "key": "OverviewPage",
+      "value": "Season 2 World Championship"
+    }
+  ]
+}

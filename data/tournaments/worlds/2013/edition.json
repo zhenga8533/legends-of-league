@@ -1,0 +1,100 @@
+{
+  "id": "ed:worlds-2013",
+  "tournament": "tour:worlds",
+  "year": 2013,
+  "name": "2013 World Championship",
+  "status": "completed",
+  "dates": {
+    "start": "2013-09-15",
+    "end": "2013-10-04"
+  },
+  "stages": [
+    {
+      "id": "groups",
+      "name": "Group Stage"
+    },
+    {
+      "id": "knockout",
+      "name": "Knockout Stage"
+    }
+  ],
+  "participants": [
+    {
+      "team": "team:cloud9",
+      "region": "region:lcs",
+      "entryStage": "knockout"
+    },
+    {
+      "team": "team:fnatic",
+      "region": "region:eu-lcs",
+      "entryStage": "groups"
+    },
+    {
+      "team": "team:gamania-bears",
+      "region": "region:lms",
+      "entryStage": "knockout"
+    },
+    {
+      "team": "team:gambit-gaming",
+      "region": "region:eu-lcs",
+      "entryStage": "groups"
+    },
+    {
+      "team": "team:gaminggear-eu",
+      "region": "region:lcl",
+      "entryStage": "groups"
+    },
+    {
+      "team": "team:lemondogs",
+      "region": "region:eu-lcs",
+      "entryStage": "groups"
+    },
+    {
+      "team": "team:mineski",
+      "region": "region:sea",
+      "entryStage": "groups"
+    },
+    {
+      "team": "team:najin-black-sword",
+      "region": "region:lck",
+      "entryStage": "knockout"
+    },
+    {
+      "team": "team:oh-my-god",
+      "region": "region:lpl",
+      "entryStage": "groups"
+    },
+    {
+      "team": "team:royal-club",
+      "region": "region:lpl",
+      "entryStage": "knockout"
+    },
+    {
+      "team": "team:samsung-ozone",
+      "region": "region:lck",
+      "entryStage": "groups"
+    },
+    {
+      "team": "team:sk-telecom-t1",
+      "region": "region:lck",
+      "entryStage": "groups"
+    },
+    {
+      "team": "team:team-vulcun",
+      "region": "region:lcs",
+      "entryStage": "groups"
+    },
+    {
+      "team": "team:tsm",
+      "region": "region:lcs",
+      "entryStage": "groups"
+    }
+  ],
+  "externalRefs": [
+    {
+      "provider": "leaguepedia",
+      "key": "OverviewPage",
+      "value": "Season 3 World Championship"
+    }
+  ]
+}
