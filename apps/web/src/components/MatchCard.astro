@@ -1,0 +1,47 @@
+---
+import type { MatchView } from "@lol/data";
+import { paths, teamName, teamTag } from "../lib/archive";
+
+interface Props {
+  match: MatchView;
+  /** Show records going into a Swiss match. */
+  showRecords?: boolean;
+}
+
+const { match, showRecords = false } = Astro.props;
+const rows = match.teams.map((team, i) => ({
+  team,
+  score: match.score[i],
+  won: match.winner === team,
+  record: match.records?.[i],
+}));
+const summary = `${teamName(match.teams[0])} ${match.score[0]}–${match.score[1]} ${teamName(match.teams[1])}`;
+---
+
+<a
+  href={paths.series(match.seriesId)}
+  class="block min-w-44 rounded border border-border bg-surface text-sm hover:border-accent"
+  aria-label={`${summary}, best of ${match.bestOf}`}
+>
+  {rows.map((row) => (
+    <span
+      class:list={[
+        "flex items-center justify-between gap-3 px-2.5 py-1.5",
+        row.won ? "font-semibold" : "text-muted",
+      ]}
+    >
+      <span class="truncate">
+        {teamTag(row.team)}
+        {showRecords && row.record && (
+          <span class="ml-1 text-xs font-normal text-muted">
+            ({row.record.wins}-{row.record.losses})
+          </span>
+        )}
+      </span>
+      <span class:list={["tabular-nums", row.won && "text-accent"]}>{row.score}</span>
+    </span>
+  ))}
+  <span class="block border-t border-border px-2.5 py-0.5 text-xs text-muted">
+    Bo{match.bestOf}
+  </span>
+</a>

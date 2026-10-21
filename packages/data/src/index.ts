@@ -8,3 +8,26 @@ export {
   rulesetFor,
 } from "./load";
 export { actualPlacements, actualSeries, ratedGames, tournamentInput } from "./sim";
+export { type Entities, idSlug, loadEntities, playerHandle } from "./entities";
+export {
+  type Archive,
+  type ChampionLine,
+  type EditionSummary,
+  type GameView,
+  type MatchView,
+  type PlayerCareer,
+  type PlayerEdition,
+  type Standing,
+  type StageView,
+  type TeamAppearance,
+  editionStages,
+  editionStandings,
+  editionSummary,
+  formatDuration,
+  kda,
+  loadArchive,
+  placeText,
+  playerCareer,
+  seriesGames,
+  teamHistory,
+} from "./views";

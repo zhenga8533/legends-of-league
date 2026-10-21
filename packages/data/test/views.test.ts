@@ -1,0 +1,89 @@
+import { describe, expect, it } from "vitest";
+import {
+  editionStages,
+  editionStandings,
+  editionSummary,
+  kda,
+  loadArchive,
+  placeText,
+  playerCareer,
+  rulesetFor,
+  seriesGames,
+  teamHistory,
+} from "../src";
+
+const archive = loadArchive();
+const edition = (id: string) => archive.editions.find((b) => b.edition.id === id)!;
+const worlds = edition("ed:worlds-2024");
+const msi = edition("ed:msi-2024");
+
+describe("edition views", () => {
+  it("maps every replayed match back to exactly one series", () => {
+    for (const bundle of archive.editions) {
+      const stages = editionStages(bundle, rulesetFor(bundle.edition.id, archive.rulesets)!);
+      const ids = stages.flatMap((stage) => stage.matches.map((m) => m.seriesId));
+      expect(new Set(ids).size).toBe(bundle.series.length);
+    }
+  });
+
+  it("labels bracket positions and Swiss records from the replay", () => {
+    const [, swiss] = editionStages(worlds, rulesetFor("ed:worlds-2024", archive.rulesets)!);
+    const decider = swiss!.matches.find((m) =>
+      m.records?.every((r) => r.wins === 2 && r.losses === 2),
+    );
+    expect(decider?.bestOf).toBe(3);
+    const bracket = editionStages(msi, rulesetFor("ed:msi-2024", archive.rulesets)!)[1]!;
+    expect(bracket.matches.map((m) => m.label)).toContain("Lower round 2");
+    const playIn = editionStages(msi, rulesetFor("ed:msi-2024", archive.rulesets)!)[0]!;
+    expect(new Set(playIn.matches.map((m) => m.group))).toEqual(new Set(["Group A", "Group B"]));
+  });
+
+  it("summarizes champion, runner-up and the final", () => {
+    const summary = editionSummary(worlds);
+    expect(summary).toMatchObject({ champion: "team:t1", runnerUp: "team:bilibili-gaming" });
+    expect(summary.final?.score).toEqual([2, 3]);
+  });
+
+  it("ranks standings by final place with series and game records", () => {
+    const [first, second] = editionStandings(worlds);
+    expect(first).toMatchObject({ team: "team:t1", place: [1, 1] });
+    expect(second?.team).toBe("team:bilibili-gaming");
+    const t1 = first!;
+    expect(t1.series.wins).toBeGreaterThan(t1.series.losses);
+  });
+});
+
+describe("team and player views", () => {
+  it("collects a team's appearances in date order", () => {
+    const history = teamHistory(archive, "team:t1").map((a) => [
+      a.bundle.edition.id,
+      placeText(a.standing.place),
+    ]);
+    expect(history).toEqual([
+      ["ed:msi-2024", "3rd"],
+      ["ed:worlds-2024", "1st"],
+    ]);
+  });
+
+  it("aggregates a player's games consistently across editions and champions", () => {
+    const career = playerCareer(archive, "player:faker");
+    const total = career.editions.reduce((sum, e) => sum + e.games, 0);
+    expect(total).toBeGreaterThan(0);
+    expect(career.champions.reduce((sum, c) => sum + c.games, 0)).toBe(total);
+    expect(career.editions.every((e) => e.team === "team:t1" && e.role === "mid")).toBe(true);
+  });
+
+  it("splits a game's player stats by side in role order", () => {
+    const [game] = seriesGames(worlds, "ser:worlds-2024-knockout-finals-01");
+    expect(game!.blue.map((r) => r.role)).toEqual(["top", "jungle", "mid", "bot", "support"]);
+    expect(game!.red).toHaveLength(5);
+  });
+
+  it("formats KDA and places", () => {
+    expect(kda({ kills: 3, deaths: 0, assists: 4 })).toBe("Perfect");
+    expect(kda({ kills: 3, deaths: 2, assists: 4 })).toBe("3.50");
+    expect(placeText([3, 4])).toBe("3rd–4th");
+    expect(placeText([11, 12])).toBe("11th–12th");
+    expect(placeText([22, 22])).toBe("22nd");
+  });
+});

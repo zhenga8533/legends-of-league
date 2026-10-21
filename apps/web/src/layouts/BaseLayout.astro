@@ -5,13 +5,26 @@ import { withBase } from "../lib/paths";
 interface Props {
   title: string;
   description?: string;
+  /** Include this page in site search. */
+  searchable?: boolean;
+  breadcrumbs?: { label: string; href?: string }[];
 }
 
 const {
   title,
   description = "History and simulation of international League of Legends tournaments.",
+  searchable = false,
+  breadcrumbs = [],
 } = Astro.props;
 const pageTitle = title === "Legends of League" ? title : `${title} · Legends of League`;
+const nav = [
+  { label: "Tournaments", href: withBase("/tournaments/") },
+  { label: "Teams", href: withBase("/teams/") },
+  { label: "Players", href: withBase("/players/") },
+  { label: "Regions", href: withBase("/regions/") },
+  { label: "Search", href: withBase("/search/") },
+];
+const current = Astro.url.pathname;
 ---
 
 <!doctype html>
@@ -22,22 +35,77 @@ const pageTitle = title === "Legends of League" ? title : `${title} · Legends o
     <meta name="description" content={description} />
     <link rel="icon" type="image/svg+xml" href={withBase("favicon.svg")} />
     <title>{pageTitle}</title>
+    <script is:inline>
+      // Apply a saved theme before first paint to avoid a flash of the wrong theme.
+      try {
+        const saved = localStorage.getItem("theme");
+        if (saved === "light" || saved === "dark") document.documentElement.dataset.theme = saved;
+      } catch {
+        /* storage unavailable: follow the OS preference */
+      }
+    </script>
   </head>
   <body class="flex min-h-screen flex-col font-sans antialiased">
     <a
       href="#main"
-      class="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:rounded focus:bg-surface focus:px-3 focus:py-2"
+      class="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-10 focus:rounded focus:bg-surface focus:px-3 focus:py-2"
     >
       Skip to content
     </a>
     <header class="border-b border-border bg-surface">
-      <nav class="mx-auto flex max-w-6xl items-center px-4 py-3" aria-label="Primary">
-        <a href={withBase("/")} class="text-lg font-semibold tracking-tight">
-          Legends of League
+      <nav
+        class="mx-auto flex max-w-6xl flex-wrap items-center gap-x-6 gap-y-2 px-4 py-3"
+        aria-label="Primary"
+      >
+        <a href={withBase("/")} class="mr-auto text-lg font-semibold tracking-tight">
+          Legends <span class="text-accent">of</span> League
         </a>
+        <ul class="order-last flex w-full flex-wrap gap-x-5 gap-y-1 text-sm sm:order-none sm:w-auto">
+          {nav.map((item) => (
+            <li>
+              <a
+                href={item.href}
+                class="hover:text-accent aria-[current=page]:font-semibold aria-[current=page]:text-accent"
+                aria-current={current.startsWith(item.href) ? "page" : undefined}
+              >
+                {item.label}
+              </a>
+            </li>
+          ))}
+        </ul>
+        <button
+          type="button"
+          id="theme-toggle"
+          class="rounded border border-border px-2 py-1 text-sm hover:border-accent"
+          aria-label="Toggle dark mode"
+        >
+          <span aria-hidden="true">◐</span>
+        </button>
       </nav>
     </header>
-    <main id="main" class="mx-auto w-full max-w-6xl flex-1 px-4 py-10">
+    <main
+      id="main"
+      class="mx-auto w-full max-w-6xl flex-1 px-4 py-8"
+      data-pagefind-body={searchable ? "" : undefined}
+    >
+      {breadcrumbs.length > 0 && (
+        <nav aria-label="Breadcrumb" class="mb-4 text-sm text-muted">
+          <ol class="flex flex-wrap gap-1">
+            {breadcrumbs.map((crumb, i) => (
+              <li>
+                {i > 0 && <span aria-hidden="true">/ </span>}
+                {crumb.href ? (
+                  <a class="hover:text-accent" href={crumb.href}>
+                    {crumb.label}
+                  </a>
+                ) : (
+                  <span aria-current="page">{crumb.label}</span>
+                )}
+              </li>
+            ))}
+          </ol>
+        </nav>
+      )}
       <slot />
     </main>
     <footer class="border-t border-border px-4 py-6 text-sm text-muted">
@@ -58,5 +126,21 @@ const pageTitle = title === "Legends of League" ? title : `${title} · Legends o
         </p>
       </div>
     </footer>
+    <script>
+      const toggle = document.getElementById("theme-toggle");
+      toggle?.addEventListener("click", () => {
+        const root = document.documentElement;
+        const dark =
+          root.dataset.theme === "dark" ||
+          (!root.dataset.theme && matchMedia("(prefers-color-scheme: dark)").matches);
+        const next = dark ? "light" : "dark";
+        root.dataset.theme = next;
+        try {
+          localStorage.setItem("theme", next);
+        } catch {
+          /* not persisted */
+        }
+      });
+    </script>
   </body>
 </html>

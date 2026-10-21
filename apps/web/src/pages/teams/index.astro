@@ -1,0 +1,44 @@
+---
+import { teamHistory } from "@lol/data";
+import TeamLink from "../../components/TeamLink.astro";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { archive } from "../../lib/archive";
+
+const teams = [...archive.entities.teams.values()]
+  .map((team) => ({ team, appearances: teamHistory(archive, team.id) }))
+  .filter((row) => row.appearances.length > 0)
+  .sort((a, b) => a.team.name.localeCompare(b.team.name, "en", { sensitivity: "base" }));
+---
+
+<BaseLayout title="Teams" searchable>
+  <h1 class="mb-6 text-3xl font-bold tracking-tight">Teams</h1>
+  <div class="table-scroll" tabindex="0" role="region" aria-label="Scrollable table">
+    <table class="data-table">
+      <caption class="sr-only">Teams with international appearances</caption>
+      <thead>
+        <tr>
+          <th scope="col">Team</th>
+          <th scope="col">Tag</th>
+          <th scope="col" class="num">
+            Appearances
+          </th>
+          <th scope="col" class="num">
+            Titles
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        {teams.map(({ team, appearances }) => (
+          <tr>
+            <th scope="row" class="font-normal">
+              <TeamLink team={team.id} region={team.region} />
+            </th>
+            <td class="text-muted">{team.shortName ?? "—"}</td>
+            <td class="num">{appearances.length}</td>
+            <td class="num">{appearances.filter((a) => a.standing.place?.[0] === 1).length}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+</BaseLayout>

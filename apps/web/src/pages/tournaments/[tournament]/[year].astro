@@ -1,0 +1,132 @@
+---
+import { type EditionBundle, editionStages, editionSummary, idSlug } from "@lol/data";
+import StageView from "../../../components/StageView.astro";
+import StandingsTable from "../../../components/StandingsTable.astro";
+import TeamLink from "../../../components/TeamLink.astro";
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import { archive, dateRange, paths, ruleset, tournamentName } from "../../../lib/archive";
+import { withBase } from "../../../lib/paths";
+
+export function getStaticPaths() {
+  return archive.editions.map((bundle) => ({
+    params: { tournament: idSlug(bundle.edition.tournament), year: String(bundle.edition.year) },
+    props: { bundle },
+  }));
+}
+
+interface Props {
+  bundle: EditionBundle;
+}
+
+const { bundle } = Astro.props;
+const { edition } = bundle;
+const rules = ruleset(bundle);
+const stages = editionStages(bundle, rules);
+const summary = editionSummary(bundle);
+const gaps = bundle.provenance.gaps ?? [];
+
+function sourceLabel(url: string): string {
+  const { hostname, pathname } = new URL(url);
+  if (hostname === "lol.fandom.com") {
+    const page = decodeURIComponent(pathname.replace(/^\/wiki\//, "")).replaceAll("_", " ");
+    return page.startsWith("Archive:Official")
+      ? "Official rulebook (Leaguepedia archive)"
+      : `Leaguepedia: ${page}`;
+  }
+  return pathname.endsWith(".pdf") ? "Official rulebook (PDF)" : hostname;
+}
+---
+
+<BaseLayout
+  title={edition.name}
+  searchable
+  description={`Results, brackets and standings of the ${edition.name}.`}
+  breadcrumbs={[
+    { label: "Tournaments", href: withBase("/tournaments/") },
+    { label: tournamentName(edition.tournament), href: paths.tournament(edition.tournament) },
+    { label: String(edition.year) },
+  ]}
+>
+  <header class="mb-8 space-y-2">
+    <h1 class="text-3xl font-bold tracking-tight sm:text-4xl">{edition.name}</h1>
+    <p class="text-muted">
+      {dateRange(edition.dates.start, edition.dates.end)} · {edition.participants.length} teams
+    </p>
+    {summary.champion && (
+      <p class="text-lg">
+        <span class="text-muted">Champion:</span>{" "}
+        <span class="font-semibold">
+          <TeamLink team={summary.champion} />
+        </span>
+        {summary.final?.score && summary.runnerUp && (
+          <span class="text-muted">
+            {" "}
+            — beat <TeamLink team={summary.runnerUp} />{" "}
+            <a class="link" href={paths.series(summary.final.id)}>
+              {Math.max(...summary.final.score)}–{Math.min(...summary.final.score)}
+            </a>{" "}
+            in the final
+          </span>
+        )}
+      </p>
+    )}
+    <nav aria-label="Stages" class="flex flex-wrap gap-2 pt-2 text-sm">
+      {stages.map((stage) => (
+        <a
+          class="rounded border border-border px-3 py-1 hover:border-accent"
+          href={`#stage-${stage.id}`}
+        >
+          {stage.name}
+        </a>
+      ))}
+      <a class="rounded border border-border px-3 py-1 hover:border-accent" href="#standings">
+        Standings
+      </a>
+      <a class="rounded border border-border px-3 py-1 hover:border-accent" href="#format">
+        Format
+      </a>
+    </nav>
+  </header>
+
+  <div class="space-y-12">
+    {stages.map((stage) => (
+      <StageView stage={stage} />
+    ))}
+
+    <section id="standings" aria-labelledby="standings-heading" class="space-y-3">
+      <h2 id="standings-heading" class="text-2xl font-semibold tracking-tight">
+        Standings
+      </h2>
+      <StandingsTable bundle={bundle} />
+    </section>
+
+    <section id="format" aria-labelledby="format-heading" class="space-y-3">
+      <h2 id="format-heading" class="text-2xl font-semibold tracking-tight">
+        Format
+      </h2>
+      <ul class="list-disc space-y-1 pl-5 text-muted">
+        {rules.notes.map((note) => (
+          <li>{note}</li>
+        ))}
+      </ul>
+      {rules.sources.length > 0 && (
+        <p class="text-sm text-muted">
+          Sources:{" "}
+          {rules.sources.map((url, i) => (
+            <>
+              {i > 0 && ", "}
+              <a class="link" href={url}>
+                {sourceLabel(url)}
+              </a>
+            </>
+          ))}
+        </p>
+      )}
+      <p class="text-sm text-muted">
+        {gaps.length === 0
+          ? "No known gaps in this edition's data."
+          : `${gaps.length} known gaps in this edition's data.`}
+      </p>
+    </section>
+  </div>
+</BaseLayout>

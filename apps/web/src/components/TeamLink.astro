@@ -1,0 +1,25 @@
+---
+import { paths, regionAbbr, teamName, teamTag } from "../lib/archive";
+
+interface Props {
+  team: string;
+  /** Show the short tag instead of the full name. */
+  short?: boolean;
+  region?: string;
+}
+
+const { team, short = false, region } = Astro.props;
+---
+
+<a
+  href={paths.team(team)}
+  class="underline decoration-border decoration-1 underline-offset-4 hover:text-accent hover:decoration-accent"
+  title={short ? teamName(team) : undefined}
+>
+  {short ? teamTag(team) : teamName(team)}
+</a>
+{region && (
+  <span class="ml-1.5 rounded bg-surface-2 px-1 py-0.5 text-xs text-muted">
+    {regionAbbr(region)}
+  </span>
+)}

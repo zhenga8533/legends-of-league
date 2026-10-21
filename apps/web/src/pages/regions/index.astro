@@ -1,0 +1,47 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { archive, paths } from "../../lib/archive";
+
+const regions = [...archive.entities.regions.values()]
+  .map((region) => ({
+    region,
+    entries: archive.editions.reduce(
+      (sum, b) => sum + b.edition.participants.filter((p) => p.region === region.id).length,
+      0,
+    ),
+  }))
+  .sort(
+    (a, b) => b.entries - a.entries || a.region.abbreviation.localeCompare(b.region.abbreviation),
+  );
+---
+
+<BaseLayout title="Regions" searchable>
+  <h1 class="mb-6 text-3xl font-bold tracking-tight">Regions</h1>
+  <div class="table-scroll" tabindex="0" role="region" aria-label="Scrollable table">
+    <table class="data-table">
+      <caption class="sr-only">Regions</caption>
+      <thead>
+        <tr>
+          <th scope="col">Region</th>
+          <th scope="col">League</th>
+          <th scope="col" class="num">
+            Team entries
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        {regions.map(({ region, entries }) => (
+          <tr>
+            <th scope="row" class="font-normal">
+              <a class="link" href={paths.region(region.id)}>
+                {region.abbreviation}
+              </a>
+            </th>
+            <td>{region.name}</td>
+            <td class="num">{entries}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+</BaseLayout>

@@ -1,0 +1,106 @@
+---
+import { editionStandings, idSlug, placeText } from "@lol/data";
+import type { Region } from "@lol/schema";
+import TeamLink from "../../components/TeamLink.astro";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { archive, dateRange, editionsNewestFirst, paths, regionAbbr } from "../../lib/archive";
+import { withBase } from "../../lib/paths";
+
+export function getStaticPaths() {
+  return [...archive.entities.regions.values()].map((region) => ({
+    params: { region: idSlug(region.id) },
+    props: { region },
+  }));
+}
+
+interface Props {
+  region: Region;
+}
+
+const { region } = Astro.props;
+const editions = editionsNewestFirst
+  .map((bundle) => ({
+    bundle,
+    teams: editionStandings(bundle).filter((row) => row.region === region.id),
+  }))
+  .filter((row) => row.teams.length > 0);
+const predecessors = region.predecessors ?? [];
+const successors = region.successors ?? [];
+const related = [...predecessors, ...successors];
+---
+
+<BaseLayout
+  title={`${region.abbreviation} — ${region.name}`}
+  searchable
+  breadcrumbs={[{ label: "Regions", href: withBase("/regions/") }, { label: region.abbreviation }]}
+>
+  <header class="mb-8 space-y-1">
+    <h1 class="text-3xl font-bold tracking-tight sm:text-4xl">{region.name}</h1>
+    <p class="text-muted">
+      {region.abbreviation}
+      {(region.active.start || region.active.end) && (
+        <>
+          {" "}
+          ·{" "}
+          {region.active.start
+            ? dateRange(region.active.start, region.active.end)
+            : `until ${dateRange(region.active.end)}`}
+        </>
+      )}
+    </p>
+    {related.length > 0 && (
+      <p class="text-sm">
+        {predecessors.length > 0 && (
+          <>
+            Preceded by{" "}
+            {predecessors.map((id, i) => (
+              <>
+                {i > 0 && ", "}
+                <a class="link" href={paths.region(id)}>
+                  {regionAbbr(id)}
+                </a>
+              </>
+            ))}
+            .{" "}
+          </>
+        )}
+        {successors.length > 0 && (
+          <>
+            Succeeded by{" "}
+            {successors.map((id, i) => (
+              <>
+                {i > 0 && ", "}
+                <a class="link" href={paths.region(id)}>
+                  {regionAbbr(id)}
+                </a>
+              </>
+            ))}
+            .
+          </>
+        )}
+      </p>
+    )}
+  </header>
+
+  {editions.length === 0 && <p class="text-muted">No teams from this region in the archive yet.</p>}
+
+  <div class="space-y-8">
+    {editions.map(({ bundle, teams }) => (
+      <section aria-labelledby={`ed-${bundle.edition.id}`}>
+        <h2 id={`ed-${bundle.edition.id}`} class="mb-2 text-xl font-semibold">
+          <a class="hover:text-accent" href={paths.edition(bundle)}>
+            {bundle.edition.name}
+          </a>
+        </h2>
+        <ul class="space-y-1">
+          {teams.map((row) => (
+            <li class="flex justify-between gap-4 border-b border-border py-1">
+              <TeamLink team={row.team} />
+              <span class="text-muted">{placeText(row.place)}</span>
+            </li>
+          ))}
+        </ul>
+      </section>
+    ))}
+  </div>
+</BaseLayout>

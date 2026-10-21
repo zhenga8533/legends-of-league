@@ -1,0 +1,84 @@
+---
+import { editionSummary, idSlug } from "@lol/data";
+import type { Tournament } from "@lol/schema";
+import TeamLink from "../../../components/TeamLink.astro";
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import { archive, dateRange, editionsNewestFirst, paths } from "../../../lib/archive";
+import { withBase } from "../../../lib/paths";
+
+export function getStaticPaths() {
+  return [...archive.entities.tournaments.values()].map((tournament) => ({
+    params: { tournament: idSlug(tournament.id) },
+    props: { tournament },
+  }));
+}
+
+interface Props {
+  tournament: Tournament;
+}
+
+const { tournament } = Astro.props;
+const editions = editionsNewestFirst.filter((b) => b.edition.tournament === tournament.id);
+---
+
+<BaseLayout
+  title={tournament.name}
+  searchable
+  breadcrumbs={[
+    { label: "Tournaments", href: withBase("/tournaments/") },
+    { label: tournament.name },
+  ]}
+>
+  <h1 class="mb-6 text-3xl font-bold tracking-tight">{tournament.name}</h1>
+  {editions.length === 0 ? (
+    <p class="text-muted">No editions of this tournament have been imported yet.</p>
+  ) : (
+    <div class="table-scroll" tabindex="0" role="region" aria-label="Scrollable table">
+      <table class="data-table">
+        <caption class="sr-only">{tournament.name} editions</caption>
+        <thead>
+          <tr>
+            <th scope="col">Edition</th>
+            <th scope="col">Dates</th>
+            <th scope="col">Champion</th>
+            <th scope="col">Runner-up</th>
+            <th scope="col" class="num">
+              Final
+            </th>
+            <th scope="col" class="num">
+              Teams
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          {editions.map((bundle) => {
+            const summary = editionSummary(bundle);
+            const score = summary.final?.score;
+            return (
+              <tr>
+                <th scope="row" class="font-normal">
+                  <a class="link" href={paths.edition(bundle)}>
+                    {bundle.edition.name}
+                  </a>
+                </th>
+                <td>{dateRange(bundle.edition.dates.start, bundle.edition.dates.end)}</td>
+                <td>{summary.champion ? <TeamLink team={summary.champion} /> : "—"}</td>
+                <td>{summary.runnerUp ? <TeamLink team={summary.runnerUp} /> : "—"}</td>
+                <td class="num">
+                  {summary.final && score ? (
+                    <a class="link" href={paths.series(summary.final.id)}>
+                      {Math.max(...score)}–{Math.min(...score)}
+                    </a>
+                  ) : (
+                    "—"
+                  )}
+                </td>
+                <td class="num">{bundle.edition.participants.length}</td>
+              </tr>
+            );
+          })}
+        </tbody>
+      </table>
+    </div>
+  )}
+</BaseLayout>

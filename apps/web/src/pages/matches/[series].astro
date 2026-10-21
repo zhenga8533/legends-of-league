@@ -1,0 +1,213 @@
+---
+import { formatDuration, idSlug, kda, seriesGames } from "@lol/data";
+import type { Series } from "@lol/schema";
+import TeamLink from "../../components/TeamLink.astro";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import {
+  archive,
+  editionOfSeries,
+  formatDate,
+  paths,
+  playerName,
+  stageName,
+  teamName,
+  teamTag,
+  tournamentName,
+} from "../../lib/archive";
+
+export function getStaticPaths() {
+  return archive.editions.flatMap((bundle) =>
+    bundle.series.map((series) => ({ params: { series: idSlug(series.id) }, props: { series } })),
+  );
+}
+
+interface Props {
+  series: Series;
+}
+
+const { series } = Astro.props;
+const bundle = editionOfSeries(series.id);
+const games = seriesGames(bundle, series.id);
+const [a, b] = series.teams;
+const title = `${teamName(a)} vs ${teamName(b)}`;
+const leaguepediaPage = bundle.edition.externalRefs?.find((r) => r.key === "OverviewPage")?.value;
+const status = (bundle.provenance.records ?? []).find(
+  (r) => r.key === `series:${series.id}`,
+)?.status;
+---
+
+<BaseLayout
+  title={`${title} · ${bundle.edition.name}`}
+  description={`${title}, ${series.round}, ${bundle.edition.name}: games, drafts and player stats.`}
+  breadcrumbs={[
+    {
+      label: tournamentName(bundle.edition.tournament),
+      href: paths.tournament(bundle.edition.tournament),
+    },
+    { label: String(bundle.edition.year), href: paths.edition(bundle) },
+    { label: `${stageName(bundle, series.stage)} · ${series.round}` },
+  ]}
+>
+  <header class="mb-8 space-y-3">
+    <p class="text-sm text-muted">
+      <a class="link" href={`${paths.edition(bundle)}#stage-${series.stage}`}>
+        {stageName(bundle, series.stage)}
+      </a>{" "}
+      ·{series.round} · Bo{series.bestOf} · {formatDate(series.start)}
+      {series.patch && <> · Patch {series.patch}</>}
+    </p>
+    <h1 class="flex flex-wrap items-baseline gap-x-4 gap-y-1 text-3xl font-bold tracking-tight sm:text-4xl">
+      <span class:list={[series.winner === a ? "" : "text-muted"]}>
+        <TeamLink team={a} />
+      </span>
+      {series.score && (
+        <span class="tabular-nums" aria-label={`${series.score[0]} to ${series.score[1]}`}>
+          {series.score[0]}–{series.score[1]}
+        </span>
+      )}
+      <span class:list={[series.winner === b ? "" : "text-muted"]}>
+        <TeamLink team={b} />
+      </span>
+    </h1>
+    {series.mvp && (
+      <p>
+        <span class="text-muted">Player of the series:</span>{" "}
+        <a class="link" href={paths.player(series.mvp)}>
+          {playerName(series.mvp)}
+        </a>
+      </p>
+    )}
+  </header>
+
+  {games.length === 0 && <p class="text-muted">No game records are available for this series.</p>}
+
+  <div class="space-y-10">
+    {games.map(({ game, blue, red }) => (
+      <section
+        aria-labelledby={`game-${game.number}`}
+        class="space-y-4 rounded border border-border bg-surface p-4"
+      >
+        <h2
+          id={`game-${game.number}`}
+          class="flex flex-wrap items-baseline gap-x-3 text-xl font-semibold"
+        >
+          Game {game.number}
+          <span class="text-base font-normal text-muted">
+            {teamName(game.winner)} won · {formatDuration(game.durationSeconds)}
+          </span>
+        </h2>
+
+        {game.draft && (
+          <div class="grid gap-3 sm:grid-cols-2">
+            {(
+              [
+                ["blue", game.blue, game.draft.blue],
+                ["red", game.red, game.draft.red],
+              ] as const
+            ).map(([side, team, draft]) => (
+              <div
+                class:list={[
+                  "rounded border-l-4 bg-surface-2 p-3",
+                  side === "blue" ? "border-blue-side" : "border-red-side",
+                ]}
+              >
+                <h3 class="text-sm font-semibold">
+                  {teamTag(team)} <span class="font-normal text-muted">({side} side)</span>
+                </h3>
+                <p class="mt-1 text-sm">
+                  <span class="text-muted">Picks:</span> {draft.picks.join(", ")}
+                </p>
+                <p class="text-sm">
+                  <span class="text-muted">Bans:</span>{" "}
+                  {draft.bans.map((ban) => ban ?? "none").join(", ")}
+                </p>
+              </div>
+            ))}
+          </div>
+        )}
+
+        {[
+          ["blue", game.blue, blue],
+          ["red", game.red, red],
+        ].map(([side, team, rows]) =>
+          (rows as typeof blue).length === 0 ? null : (
+            <div class="table-scroll" tabindex="0" role="region" aria-label="Scrollable table">
+              <table class="data-table">
+                <caption>
+                  {teamName(team as string)} · {side} side
+                  {game.winner === team && (
+                    <span class="ml-2 text-sm font-normal text-win">Victory</span>
+                  )}
+                </caption>
+                <thead>
+                  <tr>
+                    <th scope="col">Player</th>
+                    <th scope="col">Role</th>
+                    <th scope="col">Champion</th>
+                    <th scope="col" class="num">
+                      K/D/A
+                    </th>
+                    <th scope="col" class="num">
+                      KDA
+                    </th>
+                    <th scope="col" class="num">
+                      CS
+                    </th>
+                    <th scope="col" class="num">
+                      Gold
+                    </th>
+                    <th scope="col" class="num">
+                      Damage
+                    </th>
+                    <th scope="col" class="num">
+                      Vision
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {(rows as typeof blue).map((row) => (
+                    <tr>
+                      <th scope="row" class="font-normal">
+                        <a
+                          class="hover:text-accent hover:underline"
+                          href={paths.player(row.player)}
+                        >
+                          {playerName(row.player)}
+                        </a>
+                      </th>
+                      <td class="capitalize text-muted">{row.role}</td>
+                      <td>{row.champion}</td>
+                      <td class="num">
+                        {row.kills}/{row.deaths}/{row.assists}
+                      </td>
+                      <td class="num">{kda(row)}</td>
+                      <td class="num">{row.cs ?? "—"}</td>
+                      <td class="num">{row.gold?.toLocaleString("en") ?? "—"}</td>
+                      <td class="num">{row.damageToChampions?.toLocaleString("en") ?? "—"}</td>
+                      <td class="num">{row.visionScore ?? "—"}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          ),
+        )}
+      </section>
+    ))}
+  </div>
+
+  <p class="mt-8 text-sm text-muted">
+    Source:{" "}
+    {leaguepediaPage ? (
+      <a
+        class="link"
+        href={`https://lol.fandom.com/wiki/${encodeURIComponent(leaguepediaPage.replaceAll(" ", "_"))}`}
+      >
+        Leaguepedia
+      </a>
+    ) : (
+      "Leaguepedia"
+    )}
+    {status && <> · record status: {status}</>}
+  </p>
+</BaseLayout>

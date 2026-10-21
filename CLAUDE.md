@@ -6,7 +6,9 @@ A static archive and simulator for international LoL tournaments. The plan and r
 ## Layout
 
 - `apps/web`: Astro static site (GitHub Pages). Build links with `withBase()` from
-  `src/lib/paths.ts`, because the site is served under a base path.
+  `src/lib/paths.ts`, because the site is served under a base path. Pages read the archive at build
+  time through `src/lib/archive.ts`. Brackets and stage views come from the engine's verified
+  replays (`editionStages`), not from provider labels. Pagefind indexes pages marked `searchable`.
 - `packages/schema`: generated TS types and JSON Schema. **Never edit by hand.**
 - `packages/sim`: pure TS simulation engine (no DOM, no I/O, seeded `Rng` only). See `docs/simulation.md`.
 - `packages/data`: Node loaders for `data/` and `rulesets/`, plus adapters into engine inputs. Its tests
@@ -21,6 +23,8 @@ A static archive and simulator for international LoL tournaments. The plan and r
 ## Commands
 
 - `pnpm dev`, `pnpm build`, `pnpm lint`, `pnpm format:check`, `pnpm typecheck`, `pnpm test`
+- E2E and accessibility (axe, light and dark, desktop and mobile): `pnpm --filter @lol/web build`, then
+  `pnpm --filter @lol/web test:e2e`. Needs `playwright install chromium` once.
 - `pnpm schema:gen` after any model change, and `pnpm schema:check` to verify there is no drift
 - In `ingest/`: `uv run ruff check`, `uv run ruff format --check`, `uv run mypy`, `uv run pytest`
 - Imports, from `ingest/`: `uv run --env-file ../.env lol-ingest run --tournament worlds --year 2024 --op dry-run`

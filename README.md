@@ -4,7 +4,7 @@ An archive of every international League of Legends tournament (Worlds, the Mid-
 Invitational and First Stand), plus a simulation engine for replaying history and forecasting
 what comes next.
 
-> **Status:** early development (milestone M2, simulation engine). See the
+> **Status:** early development (milestone M3, archive UI). See the
 > [implementation plan](docs/plan.md) for the roadmap.
 
 ## Repository layout
@@ -41,6 +41,8 @@ Importing data needs a Leaguepedia bot password; see [docs/ingestion.md](docs/in
 ```sh
 pnpm lint && pnpm format:check && pnpm typecheck && pnpm test && pnpm build
 pnpm schema:check                 # generated schema/types match the Pydantic models
+pnpm --filter @lol/web exec playwright install chromium   # once
+pnpm --filter @lol/web test:e2e   # smoke + axe accessibility tests against the build
 
 cd ingest
 uv run ruff check && uv run ruff format --check && uv run mypy && uv run pytest
