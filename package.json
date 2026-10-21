@@ -19,7 +19,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
-    "@types/node": "^24.0.0",
+    "@types/node": "^26.6.5",
     "eslint": "^10.10.0",
     "eslint-plugin-astro": "^3.2.1",
     "globals": "^17.0.0",
