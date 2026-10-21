@@ -94,7 +94,12 @@ class EntityStore:
         matches = [
             region
             for region in self.regions.values()
-            if any(_ref_key(ref) == (provider, "RegionCode", code) for ref in region.external_refs)
+            # Codes are compared case-insensitively: Leaguepedia writes "na" and "NA" alike.
+            if any(
+                (ref.provider, ref.key, ref.value.casefold())
+                == (provider, "RegionCode", code.casefold())
+                for ref in region.external_refs
+            )
             and (on is None or region.active.start is None or region.active.start <= on)
             and (on is None or region.active.end is None or on <= region.active.end)
         ]

@@ -16,6 +16,11 @@ const SwissSchema = z.object({
   losses: positive,
   /** `decisive` applies when a match can decide advancement or elimination. */
   bestOf: z.object({ default: odd, decisive: odd }),
+  /**
+   * "avoid": no rematches unless every possible draw of a pool has one. "allow": rematches
+   * may be drawn freely (for editions whose real draws had avoidable rematches).
+   */
+  rematches: z.enum(["avoid", "allow"]).default("avoid"),
 });
 
 const GslSchema = z.object({ type: z.literal("gsl"), bestOf: odd });
@@ -48,6 +53,19 @@ const GroupsSchema = z.object({
   format: z.discriminatedUnion("type", [GslSchema, RoundRobinSchema]),
 });
 
+const SeriesSchema = z.object({
+  type: z.literal("series"),
+  bestOf: odd,
+  /**
+   * Which entrants meet, as index pairs into the stage's entrant list; defaults to one series
+   * between the first two. Used for qualifiers such as a last-chance match or crossed Bo5s.
+   */
+  pairs: z
+    .array(z.tuple([z.int().nonnegative(), z.int().nonnegative()]))
+    .min(1)
+    .default([[0, 1]]),
+});
+
 export const FormatSchema = z.discriminatedUnion("type", [
   SwissSchema,
   GslSchema,
@@ -55,6 +73,7 @@ export const FormatSchema = z.discriminatedUnion("type", [
   SingleEliminationSchema,
   DoubleEliminationSchema,
   GroupsSchema,
+  SeriesSchema,
 ]);
 
 const EntrantSourceSchema = z.union([

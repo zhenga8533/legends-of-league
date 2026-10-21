@@ -1,0 +1,76 @@
+{
+  "id": "first-stand-2026",
+  "name": "First Stand 2026",
+  "editions": ["ed:first-stand-2026"],
+  "sources": ["https://lol.fandom.com/wiki/2026_First_Stand"],
+  "notes": [
+    "Groups: two GSL groups of four, Bo5; the top two of each group advance. Knockout: Bo5 semifinals with group winners facing the other group's runner-up, then a Bo5 final.",
+    "Formats, series lengths and placements are verified by replaying the recorded results.",
+    "Not modelled: the group draw rules (one team per region per group). Forward simulations draw groups randomly."
+  ],
+  "stages": [
+    {
+      "id": "groups",
+      "name": "Group Stage",
+      "format": {
+        "type": "groups",
+        "count": 2,
+        "format": {
+          "type": "gsl",
+          "bestOf": 5
+        }
+      },
+      "entrants": [
+        {
+          "entry": true
+        }
+      ]
+    },
+    {
+      "id": "knockout",
+      "name": "Knockout Stage",
+      "format": {
+        "type": "singleElimination",
+        "bestOf": [5, 5],
+        "seeding": "standard"
+      },
+      "entrants": [
+        {
+          "stage": "groups",
+          "bucket": "qualified:1"
+        },
+        {
+          "stage": "groups",
+          "bucket": "qualified:2"
+        }
+      ]
+    }
+  ],
+  "placements": [
+    {
+      "stage": "knockout",
+      "bucket": "champion",
+      "place": [1, 1]
+    },
+    {
+      "stage": "knockout",
+      "bucket": "eliminated:final",
+      "place": [2, 2]
+    },
+    {
+      "stage": "knockout",
+      "bucket": "eliminated:semifinal",
+      "place": [3, 4]
+    },
+    {
+      "stage": "groups",
+      "bucket": "eliminated:3",
+      "place": [5, 6]
+    },
+    {
+      "stage": "groups",
+      "bucket": "eliminated:4",
+      "place": [7, 8]
+    }
+  ]
+}

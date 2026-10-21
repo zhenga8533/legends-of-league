@@ -3,6 +3,7 @@ import { runDoubleElimination, runSingleElimination } from "./formats/eliminatio
 import { runGroups } from "./formats/groups";
 import { runGsl } from "./formats/gsl";
 import { runRoundRobin } from "./formats/roundRobin";
+import { runSeries } from "./formats/series";
 import { runSwiss } from "./formats/swiss";
 import type { Ruleset, StageDefinition } from "./ruleset";
 import type { Entrant, PlayedMatch, StageOutcome, TeamId } from "./types";
@@ -41,6 +42,8 @@ function runStage(definition: StageDefinition, entrants: Entrant[], ctx: Context
       return runDoubleElimination(format, id, entrants, ctx);
     case "groups":
       return runGroups(format, id, entrants, ctx);
+    case "series":
+      return runSeries(format, id, entrants, ctx);
   }
 }
 

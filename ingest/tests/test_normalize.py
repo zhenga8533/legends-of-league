@@ -111,3 +111,28 @@ def test_unmapped_region_code_is_an_error(
     result = normalize(snapshot, spec, store)
 
     assert any(issue.code == "region-unmapped" for issue in result.issues)
+
+
+def test_series_without_game_records_are_recorded_as_gaps(
+    snapshot: Snapshot, spec: EditionSpec, store: EntityStore
+) -> None:
+    final_games = [g for g in snapshot.tables["games"] if "Finals" in g["MatchId"]]
+    snapshot.tables["games"] = [g for g in snapshot.tables["games"] if g not in final_games]
+
+    result = normalize(snapshot, spec, store)
+
+    assert [(g.record, g.reason) for g in result.gaps] == [
+        (f"series:{FINAL}", "game records for 0 of 5 games")
+    ]
+
+
+def test_coach_titles_are_normalized(
+    snapshot: Snapshot, spec: EditionSpec, store: EntityStore
+) -> None:
+    coach = next(r for r in snapshot.tables["rosterPlayers"] if r["Role"] == "Coach")
+    coach["Role"] = "Head Coach"
+
+    result = normalize(snapshot, spec, store)
+
+    assert not [i for i in result.issues if i.code == "roster-role"]
+    assert any(entry.role == "coach" for entry in result.data.rosters)

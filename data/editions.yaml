@@ -49,3 +49,108 @@ editions:
           tabs:
             "Groups*": groups
             "*": knockout
+
+  - tournament: msi
+    year: 2023
+    name: 2023 Mid-Season Invitational
+    status: completed
+    stages:
+      - { id: play-in, name: Play-In }
+      - { id: last-chance, name: Last Chance Qualifier }
+      - { id: bracket, name: Bracket Stage }
+    leaguepedia:
+      basePage: 2023 Mid-Season Invitational
+      pages:
+        - page: 2023 Mid-Season Invitational
+          tabs:
+            "Play-In*": play-in
+            "Last Chance*": last-chance
+            "*": bracket
+
+  # The EMEA vs NA "Worlds Qualifying Series" (2023 Worlds Qualifying Series) is a qualifier:
+  # Leaguepedia's Worlds results do not place its loser, so the edition starts at the play-in.
+  - tournament: worlds
+    year: 2023
+    name: 2023 World Championship
+    status: completed
+    stages:
+      - { id: play-in, name: Play-In }
+      - { id: qualifiers, name: Play-In Qualifiers }
+      - { id: swiss, name: Swiss Stage }
+      - { id: knockout, name: Knockout Stage }
+    leaguepedia:
+      basePage: 2023 Season World Championship
+      pages:
+        - page: 2023 Season World Championship/Play-In
+          tabs:
+            "Qualifiers": qualifiers
+            "*": play-in
+        - page: 2023 Season World Championship/Main Event
+          tabs:
+            "Round *": swiss
+            "*": knockout
+
+  - tournament: msi
+    year: 2025
+    name: 2025 Mid-Season Invitational
+    status: completed
+    stages:
+      - { id: play-in, name: Play-In }
+      - { id: bracket, name: Bracket Stage }
+    leaguepedia:
+      basePage: 2025 Mid-Season Invitational
+      pages:
+        - page: 2025 Mid-Season Invitational
+          tabs:
+            "Play-In*": play-in
+            "*": bracket
+
+  - tournament: worlds
+    year: 2025
+    name: 2025 World Championship
+    status: completed
+    stages:
+      - { id: play-in, name: Play-In }
+      - { id: swiss, name: Swiss Stage }
+      - { id: knockout, name: Knockout Stage }
+    leaguepedia:
+      basePage: 2025 Season World Championship
+      pages:
+        - page: 2025 Season World Championship/Play-In
+          stage: play-in
+        - page: 2025 Season World Championship/Main Event
+          tabs:
+            "Round *": swiss
+            "*": knockout
+
+  - tournament: first-stand
+    year: 2026
+    name: 2026 First Stand
+    status: completed
+    stages:
+      - { id: groups, name: Group Stage }
+      - { id: knockout, name: Knockout Stage }
+    leaguepedia:
+      basePage: 2026 First Stand
+      pages:
+        - page: 2026 First Stand
+          tabs:
+            "Groups*": groups
+            "*": knockout
+
+  - tournament: msi
+    year: 2026
+    name: 2026 Mid-Season Invitational
+    status: completed
+    stages:
+      - { id: play-in, name: Play-In }
+      - { id: play-in-final, name: Play-In Final }
+      - { id: bracket, name: Bracket Stage }
+    leaguepedia:
+      basePage: 2026 Mid-Season Invitational
+      pages:
+        - page: 2026 Mid-Season Invitational
+          tabs:
+            "Play-In Day 4": play-in-final
+            "Play-In*": play-in
+            "*": bracket

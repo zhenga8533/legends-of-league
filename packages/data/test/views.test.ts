@@ -55,14 +55,12 @@ describe("edition views", () => {
 
 describe("team and player views", () => {
   it("collects a team's appearances in date order", () => {
-    const history = teamHistory(archive, "team:t1").map((a) => [
-      a.bundle.edition.id,
-      placeText(a.standing.place),
-    ]);
-    expect(history).toEqual([
-      ["ed:msi-2024", "3rd"],
-      ["ed:worlds-2024", "1st"],
-    ]);
+    const history = teamHistory(archive, "team:t1");
+    const places = new Map(history.map((a) => [a.bundle.edition.id, placeText(a.standing.place)]));
+    expect(places.get("ed:msi-2024")).toBe("3rd");
+    expect(places.get("ed:worlds-2024")).toBe("1st");
+    const starts = history.map((a) => a.bundle.edition.dates.start ?? "");
+    expect(starts).toEqual([...starts].sort());
   });
 
   it("aggregates a player's games consistently across editions and champions", () => {

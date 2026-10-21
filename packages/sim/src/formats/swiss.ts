@@ -38,6 +38,23 @@ export function drawSwissPairs(
   return fallback;
 }
 
+/** Whether the teams can be paired without any rematch. */
+export function rematchFreePairingExists(
+  teams: readonly TeamId[],
+  played: ReadonlySet<string>,
+): boolean {
+  const [first, ...rest] = teams;
+  if (first === undefined) return true;
+  return rest.some(
+    (partner) =>
+      !played.has(pairKey(first, partner)) &&
+      rematchFreePairingExists(
+        rest.filter((team) => team !== partner),
+        played,
+      ),
+  );
+}
+
 export function runSwiss(
   format: SwissFormat,
   stage: string,
@@ -64,15 +81,19 @@ export function runSwiss(
       if (teams.length % 2 !== 0) {
         throw new SimulationError(`${stage} round ${round}: odd number of teams at ${key}`);
       }
+      const avoid = format.rematches !== "allow";
       const pairs = ctx.pair({ stage, purpose: `round-${round}:${key}`, teams }, (rest) =>
-        drawSwissPairs(ctx.rng, rest, played),
+        drawSwissPairs(ctx.rng, rest, avoid ? played : new Set()),
       );
+      const rematch = pairs.find(([a, b]) => played.has(pairKey(a, b)));
+      if (rematch && avoid && rematchFreePairingExists(teams, played)) {
+        throw new SimulationError(
+          `${stage} round ${round}: ${rematch.join(" vs ")} is an avoidable rematch`,
+        );
+      }
       const [wins, losses] = key.split("-").map(Number) as [number, number];
       const decisive = wins === format.wins - 1 || losses === format.losses - 1;
       for (const [a, b] of pairs) {
-        if (played.has(pairKey(a, b))) {
-          throw new SimulationError(`${stage} round ${round}: ${a} vs ${b} is a rematch`);
-        }
         const match = ctx.play({
           stage,
           label: `Round ${round}`,
