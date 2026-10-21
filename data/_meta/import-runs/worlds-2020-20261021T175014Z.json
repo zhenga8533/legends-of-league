@@ -1,0 +1,110 @@
+{
+  "run": "worlds-2020-20261021T175014Z",
+  "at": "2026-10-21T17:50:14.272381+00:00",
+  "operation": "import",
+  "force": false,
+  "summary": {
+    "edition": "worlds-2020",
+    "operation": "import",
+    "provider": "leaguepedia",
+    "snapshotSha256": "088a638a7893e2b0ad6dfab6bf6b5ec0f188475c8fa8ab128a5c5aa1924bf05a",
+    "filesChanged": true,
+    "counts": {
+      "edition": {
+        "added": 1
+      },
+      "series": {
+        "added": 84
+      },
+      "game": {
+        "added": 114
+      },
+      "stats": {
+        "added": 1140
+      },
+      "roster": {
+        "added": 154
+      },
+      "placement": {
+        "added": 22
+      }
+    },
+    "unchanged": 0,
+    "blocked": [],
+    "errors": [],
+    "warnings": 0,
+    "gaps": 0,
+    "newEntities": [
+      "org:drx",
+      "org:legacy-esports",
+      "org:lgd-gaming",
+      "org:machi-esports",
+      "org:papara-supermassive",
+      "org:rogue",
+      "org:suning",
+      "org:v3-esports",
+      "player:acce",
+      "player:acee",
+      "player:aloned",
+      "player:angel-xiang-tao",
+      "player:archer-lee-keun-hee",
+      "player:blumigan",
+      "player:bruce",
+      "player:chashao",
+      "player:crescent-luo-sheng",
+      "player:curry",
+      "player:cvmax",
+      "player:dee",
+      "player:denian",
+      "player:dian",
+      "player:dreamer",
+      "player:eimy",
+      "player:fallen-carlos-calderon",
+      "player:finn",
+      "player:fredy122",
+      "player:ghost-jang-yong-jun",
+      "player:glen",
+      "player:huanfeng",
+      "player:jatt",
+      "player:kaas",
+      "player:kaiser",
+      "player:larssen",
+      "player:leza",
+      "player:life",
+      "player:loken",
+      "player:mabrey",
+      "player:maizijian",
+      "player:mark-ling-xu",
+      "player:mash",
+      "player:micao",
+      "player:odin-ju-yeong-dal",
+      "player:orome",
+      "player:raes",
+      "player:raina",
+      "player:santorin",
+      "player:saroo",
+      "player:seek",
+      "player:selfmade",
+      "player:shadow-facundo-cuello",
+      "player:shaves",
+      "player:skin",
+      "player:solo-colin-earnest",
+      "player:son",
+      "player:spica",
+      "player:tactical",
+      "player:tally",
+      "player:tank",
+      "player:topoon",
+      "player:vander",
+      "player:yuyanjia",
+      "team:drx",
+      "team:legacy-esports",
+      "team:lgd-gaming",
+      "team:machi-esports",
+      "team:papara-supermassive",
+      "team:rogue",
+      "team:suning",
+      "team:v3-esports"
+    ]
+  }
+}

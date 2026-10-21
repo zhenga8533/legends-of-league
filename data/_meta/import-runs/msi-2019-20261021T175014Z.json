@@ -1,0 +1,77 @@
+{
+  "run": "msi-2019-20261021T175014Z",
+  "at": "2026-10-21T17:50:14.272381+00:00",
+  "operation": "import",
+  "force": false,
+  "summary": {
+    "edition": "msi-2019",
+    "operation": "import",
+    "provider": "leaguepedia",
+    "snapshotSha256": "2c74d2389e83232ff4f61a7fb1f157383ada5d4200d3f9cb214dea189c1a8e34",
+    "filesChanged": true,
+    "counts": {
+      "edition": {
+        "added": 1
+      },
+      "series": {
+        "added": 61
+      },
+      "game": {
+        "added": 79
+      },
+      "stats": {
+        "added": 790
+      },
+      "roster": {
+        "added": 80
+      },
+      "placement": {
+        "added": 13
+      }
+    },
+    "unchanged": 0,
+    "blocked": [],
+    "errors": [],
+    "warnings": 0,
+    "gaps": 0,
+    "newEntities": [
+      "org:bombers",
+      "org:intz",
+      "org:mega",
+      "org:vega-squadron",
+      "player:ahahacik",
+      "player:balkhan",
+      "player:bolulu",
+      "player:boss-vladislav-fomin",
+      "player:buggax",
+      "player:bugi",
+      "player:clid",
+      "player:ellam",
+      "player:gadget",
+      "player:jjun",
+      "player:karam",
+      "player:kirei",
+      "player:maestro-lucas-pierre",
+      "player:mills",
+      "player:mimic-min-ju-seong",
+      "player:nomanz",
+      "player:only35",
+      "player:pop",
+      "player:rogue-jake-sharwood",
+      "player:ruin",
+      "player:ryoma",
+      "player:seok-seo-min-seok",
+      "player:shini",
+      "player:sweet-chun-jung-hee",
+      "player:tay",
+      "player:teddy",
+      "player:turkinator",
+      "player:warangelus",
+      "player:westonway",
+      "team:bombers",
+      "team:intz",
+      "team:mega",
+      "team:vega-squadron"
+    ]
+  }
+}

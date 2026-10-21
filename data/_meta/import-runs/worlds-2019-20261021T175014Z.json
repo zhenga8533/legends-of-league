@@ -1,0 +1,113 @@
+{
+  "run": "worlds-2019-20261021T175014Z",
+  "at": "2026-10-21T17:50:14.272381+00:00",
+  "operation": "import",
+  "force": false,
+  "summary": {
+    "edition": "worlds-2019",
+    "operation": "import",
+    "provider": "leaguepedia",
+    "snapshotSha256": "0ec1d8d5a5e5ce51395da4509c56e456f280733922232ec995e538cae2a0675f",
+    "filesChanged": true,
+    "counts": {
+      "edition": {
+        "added": 1
+      },
+      "series": {
+        "added": 88
+      },
+      "game": {
+        "added": 120
+      },
+      "stats": {
+        "added": 1200
+      },
+      "roster": {
+        "added": 151
+      },
+      "placement": {
+        "added": 24
+      }
+    },
+    "unchanged": 0,
+    "blocked": [],
+    "errors": [],
+    "warnings": 0,
+    "gaps": 0,
+    "newEntities": [
+      "org:clutch-gaming",
+      "org:damwon-gaming",
+      "org:flamengo-esports",
+      "org:funplus-phoenix",
+      "org:griffin",
+      "org:j-team",
+      "org:lowkey-esports-vietnam",
+      "org:mammoth",
+      "org:royal-youth",
+      "org:splyce",
+      "org:unicorns-of-love-cis",
+      "player:3z",
+      "player:alex-chen-yu-ming",
+      "player:apex-hsieh-chia-wei",
+      "player:armut",
+      "player:artifact",
+      "player:babip",
+      "player:beryl",
+      "player:celebrity",
+      "player:chaos-byun-young-sub",
+      "player:closer-can-celik",
+      "player:cyeol",
+      "player:damonte",
+      "player:deftly",
+      "player:deul",
+      "player:dnk",
+      "player:doinb",
+      "player:duke-hadrien-forestier",
+      "player:effort",
+      "player:enatron",
+      "player:fofo",
+      "player:gimgoon",
+      "player:goku",
+      "player:hana",
+      "player:hani",
+      "player:hieu3",
+      "player:innaxe",
+      "player:kobbe",
+      "player:langx",
+      "player:leyan",
+      "player:lilv",
+      "player:luci",
+      "player:lwx",
+      "player:mnm-wong-ka-chun",
+      "player:nemesis",
+      "player:nexabc",
+      "player:nixwater",
+      "player:nuclear",
+      "player:nuguri",
+      "player:pilot-na-woo-hyung",
+      "player:rainbow-kim-soo-gi",
+      "player:sheepy",
+      "player:shrimp",
+      "player:sw0rd",
+      "player:tolerant",
+      "player:tore",
+      "player:vizicsacsi",
+      "player:von-gabriel-barbosa",
+      "player:vulcan-philippe-laflamme",
+      "player:warl0ck",
+      "player:xerxe",
+      "player:ysera",
+      "team:clutch-gaming",
+      "team:damwon-gaming",
+      "team:flamengo-esports",
+      "team:funplus-phoenix",
+      "team:griffin",
+      "team:j-team",
+      "team:lowkey-esports-vietnam",
+      "team:mammoth",
+      "team:royal-youth",
+      "team:splyce",
+      "team:unicorns-of-love-cis"
+    ]
+  }
+}

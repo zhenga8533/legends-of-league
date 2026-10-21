@@ -1,0 +1,158 @@
+{
+  "id": "ed:worlds-2018",
+  "tournament": "tour:worlds",
+  "year": 2018,
+  "name": "2018 World Championship",
+  "status": "completed",
+  "dates": {
+    "start": "2018-10-01",
+    "end": "2018-11-03"
+  },
+  "stages": [
+    {
+      "id": "play-in",
+      "name": "Play-In Groups"
+    },
+    {
+      "id": "play-in-knockout",
+      "name": "Play-In Knockout"
+    },
+    {
+      "id": "groups",
+      "name": "Group Stage"
+    },
+    {
+      "id": "knockout",
+      "name": "Knockout Stage"
+    }
+  ],
+  "participants": [
+    {
+      "team": "team:100-thieves",
+      "region": "region:lcs",
+      "entryStage": "groups"
+    },
+    {
+      "team": "team:afreeca-freecs",
+      "region": "region:lck",
+      "entryStage": "groups"
+    },
+    {
+      "team": "team:ascension-gaming",
+      "region": "region:sea",
+      "entryStage": "play-in"
+    },
+    {
+      "team": "team:cloud9",
+      "region": "region:lcs",
+      "entryStage": "play-in"
+    },
+    {
+      "team": "team:detonation-focusme",
+      "region": "region:ljl",
+      "entryStage": "play-in"
+    },
+    {
+      "team": "team:dire-wolves",
+      "region": "region:opl",
+      "entryStage": "play-in"
+    },
+    {
+      "team": "team:edward-gaming",
+      "region": "region:lpl",
+      "entryStage": "play-in"
+    },
+    {
+      "team": "team:flash-wolves",
+      "region": "region:lms",
+      "entryStage": "groups"
+    },
+    {
+      "team": "team:fnatic",
+      "region": "region:eu-lcs",
+      "entryStage": "groups"
+    },
+    {
+      "team": "team:g-rex",
+      "region": "region:lms",
+      "entryStage": "play-in"
+    },
+    {
+      "team": "team:g2-esports",
+      "region": "region:eu-lcs",
+      "entryStage": "play-in"
+    },
+    {
+      "team": "team:gambit-esports",
+      "region": "region:lcl",
+      "entryStage": "play-in"
+    },
+    {
+      "team": "team:gen-g",
+      "region": "region:lck",
+      "entryStage": "groups"
+    },
+    {
+      "team": "team:infinity",
+      "region": "region:lln",
+      "entryStage": "play-in"
+    },
+    {
+      "team": "team:invictus-gaming",
+      "region": "region:lpl",
+      "entryStage": "groups"
+    },
+    {
+      "team": "team:kabum-esports",
+      "region": "region:cblol",
+      "entryStage": "play-in"
+    },
+    {
+      "team": "team:kaos-latin-gamers",
+      "region": "region:cls",
+      "entryStage": "play-in"
+    },
+    {
+      "team": "team:kt-rolster",
+      "region": "region:lck",
+      "entryStage": "groups"
+    },
+    {
+      "team": "team:mad-team",
+      "region": "region:lms",
+      "entryStage": "groups"
+    },
+    {
+      "team": "team:phong-vu-buffalo",
+      "region": "region:vcs",
+      "entryStage": "groups"
+    },
+    {
+      "team": "team:royal-never-give-up",
+      "region": "region:lpl",
+      "entryStage": "groups"
+    },
+    {
+      "team": "team:supermassive-esports",
+      "region": "region:tcl",
+      "entryStage": "play-in"
+    },
+    {
+      "team": "team:team-liquid",
+      "region": "region:lcs",
+      "entryStage": "groups"
+    },
+    {
+      "team": "team:team-vitality",
+      "region": "region:eu-lcs",
+      "entryStage": "groups"
+    }
+  ],
+  "externalRefs": [
+    {
+      "provider": "leaguepedia",
+      "key": "OverviewPage",
+      "value": "2018 Season World Championship"
+    }
+  ]
+}

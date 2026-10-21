@@ -1,0 +1,162 @@
+{
+  "id": "ed:worlds-2022",
+  "tournament": "tour:worlds",
+  "year": 2022,
+  "name": "2022 World Championship",
+  "status": "completed",
+  "dates": {
+    "start": "2022-09-29",
+    "end": "2022-11-05"
+  },
+  "stages": [
+    {
+      "id": "play-in",
+      "name": "Play-In Groups"
+    },
+    {
+      "id": "elimination",
+      "name": "Play-In Elimination Round"
+    },
+    {
+      "id": "qualification",
+      "name": "Play-In Qualification Round"
+    },
+    {
+      "id": "groups",
+      "name": "Group Stage"
+    },
+    {
+      "id": "knockout",
+      "name": "Knockout Stage"
+    }
+  ],
+  "participants": [
+    {
+      "team": "team:100-thieves",
+      "region": "region:lcs",
+      "entryStage": "groups"
+    },
+    {
+      "team": "team:beyond-gaming",
+      "region": "region:pcs",
+      "entryStage": "play-in"
+    },
+    {
+      "team": "team:chiefs-esports-club",
+      "region": "region:lco",
+      "entryStage": "play-in"
+    },
+    {
+      "team": "team:cloud9",
+      "region": "region:lcs",
+      "entryStage": "groups"
+    },
+    {
+      "team": "team:ctbc-flying-oyster",
+      "region": "region:pcs",
+      "entryStage": "groups"
+    },
+    {
+      "team": "team:detonation-focusme",
+      "region": "region:ljl",
+      "entryStage": "play-in"
+    },
+    {
+      "team": "team:drx",
+      "region": "region:lck",
+      "entryStage": "play-in"
+    },
+    {
+      "team": "team:dwg-kia",
+      "region": "region:lck",
+      "entryStage": "groups"
+    },
+    {
+      "team": "team:edward-gaming",
+      "region": "region:lpl",
+      "entryStage": "groups"
+    },
+    {
+      "team": "team:evil-geniuses",
+      "region": "region:lcs",
+      "entryStage": "play-in"
+    },
+    {
+      "team": "team:fnatic",
+      "region": "region:lec",
+      "entryStage": "play-in"
+    },
+    {
+      "team": "team:g2-esports",
+      "region": "region:lec",
+      "entryStage": "groups"
+    },
+    {
+      "team": "team:gam-esports",
+      "region": "region:vcs",
+      "entryStage": "groups"
+    },
+    {
+      "team": "team:gen-g",
+      "region": "region:lck",
+      "entryStage": "groups"
+    },
+    {
+      "team": "team:istanbul-wildcats",
+      "region": "region:tcl",
+      "entryStage": "play-in"
+    },
+    {
+      "team": "team:isurus",
+      "region": "region:lla",
+      "entryStage": "play-in"
+    },
+    {
+      "team": "team:jd-gaming",
+      "region": "region:lpl",
+      "entryStage": "groups"
+    },
+    {
+      "team": "team:loud",
+      "region": "region:cblol",
+      "entryStage": "play-in"
+    },
+    {
+      "team": "team:mad-lions",
+      "region": "region:lec",
+      "entryStage": "play-in"
+    },
+    {
+      "team": "team:rogue",
+      "region": "region:lec",
+      "entryStage": "groups"
+    },
+    {
+      "team": "team:royal-never-give-up",
+      "region": "region:lpl",
+      "entryStage": "play-in"
+    },
+    {
+      "team": "team:saigon-buffalo",
+      "region": "region:vcs",
+      "entryStage": "play-in"
+    },
+    {
+      "team": "team:t1",
+      "region": "region:lck",
+      "entryStage": "groups"
+    },
+    {
+      "team": "team:top-esports",
+      "region": "region:lpl",
+      "entryStage": "groups"
+    }
+  ],
+  "externalRefs": [
+    {
+      "provider": "leaguepedia",
+      "key": "OverviewPage",
+      "value": "2022 Season World Championship"
+    }
+  ]
+}

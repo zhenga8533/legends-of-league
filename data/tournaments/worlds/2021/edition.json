@@ -1,0 +1,152 @@
+{
+  "id": "ed:worlds-2021",
+  "tournament": "tour:worlds",
+  "year": 2021,
+  "name": "2021 World Championship",
+  "status": "completed",
+  "dates": {
+    "start": "2021-10-05",
+    "end": "2021-11-06"
+  },
+  "stages": [
+    {
+      "id": "play-in",
+      "name": "Play-In Groups"
+    },
+    {
+      "id": "elimination",
+      "name": "Play-In Elimination Round"
+    },
+    {
+      "id": "qualification",
+      "name": "Play-In Qualification Round"
+    },
+    {
+      "id": "groups",
+      "name": "Group Stage"
+    },
+    {
+      "id": "knockout",
+      "name": "Knockout Stage"
+    }
+  ],
+  "participants": [
+    {
+      "team": "team:100-thieves",
+      "region": "region:lcs",
+      "entryStage": "groups"
+    },
+    {
+      "team": "team:beyond-gaming",
+      "region": "region:pcs",
+      "entryStage": "play-in"
+    },
+    {
+      "team": "team:cloud9",
+      "region": "region:lcs",
+      "entryStage": "play-in"
+    },
+    {
+      "team": "team:detonation-focusme",
+      "region": "region:ljl",
+      "entryStage": "play-in"
+    },
+    {
+      "team": "team:dwg-kia",
+      "region": "region:lck",
+      "entryStage": "groups"
+    },
+    {
+      "team": "team:edward-gaming",
+      "region": "region:lpl",
+      "entryStage": "groups"
+    },
+    {
+      "team": "team:fnatic",
+      "region": "region:lec",
+      "entryStage": "groups"
+    },
+    {
+      "team": "team:funplus-phoenix",
+      "region": "region:lpl",
+      "entryStage": "groups"
+    },
+    {
+      "team": "team:galatasaray-esports",
+      "region": "region:tcl",
+      "entryStage": "play-in"
+    },
+    {
+      "team": "team:gen-g",
+      "region": "region:lck",
+      "entryStage": "groups"
+    },
+    {
+      "team": "team:hanwha-life-esports",
+      "region": "region:lck",
+      "entryStage": "play-in"
+    },
+    {
+      "team": "team:infinity",
+      "region": "region:lla",
+      "entryStage": "play-in"
+    },
+    {
+      "team": "team:lng-esports",
+      "region": "region:lpl",
+      "entryStage": "play-in"
+    },
+    {
+      "team": "team:mad-lions",
+      "region": "region:lec",
+      "entryStage": "groups"
+    },
+    {
+      "team": "team:peace",
+      "region": "region:lco",
+      "entryStage": "play-in"
+    },
+    {
+      "team": "team:psg-talon",
+      "region": "region:pcs",
+      "entryStage": "groups"
+    },
+    {
+      "team": "team:red-canids",
+      "region": "region:cblol",
+      "entryStage": "play-in"
+    },
+    {
+      "team": "team:rogue",
+      "region": "region:lec",
+      "entryStage": "groups"
+    },
+    {
+      "team": "team:royal-never-give-up",
+      "region": "region:lpl",
+      "entryStage": "groups"
+    },
+    {
+      "team": "team:t1",
+      "region": "region:lck",
+      "entryStage": "groups"
+    },
+    {
+      "team": "team:team-liquid",
+      "region": "region:lcs",
+      "entryStage": "groups"
+    },
+    {
+      "team": "team:unicorns-of-love-cis",
+      "region": "region:lcl",
+      "entryStage": "play-in"
+    }
+  ],
+  "externalRefs": [
+    {
+      "provider": "leaguepedia",
+      "key": "OverviewPage",
+      "value": "2021 Season World Championship"
+    }
+  ]
+}
