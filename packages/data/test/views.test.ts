@@ -68,7 +68,12 @@ describe("team and player views", () => {
     const total = career.editions.reduce((sum, e) => sum + e.games, 0);
     expect(total).toBeGreaterThan(0);
     expect(career.champions.reduce((sum, c) => sum + c.games, 0)).toBe(total);
-    expect(career.editions.every((e) => e.team === "team:t1" && e.role === "mid")).toBe(true);
+    // Records keep the team identity of the time: SK Telecom T1 until 2019, T1 after.
+    const t1 = new Set(["team:sk-telecom-t1", "team:t1"]);
+    const editions = new Set(archive.editions.map((b) => b.edition.id));
+    const asSkt = career.editions.filter((e) => e.team === "team:sk-telecom-t1");
+    expect(career.editions.every((e) => t1.has(e.team) && e.role === "mid")).toBe(true);
+    if (editions.has("ed:worlds-2017")) expect(asSkt.length).toBeGreaterThan(0);
   });
 
   it("splits a game's player stats by side in role order", () => {
