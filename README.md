@@ -4,7 +4,7 @@ An archive of every international League of Legends tournament (Worlds, the Mid-
 Invitational and First Stand), plus a simulation engine for replaying history and forecasting
 what comes next.
 
-> **Status:** the archive covers every completed Worlds, MSI and First Stand (M4); the Simulation Studio (M5) is next. See the
+> **Status:** the archive covers every completed Worlds, MSI and First Stand, with a Simulation Studio (M5). See the
 > [implementation plan](docs/plan.md) for the roadmap.
 
 ## Repository layout

@@ -184,9 +184,14 @@ function playTiebreakers(
     }
     return { tiers: [[final.winner], [final.loser], [first.loser, second.loser]], matches };
   }
-  throw new SimulationError(
-    `${stage}: tiebreakers between ${seeds.length} teams are not supported`,
-  );
+  // No real tournament has played off a tie between five or more teams, so there is no rule to
+  // follow: simulations draw the order, and replays (which need recorded games) reject it.
+  if (ctx.strict) {
+    throw new SimulationError(
+      `${stage}: tiebreakers between ${seeds.length} teams are not supported`,
+    );
+  }
+  return { tiers: seeds.map((team) => [team]), matches };
 }
 
 /**

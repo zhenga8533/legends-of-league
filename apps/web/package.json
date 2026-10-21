@@ -12,7 +12,12 @@
     "test:e2e": "playwright test"
   },
   "dependencies": {
-    "astro": "^7.3.0"
+    "astro": "^7.3.0",
+    "@astrojs/react": "^7.0.0",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "@lol/sim": "workspace:*",
+    "zod": "^4.6.0"
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.10",
@@ -23,6 +28,8 @@
     "@tailwindcss/vite": "^4.3.0",
     "pagefind": "^1.5.0",
     "tailwindcss": "^4.3.0",
-    "vitest": "^5.0.0"
+    "vitest": "^5.0.0",
+    "@types/react": "^19.2.0",
+    "@types/react-dom": "^19.2.0"
   }
 }

@@ -238,3 +238,32 @@ describe("replayed brackets", () => {
     ]);
   });
 });
+
+describe("ties between five or more teams", () => {
+  // Five teams in a single round robin, each beating the next two: everyone finishes 2-2.
+  const five = ["a", "b", "c", "d", "e"];
+  const matches = five.flatMap((team, i) => [
+    result(team, five[(i + 1) % 5]!, team),
+    result(team, five[(i + 2) % 5]!, team),
+  ]);
+  const format = { tiebreakers: [], tiebreakerGames: { positions: [2], bestOf: 1 } };
+
+  it("are drawn in simulations, since no real tournament played one off", () => {
+    const { tiers, tiebreakers } = rankWithTiebreakers(five, matches, format, context(1), "groups");
+    expect(tiebreakers).toEqual([]);
+    expect(tiers.flat().sort()).toEqual(five);
+    expect(tiers.every((tier) => tier.length === 1)).toBe(true);
+  });
+
+  it("are rejected in strict replays", () => {
+    expect(() =>
+      rankWithTiebreakers(
+        five,
+        matches,
+        format,
+        context(1, { strict: true, resolver: seeded(five) }),
+        "groups",
+      ),
+    ).toThrow(/not supported/);
+  });
+});

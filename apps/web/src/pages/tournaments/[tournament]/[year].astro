@@ -1,10 +1,17 @@
 ---
 import { type EditionBundle, editionStages, editionSummary, idSlug } from "@lol/data";
-import StageView from "../../../components/StageView.astro";
+import { StageBoard } from "../../../components/board/StageBoard";
 import StandingsTable from "../../../components/StandingsTable.astro";
 import TeamLink from "../../../components/TeamLink.astro";
 import BaseLayout from "../../../layouts/BaseLayout.astro";
-import { archive, dateRange, paths, ruleset, tournamentName } from "../../../lib/archive";
+import {
+  archive,
+  dateRange,
+  paths,
+  ruleset,
+  teamLabels,
+  tournamentName,
+} from "../../../lib/archive";
 import { withBase } from "../../../lib/paths";
 
 export function getStaticPaths() {
@@ -21,7 +28,14 @@ interface Props {
 const { bundle } = Astro.props;
 const { edition } = bundle;
 const rules = ruleset(bundle);
-const stages = editionStages(bundle, rules);
+const stages = editionStages(bundle, rules).map((stage) => ({
+  ...stage,
+  matches: stage.matches.map((match) => ({
+    ...match,
+    key: match.seriesId,
+    href: paths.series(match.seriesId),
+  })),
+}));
 const summary = editionSummary(bundle);
 const gaps = bundle.provenance.gaps ?? [];
 
@@ -85,12 +99,18 @@ function sourceLabel(url: string): string {
       <a class="rounded border border-border px-3 py-1 hover:border-accent" href="#format">
         Format
       </a>
+      <a
+        class="rounded bg-accent px-3 py-1 font-semibold text-bg hover:bg-accent-strong"
+        href={withBase(`/simulate/#ed=${idSlug(edition.id)}`)}
+      >
+        Simulate this edition
+      </a>
     </nav>
   </header>
 
   <div class="space-y-12">
     {stages.map((stage) => (
-      <StageView stage={stage} />
+      <StageBoard stage={stage} teams={teamLabels} />
     ))}
 
     <section id="standings" aria-labelledby="standings-heading" class="space-y-3">

@@ -110,3 +110,24 @@ never use the event's own results. `packages/data/test/calibration.test.ts` pred
 recorded game from earlier games only. With the three imported editions (219 games), Elo
 reaches a Brier score of 0.238 and log-loss of 0.669, against 0.250 and 0.693 for a coin flip.
 That is a real but modest edge, because most teams start without rating history.
+
+## Simulation Studio (`/simulate/`)
+
+The Studio runs the same engine in the browser, under `apps/web/src/studio/`.
+
+- **Data:** for each edition, the build writes `/simulate/data/<edition>.json`
+  (`lib/studio-data.ts`). It contains the ruleset, the participants, the recorded series and
+  placements, pre-event Elo (from games before the edition only) and precomputed pre-event
+  odds (2,000 seeded runs).
+- **Scenario** (`scenario.ts`): the edition, seed, the stage to simulate from, picked winners
+  and rating overrides. It's validated with zod and stored base64url-encoded in the URL hash
+  (`#s=…`), so a link reproduces the exact simulation. `#ed=<edition>` opens an edition with
+  defaults. Scenarios can also be exported and imported as JSON.
+- **Resolver** (`setup.ts`): stages before the "simulate from" stage replay their real
+  results through a lenient `ReplayResolver`. Picks then apply to the remaining matches, and
+  can never override a real result. Everything else is simulated.
+- **Monte Carlo** runs in a Web Worker (`worker.ts`) in chunks of 250 seeded runs. Chunks
+  report progress and merge exactly, so the page stays responsive. An e2e test checks that the
+  main thread never stalls during a 10,000-run batch.
+- **Labelling:** a persistent banner marks the page as simulated, and every match shows
+  whether it is _Real_, _Picked_ or _Sim_.

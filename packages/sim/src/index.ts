@@ -18,6 +18,7 @@ export { type ActualSeries, ReplayResolver, type ReplayResult, replayTournament 
 export { createRng, type Rng } from "./rng";
 export { type Format, type Ruleset, RulesetSchema, parseRuleset } from "./ruleset";
 export { playSeries, seriesWinProbability, winsNeeded } from "./series";
+export { type MatchSummary, type StageSummary, summarizeStages } from "./summary";
 export {
   type Participant,
   type TournamentInput,
