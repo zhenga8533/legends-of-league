@@ -27,6 +27,10 @@ export interface WinLoss {
 export interface Entrant {
   team: TeamId;
   region?: string;
+  /** Group letter the team played in, for draws that keep group mates apart. */
+  group?: string;
+  /** Finishing position in a round robin; a range when the team shared it with others. */
+  rank?: [number, number];
   record?: WinLoss;
 }
 
@@ -58,6 +62,11 @@ export interface Resolver {
   result?(match: MatchSpec): { score: Score; source: MatchSource } | undefined;
   pairing?(request: PairingRequest): [TeamId, TeamId][] | undefined;
   groups?(request: GroupsRequest): TeamId[][] | undefined;
+  /**
+   * Order of teams entering a tiebreaker bracket: [a, b] plays a vs b; [bye, a, b] plays a vs b,
+   * then the winner vs bye; [a, b, c, d] plays a vs b and c vs d, then the winners.
+   */
+  tiebreakerSeeds?(request: { stage: string; teams: TeamId[] }): TeamId[] | undefined;
   /** A fresh copy for another run, for resolvers that track what one run has consumed. */
   fork?(): Resolver;
 }

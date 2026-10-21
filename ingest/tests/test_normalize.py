@@ -136,3 +136,15 @@ def test_coach_titles_are_normalized(
 
     assert not [i for i in result.issues if i.code == "roster-role"]
     assert any(entry.role == "coach" for entry in result.data.rosters)
+
+
+def test_flex_players_get_a_roster_entry_per_role(
+    snapshot: Snapshot, spec: EditionSpec, store: EntityStore
+) -> None:
+    row = next(r for r in snapshot.tables["rosterPlayers"] if r["Link"] == "Faker")
+    row["Role"] = "Top,Mid"
+
+    result = normalize(snapshot, spec, store)
+
+    roles = sorted(e.role for e in result.data.rosters if e.player == "player:faker")
+    assert roles == ["mid", "top"]

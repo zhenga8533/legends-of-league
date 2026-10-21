@@ -27,10 +27,19 @@ const GslSchema = z.object({ type: z.literal("gsl"), bestOf: odd });
 
 const RoundRobinSchema = z.object({
   type: z.literal("roundRobin"),
-  legs: z.union([z.literal(1), z.literal(2)]),
+  /** How many times each pair meets. */
+  legs: z.int().min(1).max(4),
+  /** Overrides `legs` by group size, e.g. { "3": 4 } for a three-team group that met 4 times. */
+  legsBySize: z.record(z.string(), z.int().min(1).max(4)).default({}),
   bestOf: odd,
-  /** Applied in order after series wins; teams still tied after all of them are drawn. */
+  /** Applied in order after series wins. */
   tiebreakers: z.array(TiebreakerSchema),
+  /**
+   * Ties that span one of these positions (a tie across 2|3 for `2`) are settled by tiebreaker
+   * games: one game for two teams, a bye bracket for three, two games plus a final for four.
+   * Other ties stay shared. Without this, unresolved ties are drawn at random.
+   */
+  tiebreakerGames: z.object({ positions: z.array(positive), bestOf: odd.default(1) }).optional(),
   advance: z.int().nonnegative(),
 });
 
@@ -38,7 +47,8 @@ const SingleEliminationSchema = z.object({
   type: z.literal("singleElimination"),
   /** One entry per round, first round first. */
   bestOf: z.array(odd).min(1),
-  seeding: z.enum(["standard", "random", "swissKnockout"]),
+  /** `groupDraw`: group winners face runners-up from other groups, group mates on opposite halves. */
+  seeding: z.enum(["standard", "random", "swissKnockout", "groupDraw"]),
 });
 
 const DoubleEliminationSchema = z.object({
@@ -64,6 +74,11 @@ const SeriesSchema = z.object({
     .array(z.tuple([z.int().nonnegative(), z.int().nonnegative()]))
     .min(1)
     .default([[0, 1]]),
+  /**
+   * "fixed": exactly `pairs`. "halves": the first half of the entrants is drawn against the
+   * second half, keeping teams from the same group apart where possible.
+   */
+  draw: z.enum(["fixed", "halves"]).default("fixed"),
 });
 
 export const FormatSchema = z.discriminatedUnion("type", [
@@ -100,7 +115,17 @@ export const RulesetSchema = z
     sources: z.array(z.url()).default([]),
     stages: z.array(StageSchema).min(1),
     placements: z.array(
-      z.object({ stage: z.string(), bucket: z.string(), place: z.tuple([positive, positive]) }),
+      z.object({
+        stage: z.string(),
+        bucket: z.string(),
+        place: z.tuple([positive, positive]),
+        /**
+         * "rank": split the range in order of the teams' finishing positions in their group,
+         * with tied teams sharing places (e.g. 3rd places 9-11, a 3rd/4th tie 12-13, 4ths 14-16).
+         */
+        /** "wins": the same, but tiered by round-robin wins (best first) instead of position. */
+        split: z.enum(["rank", "wins"]).optional(),
+      }),
     ),
   })
   .superRefine((ruleset, ctx) => {

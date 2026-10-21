@@ -1,0 +1,106 @@
+{
+  "id": "msi-2021",
+  "name": "Mid-Season Invitational 2021–2022",
+  "editions": ["ed:msi-2021", "ed:msi-2022"],
+  "sources": [
+    "https://lol.fandom.com/wiki/2021_Mid-Season_Invitational",
+    "https://lol.fandom.com/wiki/2022_Mid-Season_Invitational"
+  ],
+  "notes": [
+    "Groups: three groups (two of four teams playing a double round robin, one of three playing each opponent four times), Bo1; the top two advance, ties across 2nd/3rd are played off. Rumble: six teams, double round robin, Bo1; the top four advance, ties split by head-to-head, ties across 4th/5th played off. Knockout: Bo5 semifinals (1st vs 4th, 2nd vs 3rd) and final.",
+    "MSI 2022 group results exclude three nullified series that were replayed.",
+    "Formats, series lengths, tiebreaker games and placements are verified by replaying the recorded results.",
+    "Not modelled: the group draw rules. Forward simulations draw groups randomly."
+  ],
+  "stages": [
+    {
+      "id": "groups",
+      "name": "Group Stage",
+      "format": {
+        "type": "groups",
+        "count": 3,
+        "format": {
+          "type": "roundRobin",
+          "legs": 2,
+          "bestOf": 1,
+          "tiebreakers": [],
+          "tiebreakerGames": {
+            "positions": [2]
+          },
+          "advance": 2,
+          "legsBySize": {
+            "3": 4
+          }
+        }
+      },
+      "entrants": [
+        {
+          "entry": true
+        }
+      ]
+    },
+    {
+      "id": "rumble",
+      "name": "Rumble Stage",
+      "format": {
+        "type": "roundRobin",
+        "legs": 2,
+        "bestOf": 1,
+        "tiebreakers": ["headToHead"],
+        "tiebreakerGames": {
+          "positions": [4]
+        },
+        "advance": 4
+      },
+      "entrants": [
+        {
+          "stage": "groups",
+          "bucket": "qualified"
+        }
+      ]
+    },
+    {
+      "id": "knockout",
+      "name": "Knockout Stage",
+      "format": {
+        "type": "singleElimination",
+        "bestOf": [5, 5],
+        "seeding": "standard"
+      },
+      "entrants": [
+        {
+          "stage": "rumble",
+          "bucket": "qualified"
+        }
+      ]
+    }
+  ],
+  "placements": [
+    {
+      "stage": "knockout",
+      "bucket": "champion",
+      "place": [1, 1]
+    },
+    {
+      "stage": "knockout",
+      "bucket": "eliminated:final",
+      "place": [2, 2]
+    },
+    {
+      "stage": "knockout",
+      "bucket": "eliminated:semifinal",
+      "place": [3, 4]
+    },
+    {
+      "stage": "rumble",
+      "bucket": "eliminated",
+      "place": [5, 6]
+    },
+    {
+      "stage": "groups",
+      "bucket": "eliminated",
+      "place": [7, 11],
+      "split": "rank"
+    }
+  ]
+}

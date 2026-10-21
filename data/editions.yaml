@@ -154,3 +154,254 @@ editions:
             "Play-In Day 4": play-in-final
             "Play-In*": play-in
             "*": bracket
+
+  - tournament: msi
+    year: 2017
+    name: 2017 Mid-Season Invitational
+    status: completed
+    stages:
+      - { id: play-in, name: Play-In Groups }
+      - { id: play-in-round-2, name: Play-In Round 2 }
+      - { id: play-in-round-3, name: Play-In Round 3 }
+      - { id: groups, name: Group Stage }
+      - { id: knockout, name: Knockout Stage }
+    leaguepedia:
+      basePage: 2017 Mid-Season Invitational
+      pages:
+        - page: 2017 Mid-Season Invitational/Play-In
+          tabs:
+            "Day *": play-in
+            "Tiebreakers": play-in
+            "Round 2": play-in-round-2
+            "Round 3": play-in-round-3
+        - page: 2017 Mid-Season Invitational/Main Event
+          tabs:
+            "Day *": groups
+            "Tiebreakers": groups
+            "*": knockout
+
+  - tournament: worlds
+    year: 2017
+    name: 2017 World Championship
+    status: completed
+    stages:
+      - { id: play-in, name: Play-In Groups }
+      - { id: play-in-knockout, name: Play-In Knockout }
+      - { id: groups, name: Group Stage }
+      - { id: knockout, name: Knockout Stage }
+    leaguepedia:
+      basePage: 2017 Season World Championship
+      pages:
+        - page: 2017 Season World Championship/Play-In
+          tabs:
+            "Day *": play-in
+            "Tiebreakers": play-in
+            "Round 2": play-in-knockout
+        - page: 2017 Season World Championship/Main Event
+          tabs:
+            "Day *": groups
+            "Tiebreakers": groups
+            "*": knockout
+
+  - tournament: msi
+    year: 2018
+    name: 2018 Mid-Season Invitational
+    status: completed
+    stages:
+      - { id: play-in, name: Play-In Groups }
+      - { id: play-in-knockout, name: Play-In Knockout }
+      - { id: groups, name: Group Stage }
+      - { id: knockout, name: Knockout Stage }
+    leaguepedia:
+      basePage: 2018 Mid-Season Invitational
+      pages:
+        - page: 2018 Mid-Season Invitational/Play-In
+          tabs:
+            "Day *": play-in
+            "Tiebreakers": play-in
+            "Round 2": play-in-knockout
+        - page: 2018 Mid-Season Invitational/Main Event
+          tabs:
+            "Day *": groups
+            "Tiebreakers": groups
+            "*": knockout
+
+  - tournament: worlds
+    year: 2018
+    name: 2018 World Championship
+    status: completed
+    stages:
+      - { id: play-in, name: Play-In Groups }
+      - { id: play-in-knockout, name: Play-In Knockout }
+      - { id: groups, name: Group Stage }
+      - { id: knockout, name: Knockout Stage }
+    leaguepedia:
+      basePage: 2018 Season World Championship
+      pages:
+        - page: 2018 Season World Championship/Play-In
+          tabs:
+            "Day *": play-in
+            "Tiebreakers": play-in
+            "Round 2": play-in-knockout
+        - page: 2018 Season World Championship/Main Event
+          tabs:
+            "Day *": groups
+            "Tiebreakers": groups
+            "*": knockout
+
+  - tournament: msi
+    year: 2019
+    name: 2019 Mid-Season Invitational
+    status: completed
+    stages:
+      - { id: play-in, name: Play-In Groups }
+      - { id: play-in-round-2, name: Play-In Round 2 }
+      - { id: play-in-round-3, name: Play-In Round 3 }
+      - { id: groups, name: Group Stage }
+      - { id: knockout, name: Knockout Stage }
+    leaguepedia:
+      basePage: 2019 Mid-Season Invitational
+      pages:
+        - page: 2019 Mid-Season Invitational/Play-In
+          tabs:
+            "Day *": play-in
+            "Tiebreakers": play-in
+            "Knockout Stage#3": play-in-round-3
+            "Knockout Stage": play-in-round-2
+        - page: 2019 Mid-Season Invitational/Main Event
+          tabs:
+            "Day *": groups
+            "Tiebreakers": groups
+            "*": knockout
+
+  - tournament: worlds
+    year: 2019
+    name: 2019 World Championship
+    status: completed
+    stages:
+      - { id: play-in, name: Play-In Groups }
+      - { id: play-in-knockout, name: Play-In Knockout }
+      - { id: groups, name: Group Stage }
+      - { id: knockout, name: Knockout Stage }
+    leaguepedia:
+      basePage: 2019 Season World Championship
+      pages:
+        - page: 2019 Season World Championship/Play-In
+          tabs:
+            "Day *": play-in
+            "Tiebreakers": play-in
+            "Round 2": play-in-knockout
+        - page: 2019 Season World Championship/Main Event
+          tabs:
+            "Day *": groups
+            "Tiebreakers": groups
+            "*": knockout
+
+  - tournament: worlds
+    year: 2020
+    name: 2020 World Championship
+    status: completed
+    stages:
+      - { id: play-in, name: Play-In Groups }
+      - { id: elimination, name: Play-In Elimination Round }
+      - { id: qualification, name: Play-In Qualification Round }
+      - { id: groups, name: Group Stage }
+      - { id: knockout, name: Knockout Stage }
+    leaguepedia:
+      basePage: 2020 Season World Championship
+      pages:
+        - page: 2020 Season World Championship/Play-In
+          tabs:
+            "Day *": play-in
+            "Tiebreakers": play-in
+            "Elimination Round": elimination
+            "Qualification Round": qualification
+        - page: 2020 Season World Championship/Main Event
+          tabs:
+            "Day *": groups
+            "Tiebreakers": groups
+            "*": knockout
+
+  - tournament: msi
+    year: 2021
+    name: 2021 Mid-Season Invitational
+    status: completed
+    stages:
+      - { id: groups, name: Group Stage }
+      - { id: rumble, name: Rumble Stage }
+      - { id: knockout, name: Knockout Stage }
+    leaguepedia:
+      basePage: 2021 Mid-Season Invitational
+      pages:
+        - page: 2021 Mid-Season Invitational
+          tabs:
+            "Groups*": groups
+            "Rumble*": rumble
+            "*": knockout
+
+  - tournament: worlds
+    year: 2021
+    name: 2021 World Championship
+    status: completed
+    stages:
+      - { id: play-in, name: Play-In Groups }
+      - { id: elimination, name: Play-In Elimination Round }
+      - { id: qualification, name: Play-In Qualification Round }
+      - { id: groups, name: Group Stage }
+      - { id: knockout, name: Knockout Stage }
+    leaguepedia:
+      basePage: 2021 Season World Championship
+      pages:
+        - page: 2021 Season World Championship/Play-In
+          tabs:
+            "Day *": play-in
+            "Tiebreakers": play-in
+            "Elimination Round": elimination
+            "Qualification Round": qualification
+        - page: 2021 Season World Championship/Main Event
+          tabs:
+            "Day *": groups
+            "Tiebreakers": groups
+            "*": knockout
+
+  - tournament: msi
+    year: 2022
+    name: 2022 Mid-Season Invitational
+    status: completed
+    stages:
+      - { id: groups, name: Group Stage }
+      - { id: rumble, name: Rumble Stage }
+      - { id: knockout, name: Knockout Stage }
+    leaguepedia:
+      basePage: 2022 Mid-Season Invitational
+      pages:
+        - page: 2022 Mid-Season Invitational
+          tabs:
+            "Groups*": groups
+            "Rumble*": rumble
+            "*": knockout
+
+  - tournament: worlds
+    year: 2022
+    name: 2022 World Championship
+    status: completed
+    stages:
+      - { id: play-in, name: Play-In Groups }
+      - { id: elimination, name: Play-In Elimination Round }
+      - { id: qualification, name: Play-In Qualification Round }
+      - { id: groups, name: Group Stage }
+      - { id: knockout, name: Knockout Stage }
+    leaguepedia:
+      basePage: 2022 Season World Championship
+      pages:
+        - page: 2022 Season World Championship/Play-In
+          tabs:
+            "Day *": play-in
+            "Tiebreakers": play-in
+            "Elimination Round": elimination
+            "Qualification Round": qualification
+        - page: 2022 Season World Championship/Main Event
+          tabs:
+            "Day *": groups
+            "Tiebreakers": groups
+            "*": knockout

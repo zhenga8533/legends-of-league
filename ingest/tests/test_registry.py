@@ -53,3 +53,12 @@ def test_select_filters_by_tournament_and_year() -> None:
 def test_duplicate_editions_are_rejected() -> None:
     with pytest.raises(ValidationError, match="duplicate"):
         Registry.model_validate({"editions": [spec(), spec()]})
+
+
+def test_numbered_tab_globs_pick_out_single_matches() -> None:
+    page = LeaguepediaPage(
+        page="Play-In", tabs={"Knockout Stage#3": "round-3", "Knockout Stage": "round-2"}
+    )
+
+    assert page.stage_for_tab("Knockout Stage", 3) == "round-3"
+    assert page.stage_for_tab("Knockout Stage", 1) == "round-2"

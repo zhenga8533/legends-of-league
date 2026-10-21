@@ -1,0 +1,179 @@
+{
+  "id": "worlds-2020",
+  "name": "World Championship 2020–2021",
+  "editions": ["ed:worlds-2020", "ed:worlds-2021"],
+  "sources": [
+    "https://lol.fandom.com/wiki/2020_Season_World_Championship",
+    "https://lol.fandom.com/wiki/2021_Season_World_Championship"
+  ],
+  "notes": [
+    "Play-In: two groups of five, single round robin, Bo1. 1st place joins the group stage; 3rd and 4th of each group meet in a Bo5 elimination round; 2nd place meets the other group's elimination winner in a Bo5 qualification round, whose winners join the group stage. Ties across 1st/2nd, 2nd/3rd or 4th/5th are played off. Groups: four groups of four, double round robin, Bo1; the top two advance. Ties for 1st or 2nd are played off with Bo1 tiebreaker games (a bye bracket for three-way ties), without head-to-head first. Knockout: 8-team single elimination, Bo5, group winners against runners-up from other groups.",
+    "Formats, series lengths, tiebreaker games and placements are verified by replaying the recorded results.",
+    "Not modelled: seeding pools and region rules in the group draw, and how the team with the bye in a three-way tiebreaker was chosen (Riot used game times). Forward simulations draw these randomly; the knockout keeps group mates in opposite halves."
+  ],
+  "stages": [
+    {
+      "id": "play-in",
+      "name": "Play-In Groups",
+      "format": {
+        "type": "groups",
+        "count": 2,
+        "format": {
+          "type": "roundRobin",
+          "legs": 1,
+          "bestOf": 1,
+          "tiebreakers": [],
+          "tiebreakerGames": {
+            "positions": [1, 2, 4]
+          },
+          "advance": 4
+        }
+      },
+      "entrants": [
+        {
+          "entry": true
+        }
+      ]
+    },
+    {
+      "id": "elimination",
+      "name": "Play-In Elimination Round",
+      "format": {
+        "type": "series",
+        "bestOf": 5,
+        "pairs": [
+          [0, 2],
+          [1, 3]
+        ],
+        "draw": "fixed"
+      },
+      "entrants": [
+        {
+          "stage": "play-in",
+          "bucket": "rank:3"
+        },
+        {
+          "stage": "play-in",
+          "bucket": "rank:4"
+        }
+      ]
+    },
+    {
+      "id": "qualification",
+      "name": "Play-In Qualification Round",
+      "format": {
+        "type": "series",
+        "bestOf": 5,
+        "pairs": [
+          [0, 3],
+          [1, 2]
+        ],
+        "draw": "fixed"
+      },
+      "entrants": [
+        {
+          "stage": "play-in",
+          "bucket": "rank:2"
+        },
+        {
+          "stage": "elimination",
+          "bucket": "winners"
+        }
+      ]
+    },
+    {
+      "id": "groups",
+      "name": "Group Stage",
+      "format": {
+        "type": "groups",
+        "count": 4,
+        "format": {
+          "type": "roundRobin",
+          "legs": 2,
+          "bestOf": 1,
+          "tiebreakers": [],
+          "tiebreakerGames": {
+            "positions": [1, 2]
+          },
+          "advance": 2
+        }
+      },
+      "entrants": [
+        {
+          "entry": true
+        },
+        {
+          "stage": "play-in",
+          "bucket": "rank:1"
+        },
+        {
+          "stage": "qualification",
+          "bucket": "winners"
+        }
+      ]
+    },
+    {
+      "id": "knockout",
+      "name": "Knockout Stage",
+      "format": {
+        "type": "singleElimination",
+        "bestOf": [5, 5, 5],
+        "seeding": "groupDraw"
+      },
+      "entrants": [
+        {
+          "stage": "groups",
+          "bucket": "rank:1"
+        },
+        {
+          "stage": "groups",
+          "bucket": "rank:2"
+        }
+      ]
+    }
+  ],
+  "placements": [
+    {
+      "stage": "knockout",
+      "bucket": "champion",
+      "place": [1, 1]
+    },
+    {
+      "stage": "knockout",
+      "bucket": "eliminated:final",
+      "place": [2, 2]
+    },
+    {
+      "stage": "knockout",
+      "bucket": "eliminated:semifinal",
+      "place": [3, 4]
+    },
+    {
+      "stage": "knockout",
+      "bucket": "eliminated:quarterfinal",
+      "place": [5, 8]
+    },
+    {
+      "stage": "groups",
+      "bucket": "eliminated",
+      "place": [9, 16],
+      "split": "rank"
+    },
+    {
+      "stage": "qualification",
+      "bucket": "losers",
+      "place": [17, 18]
+    },
+    {
+      "stage": "elimination",
+      "bucket": "losers",
+      "place": [19, 20]
+    },
+    {
+      "stage": "play-in",
+      "bucket": "eliminated",
+      "place": [21, 22],
+      "split": "rank"
+    }
+  ]
+}

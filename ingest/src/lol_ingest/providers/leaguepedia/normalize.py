@@ -228,7 +228,7 @@ class _Normalizer:
                 self.issue("warning", "series-nullified", f"{match_id}: nullified, skipped")
                 continue
             page = self.pages.get(row["OverviewPage"])
-            stage = page.stage_for_tab(row["Tab"]) if page else None
+            stage = page.stage_for_tab(row["Tab"], _int(row["NMatchInTab"])) if page else None
             if stage is None:
                 self.issue(
                     "error", "stage-unmapped", f"{match_id}: no stage for tab {row['Tab']!r}"
@@ -388,22 +388,24 @@ class _Normalizer:
     def rosters(self) -> list[RosterEntry]:
         entries: dict[str, RosterEntry] = {}
         for row in self.tables["rosterPlayers"]:
-            # Staff titles vary ("Head Coach", "Strategic Coach"); all are coaches here.
-            role = ROSTER_ROLES.get(row["Role"]) or (
-                "coach" if "coach" in row["Role"].lower() else None
-            )
             team, player = self.team(row["Team"]), self.player(row["Link"])
-            if role is None:
-                self.issue(
-                    "warning", "roster-role", f"{row['Team']}/{row['Link']}: role {row['Role']!r}"
+            # Flex players are registered under several roles ("Top,Mid"): one entry per role.
+            for raw_role in row["Role"].split(","):
+                raw_role = raw_role.strip()
+                # Staff titles vary ("Head Coach", "Strategic Coach"); all are coaches here.
+                role = ROSTER_ROLES.get(raw_role) or (
+                    "coach" if "coach" in raw_role.lower() else None
                 )
-                continue
-            if team is None or player is None:
-                continue
-            entry = RosterEntry(team=team, player=player, role=role)
-            key = record_key(entry)
-            entries[key] = entry
-            self.out.refs[key] = f"{row['OverviewPage']}/{row['Team']}/{row['Link']}"
+                if role is None:
+                    where = f"{row['Team']}/{row['Link']}"
+                    self.issue("warning", "roster-role", f"{where}: role {raw_role!r}")
+                    continue
+                if team is None or player is None:
+                    continue
+                entry = RosterEntry(team=team, player=player, role=role)
+                key = record_key(entry)
+                entries[key] = entry
+                self.out.refs[key] = f"{row['OverviewPage']}/{row['Team']}/{row['Link']}"
         return [entries[key] for key in sorted(entries)]
 
     def placements(self) -> list[Placement]:
