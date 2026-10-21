@@ -134,13 +134,15 @@ jobs:
             echo "::warning::No GitHub App configured (vars.DATA_BOT_APP_ID); CI will not run on this PR automatically."
           fi
           slug="${TOURNAMENT}-${YEAR}"
+          # "auto" resolves to a concrete provider; name the one actually used.
+          used=$(jq -r '[.editions[].provider // empty] | unique | join(",")' .cache/reports/report.json)
           branch="data/${slug}-${RUN_ID}"
           git config user.name "legends-of-league-data[bot]"
           git config user.email "legends-of-league-data@users.noreply.github.com"
           git remote set-url origin "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
           git switch -c "$branch"
           git add data
-          git commit -m "data(${slug}): ${OPERATION} from ${PROVIDER}"
+          git commit -m "data(${slug}): ${OPERATION} from ${used}"
           git push -u origin "$branch"
 
           labels=(data)
@@ -149,12 +151,12 @@ jobs:
           for label in "${labels[@]}"; do gh label create "$label" --force >/dev/null; done
 
           {
-            echo "Automated \`${OPERATION}\` of \`${slug}\` from \`${PROVIDER}\` ([workflow run](${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${RUN_ID}))."
+            echo "Automated \`${OPERATION}\` of \`${slug}\` from \`${used}\` ([workflow run](${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${RUN_ID}))."
             echo
             head -c 60000 .cache/reports/report.md
           } > pr-body.md
           url=$(gh pr create --base main --head "$branch" \
-            --title "data(${slug}): ${OPERATION} from ${PROVIDER}" \
+            --title "data(${slug}): ${OPERATION} from ${used}" \
             --body-file pr-body.md $(printf -- '--label %s ' "${labels[@]}"))
           echo "Opened $url"
 
