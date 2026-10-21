@@ -1,0 +1,90 @@
+{
+  "id": "ed:msi-2024",
+  "tournament": "tour:msi",
+  "year": 2024,
+  "name": "2024 Mid-Season Invitational",
+  "status": "completed",
+  "dates": {
+    "start": "2024-05-01",
+    "end": "2024-05-19"
+  },
+  "stages": [
+    {
+      "id": "play-in",
+      "name": "Play-In"
+    },
+    {
+      "id": "bracket",
+      "name": "Bracket Stage"
+    }
+  ],
+  "participants": [
+    {
+      "team": "team:bilibili-gaming",
+      "region": "region:lpl",
+      "entryStage": "bracket"
+    },
+    {
+      "team": "team:estral-esports",
+      "region": "region:lla",
+      "entryStage": "play-in"
+    },
+    {
+      "team": "team:flyquest",
+      "region": "region:lcs",
+      "entryStage": "play-in"
+    },
+    {
+      "team": "team:fnatic",
+      "region": "region:lec",
+      "entryStage": "play-in"
+    },
+    {
+      "team": "team:g2-esports",
+      "region": "region:lec",
+      "entryStage": "bracket"
+    },
+    {
+      "team": "team:gam-esports",
+      "region": "region:vcs",
+      "entryStage": "play-in"
+    },
+    {
+      "team": "team:gen-g",
+      "region": "region:lck",
+      "entryStage": "bracket"
+    },
+    {
+      "team": "team:loud",
+      "region": "region:cblol",
+      "entryStage": "play-in"
+    },
+    {
+      "team": "team:psg-talon",
+      "region": "region:pcs",
+      "entryStage": "play-in"
+    },
+    {
+      "team": "team:t1",
+      "region": "region:lck",
+      "entryStage": "play-in"
+    },
+    {
+      "team": "team:team-liquid",
+      "region": "region:lcs",
+      "entryStage": "bracket"
+    },
+    {
+      "team": "team:top-esports",
+      "region": "region:lpl",
+      "entryStage": "play-in"
+    }
+  ],
+  "externalRefs": [
+    {
+      "provider": "leaguepedia",
+      "key": "OverviewPage",
+      "value": "2024 Mid-Season Invitational"
+    }
+  ]
+}

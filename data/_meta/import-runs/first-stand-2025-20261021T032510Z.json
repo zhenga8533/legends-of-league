@@ -1,0 +1,63 @@
+{
+  "run": "first-stand-2025-20261021T032510Z",
+  "at": "2026-10-21T03:25:10.215709+00:00",
+  "operation": "import",
+  "force": false,
+  "summary": {
+    "edition": "first-stand-2025",
+    "operation": "import",
+    "provider": "leaguepedia",
+    "snapshotSha256": "31430ffcbd1fa14aa1dd3ee65f30c8336c3016493d00578fc89ee239bfbfd1ee",
+    "filesChanged": true,
+    "counts": {
+      "edition": {
+        "added": 1
+      },
+      "series": {
+        "added": 13
+      },
+      "game": {
+        "added": 35
+      },
+      "stats": {
+        "added": 350
+      },
+      "roster": {
+        "added": 39
+      },
+      "placement": {
+        "added": 5
+      }
+    },
+    "unchanged": 0,
+    "blocked": [],
+    "errors": [],
+    "warnings": 0,
+    "gaps": 0,
+    "newEntities": [
+      "org:ctbc-flying-oyster",
+      "org:karmine-corp",
+      "player:apples",
+      "player:ben",
+      "player:caliste",
+      "player:canna",
+      "player:chawy",
+      "player:doggo",
+      "player:driver",
+      "player:ggoong",
+      "player:homme",
+      "player:hongq",
+      "player:kaiwing",
+      "player:kanavi",
+      "player:reha",
+      "player:rest",
+      "player:swiffer",
+      "player:targamas",
+      "player:vladi",
+      "player:wadi",
+      "player:wulala",
+      "team:ctbc-flying-oyster",
+      "team:karmine-corp"
+    ]
+  }
+}
