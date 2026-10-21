@@ -63,10 +63,15 @@ describe("Monte Carlo on Worlds 2024", () => {
 
 describe("pre-event ratings", () => {
   it("use only games from before the event", () => {
-    const msi = editions.find((bundle) => bundle.edition.id === "ed:msi-2024")!;
-    const book = ratingsBefore(games, msi.edition.dates.start!);
-    expect(book.ratings.size).toBe(0);
-    const afterMsi = ratingsBefore(games, worlds.edition.dates.start!);
-    expect(afterMsi.ratings.size).toBe(msi.edition.participants.length);
+    const [first] = editions;
+    expect(ratingsBefore(games, first!.edition.dates.start!).ratings.size).toBe(0);
+
+    const start = worlds.edition.dates.start!;
+    const earlierTeams = new Set(
+      games
+        .filter((game) => Date.parse(game.date) < Date.parse(start))
+        .flatMap((game) => game.teams),
+    );
+    expect(new Set(ratingsBefore(games, start).ratings.keys())).toEqual(earlierTeams);
   });
 });

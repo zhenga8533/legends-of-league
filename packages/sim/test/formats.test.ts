@@ -10,18 +10,20 @@ import {
 import { runGroups } from "../src/formats/groups";
 import { runGsl } from "../src/formats/gsl";
 import { rankStandings, runRoundRobin } from "../src/formats/roundRobin";
-import { drawSwissPairs, pairKey, runSwiss } from "../src/formats/swiss";
+import { runSeries } from "../src/formats/series";
+import { drawSwissPairs, pairKey, rematchFreePairingExists, runSwiss } from "../src/formats/swiss";
 import { createRng } from "../src/rng";
 import type { Format } from "../src/ruleset";
 import type { PlayedMatch } from "../src/types";
 import { context, entrants, favourites, teams } from "./helpers";
 
-const worldsSwiss = {
+const worldsSwiss: Extract<Format, { type: "swiss" }> = {
   type: "swiss",
   wins: 3,
   losses: 3,
   bestOf: { default: 1, decisive: 3 },
-} as const;
+  rematches: "avoid",
+};
 
 describe("Swiss", () => {
   it("finishes with the right record buckets, no rematches and the Bo3 rule", () => {
@@ -217,5 +219,98 @@ describe("elimination brackets", () => {
     const lower1 = outcome.matches.filter((m) => m.label === "Lower round 1");
     // The loser of the first upper semifinal meets the winner of the *second* lower round 1 match.
     expect(lower2[0]!.teams).toEqual([upperSemis[0]!.loser, lower1[1]!.winner]);
+  });
+});
+
+describe("standalone series", () => {
+  it("plays the configured index pairs and reports winners and losers in pair order", () => {
+    const format: Extract<Format, { type: "series" }> = {
+      type: "series",
+      bestOf: 5,
+      pairs: [
+        [0, 3],
+        [1, 2],
+      ],
+    };
+    const outcome = runSeries(
+      format,
+      "qualifiers",
+      entrants(teams(4)),
+      context(1, { model: favourites }),
+    );
+    expect(outcome.matches.map((m) => m.teams)).toEqual([
+      ["team:t01", "team:t04"],
+      ["team:t02", "team:t03"],
+    ]);
+    expect(outcome.buckets["winners"]!.map((e) => e.team)).toEqual(["team:t01", "team:t02"]);
+    expect(outcome.buckets["losers"]!.map((e) => e.team)).toEqual(["team:t04", "team:t03"]);
+  });
+
+  it("rejects pairs that do not use every entrant exactly once", () => {
+    const format: Extract<Format, { type: "series" }> = {
+      type: "series",
+      bestOf: 5,
+      pairs: [[0, 1]],
+    };
+    expect(() => runSeries(format, "qualifiers", entrants(teams(3)), context(1))).toThrow(
+      SimulationError,
+    );
+  });
+});
+
+describe("Swiss rematch rules", () => {
+  // Eight teams, two wins to qualify; with `favourites` the lower-numbered team always wins.
+  // R1: 1-2, 3-4, 5-6, 7-8 -> 1, 3, 5, 7 at 1-0.
+  // R2: 1-3 and 5-7 (1-0 pool), 4-8 and 2-6 (0-1 pool) -> 3, 7, 4, 2 at 1-1.
+  // R3 forced: 3-4 (they met in R1) and 2-7, although 3-7 and 2-4 would avoid the rematch.
+  const t = (n: number) => `team:t0${n}`;
+  const draws: Record<string, [string, string][]> = {
+    "round-1:0-0": [
+      [t(1), t(2)],
+      [t(3), t(4)],
+      [t(5), t(6)],
+      [t(7), t(8)],
+    ],
+    "round-2:1-0": [
+      [t(1), t(3)],
+      [t(5), t(7)],
+    ],
+    "round-2:0-1": [
+      [t(4), t(8)],
+      [t(2), t(6)],
+    ],
+    "round-3:1-1": [
+      [t(3), t(4)],
+      [t(2), t(7)],
+    ],
+  };
+  const resolver = { pairing: (request: { purpose: string }) => draws[request.purpose] };
+  const format = (rematches: "avoid" | "allow"): Extract<Format, { type: "swiss" }> => ({
+    type: "swiss",
+    wins: 2,
+    losses: 2,
+    bestOf: { default: 1, decisive: 1 },
+    rematches,
+  });
+  const run = (rematches: "avoid" | "allow") =>
+    runSwiss(
+      format(rematches),
+      "swiss",
+      entrants(teams(8)),
+      context(1, { model: favourites, resolver }),
+    );
+
+  it("rejects an avoidable rematch when rematches are avoided", () => {
+    expect(() => run("avoid")).toThrow(/team:t03 vs team:t04 is an avoidable rematch/);
+  });
+
+  it("accepts it when the ruleset allows rematches", () => {
+    expect(run("allow").buckets["qualified"]).toHaveLength(4);
+  });
+
+  it("knows when every pairing of a pool is a rematch", () => {
+    const played = new Set([pairKey("a", "b"), pairKey("a", "c"), pairKey("a", "d")]);
+    expect(rematchFreePairingExists(["a", "b", "c", "d"], played)).toBe(false);
+    expect(rematchFreePairingExists(["a", "b", "c", "d"], new Set([pairKey("a", "b")]))).toBe(true);
   });
 });

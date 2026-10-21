@@ -33,8 +33,13 @@ Each format produces these buckets:
 | `roundRobin`        | `qualified` (top `advance`), `eliminated`, `rank:1`, `rank:2`, …                                               |
 | `singleElimination` | `champion`, `eliminated:final`, `eliminated:semifinal`, `eliminated:quarterfinal`, …                           |
 | `doubleElimination` | `champion`, `eliminated:grand-final`, `eliminated:lower-final`, `eliminated:lower-round-1` … `-3`              |
+| `series`            | `winners`, `losers` (in pair order)                                                                            |
 
-Swiss uses `bestOf.decisive` when a match can decide advancement or elimination. Round robin
+Swiss uses `bestOf.decisive` when a match can decide advancement or elimination. With
+`rematches: "avoid"` (the default), a rematch is only legal when every possible draw of the
+pool has one. `"allow"` exists for editions whose real draws had avoidable rematches (Worlds
+2023). A `series` stage plays standalone series between entrants chosen by index (`pairs`),
+which covers last-chance qualifiers, play-in finals and crossed qualifiers. Round robin
 applies its `tiebreakers` after series wins: `headToHead`, `headToHeadGameDiff`, `gameDiff`,
 `gameWins`. Whenever a tie splits, each smaller group restarts the list. Ties that survive
 every tiebreaker are drawn at random, which is an error in replays.

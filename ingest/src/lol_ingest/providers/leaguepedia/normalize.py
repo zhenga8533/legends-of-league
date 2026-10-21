@@ -202,6 +202,7 @@ class _Normalizer:
     def run(self) -> NormalizedEdition:
         series = self.series()
         games = self.games(series)
+        self.missing_games(series, games)
         stats = self.player_stats(games)
         rosters = self.rosters()
         placements = self.placements()
@@ -306,6 +307,18 @@ class _Normalizer:
             self.out.refs[record_key(game)] = game_ref
         return by_game
 
+    def missing_games(self, series_by_match: dict[str, Series], games: dict[str, Game]) -> None:
+        recorded: dict[str, int] = defaultdict(int)
+        for game in games.values():
+            recorded[game.series] += 1
+        for series in series_by_match.values():
+            expected = sum(series.score) if series.score and not series.forfeit else 0
+            if recorded[series.id] < expected:
+                self.gap(
+                    f"series:{series.id}",
+                    f"game records for {recorded[series.id]} of {expected} games",
+                )
+
     def draft(self, row: Row | None, blue: str, red: str) -> Draft | None:
         if row is None:
             return None
@@ -375,7 +388,10 @@ class _Normalizer:
     def rosters(self) -> list[RosterEntry]:
         entries: dict[str, RosterEntry] = {}
         for row in self.tables["rosterPlayers"]:
-            role = ROSTER_ROLES.get(row["Role"])
+            # Staff titles vary ("Head Coach", "Strategic Coach"); all are coaches here.
+            role = ROSTER_ROLES.get(row["Role"]) or (
+                "coach" if "coach" in row["Role"].lower() else None
+            )
             team, player = self.team(row["Team"]), self.player(row["Link"])
             if role is None:
                 self.issue(

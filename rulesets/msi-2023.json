@@ -1,0 +1,113 @@
+{
+  "id": "msi-2023",
+  "name": "Mid-Season Invitational 2023",
+  "editions": ["ed:msi-2023"],
+  "sources": ["https://lol.fandom.com/wiki/2023_Mid-Season_Invitational"],
+  "notes": [
+    "Play-In: two GSL groups of four, Bo3. Group winners advance to the bracket; the two decider winners play a Bo5 Last Chance Qualifier for the last spot. Bracket: 8-team double elimination, Bo5, no grand final reset.",
+    "Formats, series lengths and placements are verified by replaying the recorded results.",
+    "Not modelled: the group and bracket draw rules (seeds, region separation). Forward simulations draw these randomly."
+  ],
+  "stages": [
+    {
+      "id": "play-in",
+      "name": "Play-In",
+      "format": {
+        "type": "groups",
+        "count": 2,
+        "format": {
+          "type": "gsl",
+          "bestOf": 3
+        }
+      },
+      "entrants": [
+        {
+          "entry": true
+        }
+      ]
+    },
+    {
+      "id": "last-chance",
+      "name": "Last Chance Qualifier",
+      "format": {
+        "type": "series",
+        "bestOf": 5
+      },
+      "entrants": [
+        {
+          "stage": "play-in",
+          "bucket": "qualified:2"
+        }
+      ]
+    },
+    {
+      "id": "bracket",
+      "name": "Bracket Stage",
+      "format": {
+        "type": "doubleElimination",
+        "bestOf": 5,
+        "seeding": "random"
+      },
+      "entrants": [
+        {
+          "entry": true
+        },
+        {
+          "stage": "play-in",
+          "bucket": "qualified:1"
+        },
+        {
+          "stage": "last-chance",
+          "bucket": "winners"
+        }
+      ]
+    }
+  ],
+  "placements": [
+    {
+      "stage": "bracket",
+      "bucket": "champion",
+      "place": [1, 1]
+    },
+    {
+      "stage": "bracket",
+      "bucket": "eliminated:grand-final",
+      "place": [2, 2]
+    },
+    {
+      "stage": "bracket",
+      "bucket": "eliminated:lower-final",
+      "place": [3, 3]
+    },
+    {
+      "stage": "bracket",
+      "bucket": "eliminated:lower-round-3",
+      "place": [4, 4]
+    },
+    {
+      "stage": "bracket",
+      "bucket": "eliminated:lower-round-2",
+      "place": [5, 6]
+    },
+    {
+      "stage": "bracket",
+      "bucket": "eliminated:lower-round-1",
+      "place": [7, 8]
+    },
+    {
+      "stage": "last-chance",
+      "bucket": "losers",
+      "place": [9, 9]
+    },
+    {
+      "stage": "play-in",
+      "bucket": "eliminated:3",
+      "place": [10, 11]
+    },
+    {
+      "stage": "play-in",
+      "bucket": "eliminated:4",
+      "place": [12, 13]
+    }
+  ]
+}
