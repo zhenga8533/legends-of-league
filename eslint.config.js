@@ -23,7 +23,7 @@ export default tseslint.config(
   },
   {
     // Tests assert on known fixtures, where `!` is clearer than defensive checks.
-    files: ["**/test/**", "**/*.test.ts"],
+    files: ["**/test/**", "**/e2e/**", "**/*.test.ts"],
     rules: { "@typescript-eslint/no-non-null-assertion": "off" },
   },
   {

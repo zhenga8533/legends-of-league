@@ -9,6 +9,8 @@ A static archive and simulator for international LoL tournaments. The plan and r
   `src/lib/paths.ts`, because the site is served under a base path. Pages read the archive at build
   time through `src/lib/archive.ts`. Brackets and stage views come from the engine's verified
   replays (`editionStages`), not from provider labels. Pagefind indexes pages marked `searchable`.
+  Matches and stages render with the React `components/board/` (static on archive pages, interactive
+  in the Simulation Studio, `src/studio/`, a `client:only` island with a Web Worker).
 - `packages/schema`: generated TS types and JSON Schema. **Never edit by hand.**
 - `packages/sim`: pure TS simulation engine (no DOM, no I/O, seeded `Rng` only). See `docs/simulation.md`.
 - `packages/data`: Node loaders for `data/` and `rulesets/`, plus adapters into engine inputs. Its tests

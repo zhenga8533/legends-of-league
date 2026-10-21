@@ -1,12 +1,13 @@
 /** Derived, page-ready views over the archive. Pure functions of loaded data. */
 import type { Game, PlayerGameStats, Series } from "@lol/schema";
 import {
-  type Format,
+  type MatchSummary,
   type Ruleset,
-  type Score,
+  type StageSummary,
   type TeamId,
   type WinLoss,
   replayTournament,
+  summarizeStages,
 } from "@lol/sim";
 import { type Entities, loadEntities } from "./entities";
 import { DATA_DIR, type EditionBundle, RULESETS_DIR, loadEditions, loadRulesets } from "./load";
@@ -31,25 +32,12 @@ export function loadArchive(dirs: { dataDir?: string; rulesetsDir?: string } = {
   };
 }
 
-export interface MatchView {
+export interface MatchView extends MatchSummary {
   seriesId: string;
-  /** Position within the stage as the engine names it, e.g. "Upper semifinal". */
-  label: string;
-  /** "Group A" for grouped stages. */
-  group?: string;
-  teams: [TeamId, TeamId];
-  score: Score;
-  winner: TeamId;
-  bestOf: number;
   start?: string;
-  /** Swiss only: both teams' records going into the match. */
-  records?: [WinLoss, WinLoss];
 }
 
-export interface StageView {
-  id: string;
-  name: string;
-  format: Format["type"];
+export interface StageView extends Omit<StageSummary, "matches"> {
   matches: MatchView[];
 }
 
@@ -72,34 +60,13 @@ export function editionStages(bundle: EditionBundle, ruleset: Ruleset): StageVie
     if (index === -1 || !series) throw new Error(`${stage}: no series for ${teams.join(" vs ")}`);
     return series;
   };
-
-  return ruleset.stages.map((definition) => {
-    const records = new Map<TeamId, WinLoss>();
-    const record = (team: TeamId): WinLoss => records.get(team) ?? { wins: 0, losses: 0 };
-    const matches = (result.stages[definition.id]?.matches ?? []).map((match): MatchView => {
-      const series = take(definition.id, match.teams);
-      const group = /^(Group [A-Z]) (.*)$/.exec(match.label);
-      const view: MatchView = {
-        seriesId: series.id,
-        label: group?.[2] ?? match.label,
-        teams: match.teams,
-        score: match.score,
-        winner: match.winner,
-        bestOf: match.bestOf,
-        ...(series.start ? { start: series.start } : {}),
-        ...(group?.[1] ? { group: group[1] } : {}),
-      };
-      if (definition.format.type === "swiss") {
-        view.records = [record(match.teams[0]), record(match.teams[1])];
-        const winner = record(match.winner);
-        const loser = record(match.loser);
-        records.set(match.winner, { wins: winner.wins + 1, losses: winner.losses });
-        records.set(match.loser, { wins: loser.wins, losses: loser.losses + 1 });
-      }
-      return view;
-    });
-    return { id: definition.id, name: definition.name, format: definition.format.type, matches };
-  });
+  return summarizeStages(result, ruleset).map((stage) => ({
+    ...stage,
+    matches: stage.matches.map((match): MatchView => {
+      const series = take(stage.id, match.teams);
+      return { ...match, seriesId: series.id, ...(series.start ? { start: series.start } : {}) };
+    }),
+  }));
 }
 
 export interface Standing {
@@ -127,7 +94,31 @@ function tallyInto(table: Map<TeamId, Standing>, series: readonly Series[]): voi
 }
 
 /** Every participant with final place and series/game records, best place first. */
+// Pages ask for the same derived views many times (every team page scans every edition), so
+// results are cached per loaded edition. Bundles are never mutated after loading.
+const standingsCache = new WeakMap<EditionBundle, Standing[]>();
+const statsByPlayerCache = new WeakMap<EditionBundle, Map<string, PlayerGameStats[]>>();
+
+function statsByPlayer(bundle: EditionBundle): Map<string, PlayerGameStats[]> {
+  let index = statsByPlayerCache.get(bundle);
+  if (!index) {
+    index = new Map();
+    for (const row of bundle.playerStats)
+      index.set(row.player, [...(index.get(row.player) ?? []), row]);
+    statsByPlayerCache.set(bundle, index);
+  }
+  return index;
+}
+
 export function editionStandings(bundle: EditionBundle): Standing[] {
+  const cached = standingsCache.get(bundle);
+  if (cached) return cached;
+  const standings = computeStandings(bundle);
+  standingsCache.set(bundle, standings);
+  return standings;
+}
+
+function computeStandings(bundle: EditionBundle): Standing[] {
   const places = new Map(
     bundle.placements.map((p) => [p.team, [p.placeFrom, p.placeTo] as [number, number]]),
   );
@@ -223,7 +214,7 @@ export function playerCareer(archive: Archive, player: string): PlayerCareer {
   const editions: PlayerEdition[] = [];
   for (const bundle of archive.editions) {
     const winners = new Map(bundle.games.map((g) => [g.id, g.winner]));
-    const rows = bundle.playerStats.filter((row) => row.player === player);
+    const rows = statsByPlayer(bundle).get(player) ?? [];
     const rosterEntry = bundle.rosters.find((entry) => entry.player === player);
     const first = rows[0] ?? rosterEntry;
     if (!first) continue;

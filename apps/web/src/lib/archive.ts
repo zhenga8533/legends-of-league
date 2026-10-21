@@ -10,6 +10,14 @@ const { entities } = archive;
 
 export const editionsNewestFirst = [...archive.editions].reverse();
 
+/** Names and tags of every team, for components that render matches. */
+export const teamLabels: Record<string, { name: string; tag: string }> = Object.fromEntries(
+  [...entities.teams.values()].map((team) => [
+    team.id,
+    { name: team.name, tag: team.shortName ?? team.name },
+  ]),
+);
+
 export function ruleset(bundle: EditionBundle) {
   const found = rulesetFor(bundle.edition.id, archive.rulesets);
   if (!found) throw new Error(`no ruleset for ${bundle.edition.id}`);
