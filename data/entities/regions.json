@@ -1,10 +1,12 @@
 [
-{"id":"region:cblol","name":"Campeonato Brasileiro de League of Legends","abbreviation":"CBLOL","active":{"end":"2024-12-31"},"predecessors":[],"successors":[],"externalRefs":[{"provider":"leaguepedia","key":"RegionCode","value":"BR"}]},
+{"id":"region:cblol","name":"Campeonato Brasileiro de League of Legends","abbreviation":"CBLOL","active":{"end":"2024-12-31"},"predecessors":[],"successors":["region:lta"],"externalRefs":[{"provider":"leaguepedia","key":"RegionCode","value":"BR"}]},
 {"id":"region:lck","name":"League of Legends Champions Korea","abbreviation":"LCK","active":{},"predecessors":[],"successors":[],"externalRefs":[{"provider":"leaguepedia","key":"RegionCode","value":"KR"}]},
-{"id":"region:lcs","name":"League Championship Series","abbreviation":"LCS","active":{"end":"2024-12-31"},"predecessors":[],"successors":[],"externalRefs":[{"provider":"leaguepedia","key":"RegionCode","value":"NA"}]},
+{"id":"region:lcp","name":"League of Legends Championship Pacific","abbreviation":"LCP","active":{"start":"2025-01-01"},"predecessors":["region:pcs"],"successors":[],"externalRefs":[{"provider":"leaguepedia","key":"RegionCode","value":"APAC"}]},
+{"id":"region:lcs","name":"League Championship Series","abbreviation":"LCS","active":{"end":"2024-12-31"},"predecessors":[],"successors":["region:lta"],"externalRefs":[{"provider":"leaguepedia","key":"RegionCode","value":"NA"}]},
 {"id":"region:lec","name":"League of Legends EMEA Championship","abbreviation":"LEC","active":{},"predecessors":[],"successors":[],"externalRefs":[{"provider":"leaguepedia","key":"RegionCode","value":"EMEA"}]},
-{"id":"region:lla","name":"Liga Latinoamérica","abbreviation":"LLA","active":{"end":"2024-12-31"},"predecessors":[],"successors":[],"externalRefs":[{"provider":"leaguepedia","key":"RegionCode","value":"LAT"}]},
+{"id":"region:lla","name":"Liga Latinoamérica","abbreviation":"LLA","active":{"end":"2024-12-31"},"predecessors":[],"successors":["region:lta"],"externalRefs":[{"provider":"leaguepedia","key":"RegionCode","value":"LAT"}]},
 {"id":"region:lpl","name":"League of Legends Pro League","abbreviation":"LPL","active":{},"predecessors":[],"successors":[],"externalRefs":[{"provider":"leaguepedia","key":"RegionCode","value":"CN"}]},
-{"id":"region:pcs","name":"Pacific Championship Series","abbreviation":"PCS","active":{"end":"2024-12-31"},"predecessors":[],"successors":[],"externalRefs":[{"provider":"leaguepedia","key":"RegionCode","value":"APAC"}]},
+{"id":"region:lta","name":"League of Legends Championship of The Americas","abbreviation":"LTA","active":{"start":"2025-01-01"},"predecessors":["region:cblol","region:lcs","region:lla"],"successors":[],"externalRefs":[{"provider":"leaguepedia","key":"RegionCode","value":"AME"}]},
+{"id":"region:pcs","name":"Pacific Championship Series","abbreviation":"PCS","active":{"end":"2024-12-31"},"predecessors":[],"successors":["region:lcp"],"externalRefs":[{"provider":"leaguepedia","key":"RegionCode","value":"APAC"},{"provider":"leaguepedia","key":"RegionCode","value":"PCS"}]},
 {"id":"region:vcs","name":"Vietnam Championship Series","abbreviation":"VCS","active":{},"predecessors":[],"successors":[],"externalRefs":[{"provider":"leaguepedia","key":"RegionCode","value":"VN"}]}
 ]
