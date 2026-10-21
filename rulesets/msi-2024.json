@@ -1,0 +1,38 @@
+{
+  "id": "msi-2024",
+  "name": "Mid-Season Invitational 2024",
+  "editions": ["ed:msi-2024"],
+  "sources": [
+    "https://lol.fandom.com/wiki/Archive:Official_Rulebooks/Riot/MSI/2024",
+    "https://lol.fandom.com/wiki/2024_Mid-Season_Invitational"
+  ],
+  "notes": [
+    "Play-In: two GSL groups of four, Bo3; the winners' match and decider winners qualify. Bracket: 8-team double elimination, Bo5, losers of the upper semifinals cross over in the lower bracket, no grand final reset.",
+    "Formats, series lengths and placements are verified by replaying the recorded results.",
+    "Not modelled: the group and bracket draw rules (seeds, region separation). Forward simulations draw these randomly."
+  ],
+  "stages": [
+    {
+      "id": "play-in",
+      "name": "Play-In",
+      "format": { "type": "groups", "count": 2, "format": { "type": "gsl", "bestOf": 3 } },
+      "entrants": [{ "entry": true }]
+    },
+    {
+      "id": "bracket",
+      "name": "Bracket Stage",
+      "format": { "type": "doubleElimination", "bestOf": 5, "seeding": "random" },
+      "entrants": [{ "entry": true }, { "stage": "play-in", "bucket": "qualified" }]
+    }
+  ],
+  "placements": [
+    { "stage": "bracket", "bucket": "champion", "place": [1, 1] },
+    { "stage": "bracket", "bucket": "eliminated:grand-final", "place": [2, 2] },
+    { "stage": "bracket", "bucket": "eliminated:lower-final", "place": [3, 3] },
+    { "stage": "bracket", "bucket": "eliminated:lower-round-3", "place": [4, 4] },
+    { "stage": "bracket", "bucket": "eliminated:lower-round-2", "place": [5, 6] },
+    { "stage": "bracket", "bucket": "eliminated:lower-round-1", "place": [7, 8] },
+    { "stage": "play-in", "bucket": "eliminated:3", "place": [9, 10] },
+    { "stage": "play-in", "bucket": "eliminated:4", "place": [11, 12] }
+  ]
+}

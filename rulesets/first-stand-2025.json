@@ -1,0 +1,37 @@
+{
+  "id": "first-stand-2025",
+  "name": "First Stand 2025",
+  "editions": ["ed:first-stand-2025"],
+  "sources": ["https://lol.fandom.com/wiki/2025_First_Stand"],
+  "notes": [
+    "Groups: single round robin of Bo3 series between five teams; the top four advance. Knockout: Bo5 semifinals (1st vs 4th, 2nd vs 3rd) and final.",
+    "Tiebreakers are unverified against the rulebook. Head-to-head first is reported from the rulebook by secondary sources. Head-to-head game differential and then overall game differential are consistent with the recorded outcome: KC, TES and TL tied at 1-3 with a circular head-to-head and finished 3rd, 4th and 5th. Overall game win rate is not the next criterion, because it would have ranked TL above TES.",
+    "Formats, series lengths and placements are verified by replaying the recorded results."
+  ],
+  "stages": [
+    {
+      "id": "groups",
+      "name": "Group Stage",
+      "format": {
+        "type": "roundRobin",
+        "legs": 1,
+        "bestOf": 3,
+        "tiebreakers": ["headToHead", "headToHeadGameDiff", "gameDiff"],
+        "advance": 4
+      },
+      "entrants": [{ "entry": true }]
+    },
+    {
+      "id": "knockout",
+      "name": "Knockout Stage",
+      "format": { "type": "singleElimination", "bestOf": [5, 5], "seeding": "standard" },
+      "entrants": [{ "stage": "groups", "bucket": "qualified" }]
+    }
+  ],
+  "placements": [
+    { "stage": "knockout", "bucket": "champion", "place": [1, 1] },
+    { "stage": "knockout", "bucket": "eliminated:final", "place": [2, 2] },
+    { "stage": "knockout", "bucket": "eliminated:semifinal", "place": [3, 4] },
+    { "stage": "groups", "bucket": "rank:5", "place": [5, 5] }
+  ]
+}
