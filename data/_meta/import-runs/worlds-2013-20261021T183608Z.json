@@ -1,0 +1,101 @@
+{
+  "run": "worlds-2013-20261021T183608Z",
+  "at": "2026-10-21T18:36:08.456315+00:00",
+  "operation": "import",
+  "force": false,
+  "summary": {
+    "edition": "worlds-2013",
+    "operation": "import",
+    "provider": "leaguepedia",
+    "snapshotSha256": "98b7ec0a1c867873d2c565f5c81f2bd2e4ace3c6ec33dd6bb24b76b6dc1d666d",
+    "filesChanged": true,
+    "counts": {
+      "edition": {
+        "added": 1
+      },
+      "series": {
+        "added": 48
+      },
+      "game": {
+        "added": 63
+      },
+      "stats": {
+        "added": 630
+      },
+      "roster": {
+        "added": 74
+      },
+      "placement": {
+        "added": 14
+      }
+    },
+    "unchanged": 0,
+    "blocked": [],
+    "errors": [],
+    "warnings": 0,
+    "gaps": 63,
+    "newEntities": [
+      "org:gamania-bears",
+      "org:gambit-gaming",
+      "org:gaminggear-eu",
+      "org:lemondogs",
+      "org:mineski",
+      "org:najin-black-sword",
+      "org:oh-my-god",
+      "org:samsung-ozone",
+      "org:team-vulcun",
+      "player:alex-penn",
+      "player:alunir",
+      "player:balis",
+      "player:benny-benny-hung",
+      "player:bloodwater",
+      "player:chris-siu-keung",
+      "player:cool",
+      "player:da7",
+      "player:dade",
+      "player:deadlybrother",
+      "player:dexter",
+      "player:exosen",
+      "player:expession",
+      "player:godlike",
+      "player:gogoing",
+      "player:hai",
+      "player:imp",
+      "player:inspirro",
+      "player:kaigu",
+      "player:lemonnation",
+      "player:looper",
+      "player:loveling",
+      "player:lucky-liu-jun-jie",
+      "player:mancloud",
+      "player:mazzerin",
+      "player:meteos",
+      "player:nagne",
+      "player:nbs",
+      "player:nl-hsiung-wen-an",
+      "player:piglet",
+      "player:pomelo",
+      "player:puszu",
+      "player:san-guo-jun-liang",
+      "player:snoy",
+      "player:tabzz",
+      "player:tgee",
+      "player:voidle",
+      "player:wh1t3zz",
+      "player:winds",
+      "player:yume-danyll-jann-balisi",
+      "player:zorozero",
+      "player:zuna",
+      "team:gamania-bears",
+      "team:gambit-gaming",
+      "team:gaminggear-eu",
+      "team:lemondogs",
+      "team:mineski",
+      "team:najin-black-sword",
+      "team:oh-my-god",
+      "team:royal-club",
+      "team:samsung-ozone",
+      "team:team-vulcun"
+    ]
+  }
+}

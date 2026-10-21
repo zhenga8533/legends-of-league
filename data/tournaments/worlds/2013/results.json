@@ -1,0 +1,16 @@
+[
+{"team":"team:cloud9","placeFrom":5,"placeTo":8,"prizeUsd":75000.0},
+{"team":"team:fnatic","placeFrom":3,"placeTo":4,"prizeUsd":150000.0},
+{"team":"team:gamania-bears","placeFrom":5,"placeTo":8,"prizeUsd":75000.0},
+{"team":"team:gambit-gaming","placeFrom":5,"placeTo":8,"prizeUsd":75000.0},
+{"team":"team:gaminggear-eu","placeFrom":13,"placeTo":14,"prizeUsd":25000.0},
+{"team":"team:lemondogs","placeFrom":9,"placeTo":10,"prizeUsd":45000.0},
+{"team":"team:mineski","placeFrom":13,"placeTo":14,"prizeUsd":25000.0},
+{"team":"team:najin-black-sword","placeFrom":3,"placeTo":4,"prizeUsd":150000.0},
+{"team":"team:oh-my-god","placeFrom":5,"placeTo":8,"prizeUsd":75000.0},
+{"team":"team:royal-club","placeFrom":2,"placeTo":2,"prizeUsd":250000.0},
+{"team":"team:samsung-ozone","placeFrom":9,"placeTo":10,"prizeUsd":45000.0},
+{"team":"team:sk-telecom-t1","placeFrom":1,"placeTo":1,"prizeUsd":1000000.0},
+{"team":"team:team-vulcun","placeFrom":11,"placeTo":12,"prizeUsd":30000.0},
+{"team":"team:tsm","placeFrom":11,"placeTo":12,"prizeUsd":30000.0}
+]

@@ -1,0 +1,76 @@
+{
+  "run": "worlds-2015-20261021T183608Z",
+  "at": "2026-10-21T18:36:08.456315+00:00",
+  "operation": "import",
+  "force": false,
+  "summary": {
+    "edition": "worlds-2015",
+    "operation": "import",
+    "provider": "leaguepedia",
+    "snapshotSha256": "4facfba8593c5df5fb2f08605852fa9a61a8389379288a8cd01585fdf83f49a9",
+    "filesChanged": true,
+    "counts": {
+      "edition": {
+        "added": 1
+      },
+      "series": {
+        "added": 56
+      },
+      "game": {
+        "added": 73
+      },
+      "stats": {
+        "added": 730
+      },
+      "roster": {
+        "added": 101
+      },
+      "placement": {
+        "added": 16
+      }
+    },
+    "unchanged": 0,
+    "blocked": [],
+    "errors": [],
+    "warnings": 0,
+    "gaps": 73,
+    "newEntities": [
+      "org:bangkok-titans",
+      "org:h2k-gaming",
+      "org:koo-tigers",
+      "org:origen",
+      "player:007x",
+      "player:aaron-ji-xing",
+      "player:amazingj",
+      "player:arrow",
+      "player:backstairs",
+      "player:bubbadub",
+      "player:darshan",
+      "player:deilor",
+      "player:febiven",
+      "player:godv-wei-zhen",
+      "player:hermit",
+      "player:hojin",
+      "player:kami-gabriel-bohm-santos",
+      "player:kasing",
+      "player:kitties",
+      "player:locodoco",
+      "player:loulex",
+      "player:marin",
+      "player:mit",
+      "player:moss-sorawat-boonphrom",
+      "player:mylon",
+      "player:piccaboo",
+      "player:pyl-chen-bo",
+      "player:sirt",
+      "player:tbq",
+      "player:time-tang-jing-tai",
+      "player:zandarc",
+      "player:zikz",
+      "team:bangkok-titans",
+      "team:h2k-gaming",
+      "team:koo-tigers",
+      "team:origen"
+    ]
+  }
+}

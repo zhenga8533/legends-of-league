@@ -1,0 +1,78 @@
+{
+  "id": "ed:worlds-2011",
+  "tournament": "tour:worlds",
+  "year": 2011,
+  "name": "2011 World Championship",
+  "status": "completed",
+  "dates": {
+    "start": "2011-06-18",
+    "end": "2011-06-20"
+  },
+  "stages": [
+    {
+      "id": "groups",
+      "name": "Group Stage"
+    },
+    {
+      "id": "round-1",
+      "name": "Playoff Round 1"
+    },
+    {
+      "id": "fifth-place",
+      "name": "Fifth Place Match"
+    },
+    {
+      "id": "playoffs",
+      "name": "Playoffs"
+    }
+  ],
+  "participants": [
+    {
+      "team": "team:against-all-authority",
+      "region": "region:eu",
+      "entryStage": "groups"
+    },
+    {
+      "team": "team:counter-logic-gaming",
+      "region": "region:na",
+      "entryStage": "groups"
+    },
+    {
+      "team": "team:epik-gamer",
+      "region": "region:na",
+      "entryStage": "groups"
+    },
+    {
+      "team": "team:fnatic",
+      "region": "region:eu",
+      "entryStage": "groups"
+    },
+    {
+      "team": "team:team-gamed-de",
+      "region": "region:eu",
+      "entryStage": "groups"
+    },
+    {
+      "team": "team:team-pacific",
+      "region": "region:sea",
+      "entryStage": "groups"
+    },
+    {
+      "team": "team:tsm",
+      "region": "region:na",
+      "entryStage": "groups"
+    },
+    {
+      "team": "team:xan",
+      "region": "region:sea",
+      "entryStage": "groups"
+    }
+  ],
+  "externalRefs": [
+    {
+      "provider": "leaguepedia",
+      "key": "OverviewPage",
+      "value": "Season 1 World Championship"
+    }
+  ]
+}

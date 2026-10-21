@@ -1,0 +1,47 @@
+{
+  "run": "msi-2015-20261021T183608Z",
+  "at": "2026-10-21T18:36:08.456315+00:00",
+  "operation": "import",
+  "force": false,
+  "summary": {
+    "edition": "msi-2015",
+    "operation": "import",
+    "provider": "leaguepedia",
+    "snapshotSha256": "b21238055b01146236815349bf53b88e5884a430df82ba621f973b1884e47d21",
+    "filesChanged": true,
+    "counts": {
+      "edition": {
+        "added": 1
+      },
+      "series": {
+        "added": 18
+      },
+      "game": {
+        "added": 28
+      },
+      "stats": {
+        "added": 280
+      },
+      "roster": {
+        "added": 37
+      },
+      "placement": {
+        "added": 6
+      }
+    },
+    "unchanged": 0,
+    "blocked": [],
+    "errors": [],
+    "warnings": 0,
+    "gaps": 28,
+    "newEntities": [
+      "org:besiktas-esports",
+      "player:energy",
+      "player:lethilion",
+      "player:nardeus",
+      "player:steeelback",
+      "player:theokoles",
+      "team:besiktas-esports"
+    ]
+  }
+}
