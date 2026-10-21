@@ -1,0 +1,153 @@
+---
+import { idSlug, kda, playerCareer, playerHandle } from "@lol/data";
+import type { Player } from "@lol/schema";
+import TeamLink from "../../components/TeamLink.astro";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { archive, paths } from "../../lib/archive";
+import { withBase } from "../../lib/paths";
+
+export function getStaticPaths() {
+  return [...archive.entities.players.values()].map((player) => ({
+    params: { player: idSlug(player.id) },
+    props: { player },
+  }));
+}
+
+interface Props {
+  player: Player;
+}
+
+const { player } = Astro.props;
+const handle = playerHandle(player);
+const career = playerCareer(archive, player.id);
+const totals = career.editions.reduce(
+  (sum, e) => ({
+    games: sum.games + e.games,
+    wins: sum.wins + e.wins,
+    kills: sum.kills + e.kills,
+    deaths: sum.deaths + e.deaths,
+    assists: sum.assists + e.assists,
+  }),
+  { games: 0, wins: 0, kills: 0, deaths: 0, assists: 0 },
+);
+const countryName = player.country
+  ? new Intl.DisplayNames(["en"], { type: "region" }).of(player.country)
+  : undefined;
+const pct = (wins: number, games: number) => (games ? `${Math.round((wins / games) * 100)}%` : "—");
+---
+
+<BaseLayout
+  title={handle}
+  searchable
+  description={`${handle}'s international career: teams, roles and champion statistics.`}
+  breadcrumbs={[{ label: "Players", href: withBase("/players/") }, { label: handle }]}
+>
+  <header class="mb-8 space-y-1">
+    <h1 class="text-3xl font-bold tracking-tight sm:text-4xl">{handle}</h1>
+    <p class="text-muted">
+      {[player.realName, player.nativeName, countryName].filter(Boolean).join(" · ")}
+    </p>
+    {totals.games > 0 && (
+      <p>
+        {totals.games} international games · {pct(totals.wins, totals.games)} win rate · KDA{" "}
+        {kda(totals)}
+      </p>
+    )}
+  </header>
+
+  <section aria-labelledby="editions" class="space-y-4">
+    <h2 id="editions" class="text-2xl font-semibold tracking-tight">
+      By edition
+    </h2>
+    <div class="table-scroll" tabindex="0" role="region" aria-label="Scrollable table">
+      <table class="data-table">
+        <caption class="sr-only">{handle}by edition</caption>
+        <thead>
+          <tr>
+            <th scope="col">Edition</th>
+            <th scope="col">Team</th>
+            <th scope="col">Role</th>
+            <th scope="col" class="num">
+              Games
+            </th>
+            <th scope="col" class="num">
+              Win rate
+            </th>
+            <th scope="col" class="num">
+              K/D/A
+            </th>
+            <th scope="col" class="num">
+              KDA
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          {[...career.editions].reverse().map((line) => (
+            <tr>
+              <th scope="row" class="font-normal">
+                <a class="link" href={paths.edition(line.bundle)}>
+                  {line.bundle.edition.name}
+                </a>
+              </th>
+              <td>
+                <TeamLink team={line.team} />
+              </td>
+              <td class="capitalize text-muted">{line.role}</td>
+              <td class="num">{line.games}</td>
+              <td class="num">{pct(line.wins, line.games)}</td>
+              <td class="num">
+                {line.kills}/{line.deaths}/{line.assists}
+              </td>
+              <td class="num">{line.games ? kda(line) : "—"}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  {career.champions.length > 0 && (
+    <section aria-labelledby="champions" class="mt-10 space-y-4">
+      <h2 id="champions" class="text-2xl font-semibold tracking-tight">
+        Champions
+      </h2>
+      <div class="table-scroll" tabindex="0" role="region" aria-label="Scrollable table">
+        <table class="data-table">
+          <caption class="sr-only">{handle}'s champions</caption>
+          <thead>
+            <tr>
+              <th scope="col">Champion</th>
+              <th scope="col" class="num">
+                Games
+              </th>
+              <th scope="col" class="num">
+                Win rate
+              </th>
+              <th scope="col" class="num">
+                K/D/A
+              </th>
+              <th scope="col" class="num">
+                KDA
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            {career.champions.map((line) => (
+              <tr>
+                <th scope="row" class="font-normal">
+                  {line.champion}
+                </th>
+                <td class="num">{line.games}</td>
+                <td class="num">{pct(line.wins, line.games)}</td>
+                <td class="num">
+                  {line.kills}/{line.deaths}/{line.assists}
+                </td>
+                <td class="num">{kda(line)}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </section>
+  )}
+</BaseLayout>

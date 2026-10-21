@@ -1,0 +1,121 @@
+---
+import { idSlug, placeText, teamHistory } from "@lol/data";
+import type { TeamIdentity } from "@lol/schema";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { archive, paths, playerName, regionAbbr, stageName } from "../../lib/archive";
+import { withBase } from "../../lib/paths";
+
+export function getStaticPaths() {
+  return [...archive.entities.teams.values()].map((team) => ({
+    params: { team: idSlug(team.id) },
+    props: { team },
+  }));
+}
+
+interface Props {
+  team: TeamIdentity;
+}
+
+const { team } = Astro.props;
+const history = teamHistory(archive, team.id);
+const org = archive.entities.organizations.get(team.org);
+const titles = history.filter((a) => a.standing.place?.[0] === 1).length;
+---
+
+<BaseLayout
+  title={team.name}
+  searchable
+  description={`${team.name}'s international results, rosters and placements.`}
+  breadcrumbs={[{ label: "Teams", href: withBase("/teams/") }, { label: team.name }]}
+>
+  <header class="mb-8 space-y-1">
+    <h1 class="text-3xl font-bold tracking-tight sm:text-4xl">{team.name}</h1>
+    <p class="text-muted">
+      {team.shortName && <>{team.shortName} · </>}
+      <a class="link" href={paths.region(team.region)}>
+        {regionAbbr(team.region)}
+      </a>
+      {org && org.name !== team.name && <> · Organization: {org.name}</>}
+    </p>
+    <p>
+      {history.length} international {history.length === 1 ? "appearance" : "appearances"}
+      {titles > 0 && (
+        <>
+          , {titles} {titles === 1 ? "title" : "titles"}
+        </>
+      )}
+    </p>
+  </header>
+
+  <section aria-labelledby="history" class="space-y-4">
+    <h2 id="history" class="text-2xl font-semibold tracking-tight">
+      International history
+    </h2>
+    <div class="table-scroll" tabindex="0" role="region" aria-label="Scrollable table">
+      <table class="data-table">
+        <caption class="sr-only">{team.name}by edition</caption>
+        <thead>
+          <tr>
+            <th scope="col">Edition</th>
+            <th scope="col">Region</th>
+            <th scope="col">Entered at</th>
+            <th scope="col">Place</th>
+            <th scope="col" class="num">
+              Series
+            </th>
+            <th scope="col" class="num">
+              Games
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          {[...history].reverse().map(({ bundle, standing }) => (
+            <tr>
+              <th scope="row" class="font-normal">
+                <a class="link" href={paths.edition(bundle)}>
+                  {bundle.edition.name}
+                </a>
+              </th>
+              <td>{regionAbbr(standing.region)}</td>
+              <td class="text-muted">{stageName(bundle, standing.entryStage)}</td>
+              <td>{placeText(standing.place)}</td>
+              <td class="num">
+                {standing.series.wins}–{standing.series.losses}
+              </td>
+              <td class="num">
+                {standing.games.wins}–{standing.games.losses}
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section aria-labelledby="rosters" class="mt-10 space-y-4">
+    <h2 id="rosters" class="text-2xl font-semibold tracking-tight">
+      Rosters
+    </h2>
+    <div class="grid gap-4 md:grid-cols-2">
+      {[...history].reverse().map(({ bundle, roster }) => (
+        <div class="rounded border border-border bg-surface p-4">
+          <h3 class="font-semibold">{bundle.edition.name}</h3>
+          {roster.length === 0 ? (
+            <p class="text-sm text-muted">No registered roster recorded.</p>
+          ) : (
+            <ul class="mt-2 grid grid-cols-2 gap-x-4 gap-y-1 text-sm">
+              {roster.map((entry) => (
+                <li>
+                  <a class="hover:text-accent hover:underline" href={paths.player(entry.player)}>
+                    {playerName(entry.player)}
+                  </a>{" "}
+                  <span class="capitalize text-muted">{entry.role}</span>
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+      ))}
+    </div>
+  </section>
+</BaseLayout>

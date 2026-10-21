@@ -1,0 +1,199 @@
+---
+import type { MatchView, StageView } from "@lol/data";
+import MatchCard from "./MatchCard.astro";
+import TeamLink from "./TeamLink.astro";
+
+interface Props {
+  stage: StageView;
+}
+
+const { stage } = Astro.props;
+
+function columnsByLabel(matches: MatchView[]): { label: string; matches: MatchView[] }[] {
+  const columns: { label: string; matches: MatchView[] }[] = [];
+  for (const match of matches) {
+    const column = columns.find((c) => c.label === match.label);
+    if (column) column.matches.push(match);
+    else columns.push({ label: match.label, matches: [match] });
+  }
+  return columns;
+}
+
+const columns = columnsByLabel(stage.matches);
+
+// Swiss rounds, each split into pools of teams with the same record.
+const swissRounds = columns.map((column) => {
+  const pools = new Map<string, MatchView[]>();
+  for (const match of column.matches) {
+    const record = match.records?.[0];
+    const key = record ? `${record.wins}–${record.losses}` : "";
+    pools.set(key, [...(pools.get(key) ?? []), match]);
+  }
+  return { label: column.label, pools: [...pools] };
+});
+
+const groupNames = [...new Set(stage.matches.flatMap((m) => (m.group ? [m.group] : [])))];
+const groups = groupNames.map((group) => ({
+  group,
+  matches: stage.matches.filter((m) => m.group === group),
+}));
+
+const upper = columns.filter((c) => c.label.startsWith("Upper"));
+const lower = columns.filter((c) => c.label.startsWith("Lower"));
+const grandFinal = columns.filter((c) => c.label === "Grand final");
+
+// Round robin table from the stage's own matches.
+const table = new Map<string, { team: string; w: number; l: number; gw: number; gl: number }>();
+if (stage.format === "roundRobin") {
+  for (const match of stage.matches) {
+    match.teams.forEach((team, side) => {
+      const row = table.get(team) ?? { team, w: 0, l: 0, gw: 0, gl: 0 };
+      row[match.winner === team ? "w" : "l"]++;
+      row.gw += match.score[side] ?? 0;
+      row.gl += match.score[1 - side] ?? 0;
+      table.set(team, row);
+    });
+  }
+}
+const rows = [...table.values()].sort((a, b) => b.w - a.w || b.gw - b.gl - (a.gw - a.gl));
+---
+
+<section aria-labelledby={`stage-${stage.id}`} class="space-y-4">
+  <h2 id={`stage-${stage.id}`} class="text-2xl font-semibold tracking-tight">
+    {stage.name}
+  </h2>
+
+  {stage.format === "swiss" && (
+    <div class="flex gap-4 overflow-x-auto pb-2">
+      {swissRounds.map((round) => (
+        <div class="space-y-3">
+          <h3 class="text-sm font-semibold text-muted">{round.label}</h3>
+          {round.pools.map(([record, matches]) => (
+            <div class="space-y-2">
+              {record && <p class="text-xs uppercase tracking-wide text-muted">{record} pool</p>}
+              <ul class="space-y-2">
+                {matches.map((match) => (
+                  <li>
+                    <MatchCard match={match} />
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
+      ))}
+    </div>
+  )}
+
+  {(stage.format === "groups" || stage.format === "gsl") && (
+    <div class="grid gap-6 md:grid-cols-2">
+      {(groups.length > 0 ? groups : [{ group: "", matches: stage.matches }]).map((group) => (
+        <div class="space-y-2">
+          {group.group && <h3 class="font-semibold">{group.group}</h3>}
+          <ul class="grid grid-cols-2 gap-2">
+            {group.matches.map((match) => (
+              <li>
+                <p class="mb-1 text-xs capitalize text-muted">{match.label}</p>
+                <MatchCard match={match} />
+              </li>
+            ))}
+          </ul>
+        </div>
+      ))}
+    </div>
+  )}
+
+  {stage.format === "roundRobin" && (
+    <div class="grid gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
+      <div class="table-scroll" tabindex="0" role="region" aria-label="Scrollable table">
+        <table class="data-table">
+          <caption>Standings</caption>
+          <thead>
+            <tr>
+              <th scope="col">Team</th>
+              <th scope="col" class="num">
+                Series
+              </th>
+              <th scope="col" class="num">
+                Games
+              </th>
+              <th scope="col" class="num">
+                Diff
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            {rows.map((row) => (
+              <tr>
+                <th scope="row" class="font-normal">
+                  <TeamLink team={row.team} />
+                </th>
+                <td class="num">
+                  {row.w}–{row.l}
+                </td>
+                <td class="num">
+                  {row.gw}–{row.gl}
+                </td>
+                <td class="num">{row.gw - row.gl > 0 ? `+${row.gw - row.gl}` : row.gw - row.gl}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <ul class="grid grid-cols-2 gap-2 sm:grid-cols-3">
+        {stage.matches.map((match) => (
+          <li>
+            <MatchCard match={match} />
+          </li>
+        ))}
+      </ul>
+    </div>
+  )}
+
+  {stage.format === "singleElimination" && (
+    <div class="flex gap-6 overflow-x-auto pb-2">
+      {columns.map((column) => (
+        <div class="flex min-w-44 flex-col">
+          <h3 class="mb-2 text-sm font-semibold text-muted">{column.label}</h3>
+          <ul class="flex flex-1 flex-col justify-around gap-3">
+            {column.matches.map((match) => (
+              <li>
+                <MatchCard match={match} />
+              </li>
+            ))}
+          </ul>
+        </div>
+      ))}
+    </div>
+  )}
+
+  {stage.format === "doubleElimination" && (
+    <div class="space-y-6 overflow-x-auto pb-2">
+      {[
+        { title: "Upper bracket", columns: upper },
+        { title: "Lower bracket", columns: lower },
+        { title: "Grand final", columns: grandFinal },
+      ].map((part) => (
+        <div>
+          <h3 class="mb-2 font-semibold">{part.title}</h3>
+          <div class="flex gap-6">
+            {part.columns.map((column) => (
+              <div class="flex min-w-44 flex-col">
+                {column.label !== part.title && (
+                  <p class="mb-2 text-sm text-muted">{column.label}</p>
+                )}
+                <ul class="flex flex-1 flex-col justify-around gap-3">
+                  {column.matches.map((match) => (
+                    <li>
+                      <MatchCard match={match} />
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
+        </div>
+      ))}
+    </div>
+  )}
+</section>

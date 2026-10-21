@@ -1,0 +1,51 @@
+---
+import { playerCareer, playerHandle } from "@lol/data";
+import TeamLink from "../../components/TeamLink.astro";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { archive, paths } from "../../lib/archive";
+
+const players = [...archive.entities.players.values()]
+  .map((player) => ({ player, career: playerCareer(archive, player.id) }))
+  .flatMap(({ player, career }) => {
+    const latest = career.editions.at(-1);
+    const games = career.editions.reduce((sum, e) => sum + e.games, 0);
+    return latest && games > 0 ? [{ player, handle: playerHandle(player), games, latest }] : [];
+  })
+  .sort((a, b) => a.handle.localeCompare(b.handle, "en", { sensitivity: "base" }));
+---
+
+<BaseLayout title="Players" searchable>
+  <h1 class="mb-2 text-3xl font-bold tracking-tight">Players</h1>
+  <p class="mb-6 text-muted">Players with at least one international game in the archive.</p>
+  <div class="table-scroll" tabindex="0" role="region" aria-label="Scrollable table">
+    <table class="data-table">
+      <caption class="sr-only">Players</caption>
+      <thead>
+        <tr>
+          <th scope="col">Player</th>
+          <th scope="col">Latest team</th>
+          <th scope="col">Role</th>
+          <th scope="col" class="num">
+            Games
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        {players.map(({ player, handle, games, latest }) => (
+          <tr>
+            <th scope="row" class="font-normal">
+              <a class="hover:text-accent hover:underline" href={paths.player(player.id)}>
+                {handle}
+              </a>
+            </th>
+            <td>
+              <TeamLink team={latest.team} />
+            </td>
+            <td class="capitalize text-muted">{latest.role}</td>
+            <td class="num">{games}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+</BaseLayout>

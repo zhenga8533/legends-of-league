@@ -1,0 +1,43 @@
+---
+import { editionSummary } from "@lol/data";
+import TeamLink from "../../components/TeamLink.astro";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { archive, editionsNewestFirst, paths } from "../../lib/archive";
+
+const tournaments = [...archive.entities.tournaments.values()].map((tournament) => ({
+  tournament,
+  editions: editionsNewestFirst.filter((b) => b.edition.tournament === tournament.id),
+}));
+---
+
+<BaseLayout title="Tournaments" searchable>
+  <h1 class="mb-6 text-3xl font-bold tracking-tight">Tournaments</h1>
+  <div class="grid gap-6 md:grid-cols-3">
+    {tournaments.map(({ tournament, editions }) => (
+      <section class="rounded border border-border bg-surface p-4" aria-labelledby={tournament.id}>
+        <h2 id={tournament.id} class="text-xl font-semibold">
+          <a class="hover:text-accent" href={paths.tournament(tournament.id)}>
+            {tournament.name}
+          </a>
+        </h2>
+        {editions.length === 0 ? (
+          <p class="mt-2 text-sm text-muted">No editions imported yet.</p>
+        ) : (
+          <ul class="mt-3 space-y-1">
+            {editions.map((bundle) => {
+              const { champion } = editionSummary(bundle);
+              return (
+                <li class="flex justify-between gap-3">
+                  <a class="link" href={paths.edition(bundle)}>
+                    {bundle.edition.year}
+                  </a>
+                  {champion && <TeamLink team={champion} />}
+                </li>
+              );
+            })}
+          </ul>
+        )}
+      </section>
+    ))}
+  </div>
+</BaseLayout>

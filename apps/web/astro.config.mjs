@@ -1,5 +1,10 @@
+import { fileURLToPath } from "node:url";
 import tailwindcss from "@tailwindcss/vite";
 import { defineConfig } from "astro/config";
+
+// Pages read the dataset at build time; resolved here because page code gets bundled elsewhere.
+const dataDir = fileURLToPath(new URL("../../data/", import.meta.url));
+const rulesetsDir = fileURLToPath(new URL("../../rulesets/", import.meta.url));
 
 // The Pages deploy workflow sets these from actions/configure-pages, so the same build works
 // for <owner>.github.io/legends-of-league and for a custom domain.
@@ -10,5 +15,9 @@ export default defineConfig({
   trailingSlash: "ignore",
   vite: {
     plugins: [tailwindcss()],
+    define: {
+      "import.meta.env.LOL_DATA_DIR": JSON.stringify(dataDir),
+      "import.meta.env.LOL_RULESETS_DIR": JSON.stringify(rulesetsDir),
+    },
   },
 });

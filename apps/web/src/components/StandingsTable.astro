@@ -1,0 +1,48 @@
+---
+import { type EditionBundle, editionStandings, placeText } from "@lol/data";
+import { stageName } from "../lib/archive";
+import TeamLink from "./TeamLink.astro";
+
+interface Props {
+  bundle: EditionBundle;
+}
+
+const { bundle } = Astro.props;
+const standings = editionStandings(bundle);
+---
+
+<div class="table-scroll" tabindex="0" role="region" aria-label="Scrollable table">
+  <table class="data-table">
+    <caption>Final standings</caption>
+    <thead>
+      <tr>
+        <th scope="col">Place</th>
+        <th scope="col">Team</th>
+        <th scope="col">Entered at</th>
+        <th scope="col" class="num">
+          Series
+        </th>
+        <th scope="col" class="num">
+          Games
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      {standings.map((row) => (
+        <tr>
+          <td>{placeText(row.place)}</td>
+          <th scope="row" class="font-normal">
+            <TeamLink team={row.team} region={row.region} />
+          </th>
+          <td class="text-muted">{stageName(bundle, row.entryStage)}</td>
+          <td class="num">
+            {row.series.wins}–{row.series.losses}
+          </td>
+          <td class="num">
+            {row.games.wins}–{row.games.losses}
+          </td>
+        </tr>
+      ))}
+    </tbody>
+  </table>
+</div>

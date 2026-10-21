@@ -1,0 +1,49 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { withBase } from "../lib/paths";
+
+const pagefind = withBase("/pagefind/");
+---
+
+<BaseLayout title="Search">
+  <h1 class="mb-6 text-3xl font-bold tracking-tight">Search</h1>
+  <link rel="stylesheet" href={`${pagefind}pagefind-ui.css`} />
+  <div id="search" data-bundle={pagefind}></div>
+  <noscript>
+    <p class="text-muted">Search needs JavaScript. Browse from the menu instead.</p>
+  </noscript>
+  <p id="search-unavailable" hidden class="text-muted">
+    The search index is built with the production site (<code>pnpm build</code>) and isn't available
+    in the dev server.
+  </p>
+  <script>
+    const container = document.getElementById("search");
+    const bundle = container?.dataset.bundle ?? "/pagefind/";
+    const script = document.createElement("script");
+    script.src = `${bundle}pagefind-ui.js`;
+    script.onload = () => {
+      // @ts-expect-error PagefindUI is a global defined by the script above.
+      new PagefindUI({
+        element: "#search",
+        bundlePath: bundle,
+        showImages: false,
+        resetStyles: false,
+      });
+    };
+    script.onerror = () => {
+      document.getElementById("search-unavailable")?.removeAttribute("hidden");
+    };
+    document.head.append(script);
+  </script>
+</BaseLayout>
+
+<style is:global>
+  #search {
+    --pagefind-ui-primary: var(--color-accent);
+    --pagefind-ui-text: var(--color-text);
+    --pagefind-ui-background: var(--color-surface);
+    --pagefind-ui-border: var(--color-border);
+    --pagefind-ui-tag: var(--color-surface-2);
+    --pagefind-ui-font: inherit;
+  }
+</style>
