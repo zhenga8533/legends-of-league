@@ -46,3 +46,13 @@ def test_completed_edition_needs_results(data: EditionData, store: EntityStore) 
     data.series[0] = data.series[0].model_copy(update={"winner": None, "score": None})
 
     assert "series-incomplete" in codes(data, store)
+
+
+def test_partial_game_records_are_not_contradictions(data: EditionData, store: EntityStore) -> None:
+    final_games = [g for g in data.games if g.series.endswith("finals-01")]
+    data.games.remove(final_games[0])
+
+    issues = validate_edition(data, store)
+
+    assert "games-score" not in {i.code for i in issues}
+    assert "games-partial" in {i.code for i in issues}

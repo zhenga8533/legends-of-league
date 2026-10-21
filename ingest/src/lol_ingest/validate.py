@@ -77,10 +77,20 @@ def validate_edition(data: EditionData, store: EntityStore) -> list[Issue]:
         winners = games_by_series.get(series.id, [])
         if not series.score or series.forfeit:
             continue
+        wins = tuple(winners.count(team) for team in series.teams)
         if not winners:
             warning("games-missing", f"{series.id}: no game records")
-        elif tuple(winners.count(team) for team in series.teams) != series.score:
+        elif any(won > scored for won, scored in zip(wins, series.score, strict=True)):
+            error(
+                "games-score", f"{series.id}: game winners {wins} exceed the score {series.score}"
+            )
+        elif len(winners) == sum(series.score) and wins != series.score:
             error("games-score", f"{series.id}: game winners do not add up to {series.score}")
+        elif len(winners) < sum(series.score):
+            warning(
+                "games-partial",
+                f"{series.id}: {len(winners)} of {sum(series.score)} games recorded",
+            )
 
     per_team: Counter[tuple[str, str]] = Counter()
     for stats in data.player_stats:

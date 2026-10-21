@@ -317,3 +317,25 @@ describe("Swiss rematch rules", () => {
     expect(rematchFreePairingExists(["a", "b", "c", "d"], new Set([pairKey("a", "b")]))).toBe(true);
   });
 });
+
+describe("four-team double elimination", () => {
+  it("plays an upper final, one lower round, a lower final and a grand final", () => {
+    const format = { type: "doubleElimination", bestOf: 3, seeding: "standard" } as const;
+    const outcome = runDoubleElimination(
+      format,
+      "playoffs",
+      entrants(teams(4)),
+      context(1, { model: favourites }),
+    );
+    expect(outcome.matches.map((m) => m.label)).toEqual([
+      "Upper round 1",
+      "Upper round 1",
+      "Upper final",
+      "Lower round 1",
+      "Lower final",
+      "Grand final",
+    ]);
+    expect(outcome.buckets["champion"]![0]!.team).toBe("team:t01");
+    expect(outcome.buckets["eliminated:lower-round-1"]).toHaveLength(1);
+  });
+});

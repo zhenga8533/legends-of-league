@@ -147,9 +147,9 @@ export function runSingleElimination(
 }
 
 /**
- * Eight-team double elimination as used at MSI since 2023: losers of the upper semifinals
- * cross over in the lower bracket to avoid immediate rematches, and the grand final has no
- * bracket reset.
+ * Double elimination without a grand final reset. Eight teams as at MSI since 2023 (losers of
+ * the upper semifinals cross over in the lower bracket to avoid immediate rematches); four
+ * teams as in the Worlds 2011 playoffs.
  */
 export function runDoubleElimination(
   format: DoubleEliminationFormat,
@@ -157,8 +157,10 @@ export function runDoubleElimination(
   entrants: readonly Entrant[],
   ctx: Context,
 ): StageOutcome {
-  if (entrants.length !== 8) {
-    throw new SimulationError(`${stage}: double elimination needs 8 teams, got ${entrants.length}`);
+  if (entrants.length !== 4 && entrants.length !== 8) {
+    throw new SimulationError(
+      `${stage}: double elimination needs 4 or 8 teams, got ${entrants.length}`,
+    );
   }
   const entrant = (team: TeamId): Entrant =>
     must(
@@ -181,6 +183,24 @@ export function runDoubleElimination(
     return match;
   };
   const upper1 = firstRound.map(([a, b]) => play("Upper round 1", a, b));
+  if (upper1.length === 2) {
+    // Four teams (Worlds 2011): upper final, one lower round, lower final, grand final.
+    const [first, second] = [at(upper1, 0), at(upper1, 1)];
+    const upperFinal = play("Upper final", first.winner, second.winner);
+    const lower1 = play("Lower round 1", first.loser, second.loser);
+    const lowerFinal = play("Lower final", upperFinal.loser, lower1.winner);
+    const grandFinal = play("Grand final", upperFinal.winner, lowerFinal.winner);
+    return {
+      stage,
+      matches,
+      buckets: {
+        champion: [entrant(grandFinal.winner)],
+        "eliminated:grand-final": [entrant(grandFinal.loser)],
+        "eliminated:lower-final": [entrant(lowerFinal.loser)],
+        "eliminated:lower-round-1": [entrant(lower1.loser)],
+      },
+    };
+  }
   const [u0, u1, u2, u3] = upper1 as [PlayedMatch, PlayedMatch, PlayedMatch, PlayedMatch];
   const lower1 = [
     play("Lower round 1", u0.loser, u1.loser),

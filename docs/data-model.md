@@ -57,3 +57,15 @@ which records changed. Generated IDs follow the edition and the source schedule,
 - Seeds and qualification paths. Leaguepedia has no structured table for them, so they will be
   curated alongside the rulesets in M2.
 - Champions as entities. Champions are stored by name for now.
+
+### Known gaps from the provider
+
+- **No drafts before 2017.** Leaguepedia's picks-and-bans table starts in 2017. Earlier games
+  still show each player's champion in the player stats, but have no draft order, so every
+  such game is recorded as a gap.
+- **Incomplete game records** for some series, such as five Worlds 2011 playoff series and
+  the Worlds 2023 quarterfinals. The series results are complete; the missing games are
+  recorded as gaps.
+- **Scoreboard match IDs that don't match the schedule** (Worlds 2011). Those games are
+  matched to the series between the same teams on the same day, and the import reports each
+  match as a warning.

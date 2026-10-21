@@ -1,0 +1,125 @@
+{
+  "id": "worlds-2011",
+  "name": "World Championship 2011",
+  "editions": ["ed:worlds-2011"],
+  "sources": ["https://lol.fandom.com/wiki/Season_1_World_Championship"],
+  "notes": [
+    "Groups: two groups of four, single round robin, Bo1; ties split by head-to-head. Group winners enter a four-team double-elimination playoff (Bo3, no grand final reset); 2nd and 3rd play crossed Bo3s (A2 vs B3, B2 vs A3) for the other two spots, and those losers play a Bo1 for 5th place.",
+    "Leaguepedia's game records for five playoff series are incomplete; the series results are complete.",
+    "Formats, series lengths, tiebreaker games and placements are verified by replaying the recorded results."
+  ],
+  "stages": [
+    {
+      "id": "groups",
+      "name": "Group Stage",
+      "format": {
+        "type": "groups",
+        "count": 2,
+        "format": {
+          "type": "roundRobin",
+          "legs": 1,
+          "bestOf": 1,
+          "tiebreakers": ["headToHead"],
+          "advance": 3
+        }
+      },
+      "entrants": [
+        {
+          "entry": true
+        }
+      ]
+    },
+    {
+      "id": "round-1",
+      "name": "Playoff Round 1",
+      "format": {
+        "type": "series",
+        "bestOf": 3,
+        "pairs": [
+          [0, 3],
+          [1, 2]
+        ]
+      },
+      "entrants": [
+        {
+          "stage": "groups",
+          "bucket": "rank:2"
+        },
+        {
+          "stage": "groups",
+          "bucket": "rank:3"
+        }
+      ]
+    },
+    {
+      "id": "fifth-place",
+      "name": "Fifth Place Match",
+      "format": {
+        "type": "series",
+        "bestOf": 1
+      },
+      "entrants": [
+        {
+          "stage": "round-1",
+          "bucket": "losers"
+        }
+      ]
+    },
+    {
+      "id": "playoffs",
+      "name": "Playoffs",
+      "format": {
+        "type": "doubleElimination",
+        "bestOf": 3,
+        "seeding": "random"
+      },
+      "entrants": [
+        {
+          "stage": "groups",
+          "bucket": "rank:1"
+        },
+        {
+          "stage": "round-1",
+          "bucket": "winners"
+        }
+      ]
+    }
+  ],
+  "placements": [
+    {
+      "stage": "playoffs",
+      "bucket": "champion",
+      "place": [1, 1]
+    },
+    {
+      "stage": "playoffs",
+      "bucket": "eliminated:grand-final",
+      "place": [2, 2]
+    },
+    {
+      "stage": "playoffs",
+      "bucket": "eliminated:lower-final",
+      "place": [3, 3]
+    },
+    {
+      "stage": "playoffs",
+      "bucket": "eliminated:lower-round-1",
+      "place": [4, 4]
+    },
+    {
+      "stage": "fifth-place",
+      "bucket": "winners",
+      "place": [5, 5]
+    },
+    {
+      "stage": "fifth-place",
+      "bucket": "losers",
+      "place": [6, 6]
+    },
+    {
+      "stage": "groups",
+      "bucket": "eliminated",
+      "place": [7, 8]
+    }
+  ]
+}

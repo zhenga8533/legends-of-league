@@ -1,0 +1,83 @@
+{
+  "id": "worlds-2012",
+  "name": "World Championship 2012",
+  "editions": ["ed:worlds-2012"],
+  "sources": ["https://lol.fandom.com/wiki/Season_2_World_Championship"],
+  "notes": [
+    "Groups: two groups of four, single round robin, Bo1; the top two join four seeded teams in an 8-team single-elimination bracket (Bo3 quarterfinals and semifinals, Bo5 final).",
+    "Formats, series lengths, tiebreaker games and placements are verified by replaying the recorded results.",
+    "Not modelled: how the seeded teams' bracket positions were drawn. Forward simulations draw the bracket randomly."
+  ],
+  "stages": [
+    {
+      "id": "groups",
+      "name": "Group Stage",
+      "format": {
+        "type": "groups",
+        "count": 2,
+        "format": {
+          "type": "roundRobin",
+          "legs": 1,
+          "bestOf": 1,
+          "tiebreakers": ["headToHead"],
+          "advance": 2
+        }
+      },
+      "entrants": [
+        {
+          "entry": true
+        }
+      ]
+    },
+    {
+      "id": "knockout",
+      "name": "Knockout Stage",
+      "format": {
+        "type": "singleElimination",
+        "bestOf": [3, 3, 5],
+        "seeding": "random"
+      },
+      "entrants": [
+        {
+          "entry": true
+        },
+        {
+          "stage": "groups",
+          "bucket": "rank:1"
+        },
+        {
+          "stage": "groups",
+          "bucket": "rank:2"
+        }
+      ]
+    }
+  ],
+  "placements": [
+    {
+      "stage": "knockout",
+      "bucket": "champion",
+      "place": [1, 1]
+    },
+    {
+      "stage": "knockout",
+      "bucket": "eliminated:final",
+      "place": [2, 2]
+    },
+    {
+      "stage": "knockout",
+      "bucket": "eliminated:semifinal",
+      "place": [3, 4]
+    },
+    {
+      "stage": "knockout",
+      "bucket": "eliminated:quarterfinal",
+      "place": [5, 8]
+    },
+    {
+      "stage": "groups",
+      "bucket": "eliminated",
+      "place": [9, 12],
+      "split": "rank"
+    }
+  ]
+}
