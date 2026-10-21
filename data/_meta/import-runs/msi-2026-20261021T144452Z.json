@@ -1,0 +1,57 @@
+{
+  "run": "msi-2026-20261021T144452Z",
+  "at": "2026-10-21T14:44:52.348817+00:00",
+  "operation": "import",
+  "force": false,
+  "summary": {
+    "edition": "msi-2026",
+    "operation": "import",
+    "provider": "leaguepedia",
+    "snapshotSha256": "a13d842acdc1dfe0f4dc8a75fd8eff0196d80f69d37a92c00fcd2ec9b1d359fa",
+    "filesChanged": true,
+    "counts": {
+      "edition": {
+        "added": 1
+      },
+      "series": {
+        "added": 20
+      },
+      "game": {
+        "added": 71
+      },
+      "stats": {
+        "added": 710
+      },
+      "roster": {
+        "added": 83
+      },
+      "placement": {
+        "added": 11
+      }
+    },
+    "unchanged": 0,
+    "blocked": [],
+    "errors": [],
+    "warnings": 0,
+    "gaps": 0,
+    "newEntities": [
+      "org:deep-cross-gaming",
+      "player:bobo-he-wen-bo",
+      "player:feng-chen-chun-feng",
+      "player:fengyue",
+      "player:flauren",
+      "player:hongsuo",
+      "player:kyeahoo",
+      "player:leo-li-yu-ming",
+      "player:luuukz",
+      "player:lxz-chiu-liang-jung",
+      "player:morgan",
+      "player:pop9",
+      "player:reapered",
+      "player:refra1n",
+      "player:sin-yeon-hyeong-mo",
+      "player:zuian",
+      "team:deep-cross-gaming"
+    ]
+  }
+}

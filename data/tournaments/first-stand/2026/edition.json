@@ -1,0 +1,70 @@
+{
+  "id": "ed:first-stand-2026",
+  "tournament": "tour:first-stand",
+  "year": 2026,
+  "name": "2026 First Stand",
+  "status": "completed",
+  "dates": {
+    "start": "2026-03-16",
+    "end": "2026-03-22"
+  },
+  "stages": [
+    {
+      "id": "groups",
+      "name": "Group Stage"
+    },
+    {
+      "id": "knockout",
+      "name": "Knockout Stage"
+    }
+  ],
+  "participants": [
+    {
+      "team": "team:bilibili-gaming",
+      "region": "region:lpl",
+      "entryStage": "groups"
+    },
+    {
+      "team": "team:bnk-fearx",
+      "region": "region:lck",
+      "entryStage": "groups"
+    },
+    {
+      "team": "team:g2-esports",
+      "region": "region:lec",
+      "entryStage": "groups"
+    },
+    {
+      "team": "team:gen-g",
+      "region": "region:lck",
+      "entryStage": "groups"
+    },
+    {
+      "team": "team:jd-gaming",
+      "region": "region:lpl",
+      "entryStage": "groups"
+    },
+    {
+      "team": "team:loud",
+      "region": "region:cblol-2026",
+      "entryStage": "groups"
+    },
+    {
+      "team": "team:lyon",
+      "region": "region:lcs-2026",
+      "entryStage": "groups"
+    },
+    {
+      "team": "team:team-secret-whales",
+      "region": "region:lcp",
+      "entryStage": "groups"
+    }
+  ],
+  "externalRefs": [
+    {
+      "provider": "leaguepedia",
+      "key": "OverviewPage",
+      "value": "2026 First Stand"
+    }
+  ]
+}

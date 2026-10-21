@@ -1,0 +1,119 @@
+{
+  "id": "ed:worlds-2025",
+  "tournament": "tour:worlds",
+  "year": 2025,
+  "name": "2025 World Championship",
+  "status": "completed",
+  "dates": {
+    "start": "2025-10-14",
+    "end": "2025-11-09"
+  },
+  "stages": [
+    {
+      "id": "play-in",
+      "name": "Play-In"
+    },
+    {
+      "id": "swiss",
+      "name": "Swiss Stage"
+    },
+    {
+      "id": "knockout",
+      "name": "Knockout Stage"
+    }
+  ],
+  "participants": [
+    {
+      "team": "team:100-thieves",
+      "region": "region:lta",
+      "entryStage": "swiss"
+    },
+    {
+      "team": "team:anyone-s-legend",
+      "region": "region:lpl",
+      "entryStage": "swiss"
+    },
+    {
+      "team": "team:bilibili-gaming",
+      "region": "region:lpl",
+      "entryStage": "swiss"
+    },
+    {
+      "team": "team:ctbc-flying-oyster",
+      "region": "region:lcp",
+      "entryStage": "swiss"
+    },
+    {
+      "team": "team:flyquest",
+      "region": "region:lta",
+      "entryStage": "swiss"
+    },
+    {
+      "team": "team:fnatic",
+      "region": "region:lec",
+      "entryStage": "swiss"
+    },
+    {
+      "team": "team:g2-esports",
+      "region": "region:lec",
+      "entryStage": "swiss"
+    },
+    {
+      "team": "team:gen-g",
+      "region": "region:lck",
+      "entryStage": "swiss"
+    },
+    {
+      "team": "team:hanwha-life-esports",
+      "region": "region:lck",
+      "entryStage": "swiss"
+    },
+    {
+      "team": "team:invictus-gaming",
+      "region": "region:lpl",
+      "entryStage": "play-in"
+    },
+    {
+      "team": "team:kt-rolster",
+      "region": "region:lck",
+      "entryStage": "swiss"
+    },
+    {
+      "team": "team:movistar-koi",
+      "region": "region:lec",
+      "entryStage": "swiss"
+    },
+    {
+      "team": "team:psg-talon",
+      "region": "region:lcp",
+      "entryStage": "swiss"
+    },
+    {
+      "team": "team:t1",
+      "region": "region:lck",
+      "entryStage": "play-in"
+    },
+    {
+      "team": "team:team-secret-whales",
+      "region": "region:lcp",
+      "entryStage": "swiss"
+    },
+    {
+      "team": "team:top-esports",
+      "region": "region:lpl",
+      "entryStage": "swiss"
+    },
+    {
+      "team": "team:vivo-keyd-stars",
+      "region": "region:lta",
+      "entryStage": "swiss"
+    }
+  ],
+  "externalRefs": [
+    {
+      "provider": "leaguepedia",
+      "key": "OverviewPage",
+      "value": "2025 Season World Championship"
+    }
+  ]
+}
