@@ -53,7 +53,7 @@ class TeamIdentity(CanonicalModel):
     id: TeamId
     org: OrgId
     name: str
-    short_name: str
+    short_name: str | None = Field(default=None, description="Tag, e.g. 'BLG'; unknown for some.")
     region: RegionId
     active: DateRange
     external_refs: list[ExternalRef] = []
@@ -68,6 +68,7 @@ class Player(CanonicalModel):
     id: PlayerId
     handles: list[PlayerHandle] = Field(min_length=1)
     real_name: str | None = None
+    native_name: str | None = None
     country: str | None = Field(
         default=None, pattern=r"^[A-Z]{2}$", description="ISO 3166-1 alpha-2."
     )

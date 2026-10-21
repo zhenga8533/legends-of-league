@@ -4,7 +4,7 @@ An archive of every international League of Legends tournament (Worlds, the Mid-
 Invitational and First Stand), plus a simulation engine for replaying history and forecasting
 what comes next.
 
-> **Status:** early development (milestone M0, foundations). See the
+> **Status:** early development (milestone M1, data ingestion). See the
 > [implementation plan](docs/plan.md) for the roadmap.
 
 ## Repository layout
@@ -31,6 +31,8 @@ pnpm dev                          # site at http://localhost:4321
 uv run --project ingest lol-ingest --help
 ```
 
+Importing data needs a Leaguepedia bot password; see [docs/ingestion.md](docs/ingestion.md).
+
 ### Checks
 
 ```sh
@@ -39,6 +41,7 @@ pnpm schema:check                 # generated schema/types match the Pydantic mo
 
 cd ingest
 uv run ruff check && uv run ruff format --check && uv run mypy && uv run pytest
+uv run lol-ingest run --op validate   # committed data is consistent
 ```
 
 ## Licensing

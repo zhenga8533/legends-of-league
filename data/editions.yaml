@@ -1,0 +1,21 @@
+# Registry of tournament editions and where each provider keeps their data.
+# Adding an edition here is the first step to importing it (see docs/data-model.md).
+
+editions:
+  - tournament: worlds
+    year: 2024
+    name: 2024 World Championship
+    status: completed
+    stages:
+      - { id: play-in, name: Play-In }
+      - { id: swiss, name: Swiss Stage }
+      - { id: knockout, name: Knockout Stage }
+    leaguepedia:
+      basePage: 2024 Season World Championship
+      pages:
+        - page: 2024 Season World Championship/Play-In
+          stage: play-in
+        - page: 2024 Season World Championship/Main Event
+          tabs:
+            "Round *": swiss
+            "*": knockout

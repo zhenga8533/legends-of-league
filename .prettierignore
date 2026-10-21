@@ -5,3 +5,4 @@ ingest
 packages/schema/json
 packages/schema/src/generated.ts
 plan.md
+data/**/*.json
