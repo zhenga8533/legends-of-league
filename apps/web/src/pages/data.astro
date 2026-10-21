@@ -1,0 +1,167 @@
+---
+import { editionCoverage } from "@lol/data";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { archive, editionsNewestFirst, paths, ruleset } from "../lib/archive";
+
+const rows = editionsNewestFirst.map((bundle) => ({
+  bundle,
+  coverage: editionCoverage(bundle),
+  ruleset: ruleset(bundle),
+}));
+const totals = rows.reduce(
+  (sum, { coverage }) => ({
+    series: sum.series + coverage.series,
+    games: sum.games + coverage.games,
+    expectedGames: sum.expectedGames + coverage.expectedGames,
+    gamesWithDraft: sum.gamesWithDraft + coverage.gamesWithDraft,
+    gamesWithStats: sum.gamesWithStats + coverage.gamesWithStats,
+  }),
+  { series: 0, games: 0, expectedGames: 0, gamesWithDraft: 0, gamesWithStats: 0 },
+);
+const pct = (part: number, whole: number) =>
+  whole === 0 ? "—" : `${Math.round((part / whole) * 100)}%`;
+const summary =
+  `${archive.editions.length} editions, ${totals.series} series and ${totals.games} of ` +
+  `${totals.expectedGames} games recorded (${pct(totals.games, totals.expectedGames)}). ` +
+  `Drafts for ${pct(totals.gamesWithDraft, totals.games)} and full player statistics for ` +
+  `${pct(totals.gamesWithStats, totals.games)} of recorded games.`;
+const repo = "https://github.com/zhenga8533/legends-of-league";
+---
+
+<BaseLayout
+  title="Data and coverage"
+  description="Where Legends of League's data comes from, how it is checked, and how complete each edition is."
+>
+  <h1 class="mb-6 text-3xl font-bold tracking-tight">Data and coverage</h1>
+
+  <div class="grid gap-8 lg:grid-cols-2">
+    <section aria-labelledby="sources" class="space-y-3">
+      <h2 id="sources" class="text-2xl font-semibold tracking-tight">
+        Sources and licence
+      </h2>
+      <p>
+        Results, games, drafts, player statistics, rosters and placements come from{" "}
+        <a class="link" href="https://lol.fandom.com/">
+          Leaguepedia
+        </a>
+        , and are licensed under{" "}
+        <a class="link" href="https://creativecommons.org/licenses/by-sa/3.0/">
+          CC BY-SA 3.0
+        </a>
+        . You can reuse the dataset under the same licence with attribution. It's in the{" "}
+        <a class="link" href={`${repo}/tree/main/data`}>
+          data folder of the repository
+        </a>
+        .
+      </p>
+      <p>
+        Every change arrives through a reviewed pull request. Records keep their provider reference,
+        and changes to verified records or removals are blocked unless reviewed. Missing data is
+        marked as a gap, never filled in.
+      </p>
+    </section>
+
+    <section aria-labelledby="verification" class="space-y-3">
+      <h2 id="verification" class="text-2xl font-semibold tracking-tight">
+        How it's checked
+      </h2>
+      <p>
+        Each edition has a ruleset describing its format: stages, series lengths, tiebreaker games
+        and placements. On every change, the simulation engine replays each edition from its
+        recorded results and must reproduce every series and the final placements exactly. That
+        checks the data against itself, and the rulesets against history.
+      </p>
+      <p class="text-sm text-muted">
+        Each edition page lists its ruleset's notes on what is verified and what is approximate.
+      </p>
+    </section>
+  </div>
+
+  <section aria-labelledby="coverage" class="mt-10 space-y-4">
+    <h2 id="coverage" class="text-2xl font-semibold tracking-tight">
+      Coverage
+    </h2>
+    <p class="text-muted">{summary}</p>
+    <div class="table-scroll" tabindex="0" role="region" aria-label="Scrollable table">
+      <table class="data-table">
+        <caption class="sr-only">Data coverage by edition</caption>
+        <thead>
+          <tr>
+            <th scope="col">Edition</th>
+            <th scope="col" class="num">
+              Teams
+            </th>
+            <th scope="col" class="num">
+              Series
+            </th>
+            <th scope="col" class="num">
+              Games
+            </th>
+            <th scope="col" class="num">
+              Drafts
+            </th>
+            <th scope="col" class="num">
+              Player stats
+            </th>
+            <th scope="col" class="num">
+              Known gaps
+            </th>
+            <th scope="col">Ruleset</th>
+          </tr>
+        </thead>
+        <tbody>
+          {rows.map(({ bundle, coverage, ruleset: rules }) => (
+            <tr>
+              <th scope="row" class="font-normal">
+                <a class="link" href={paths.edition(bundle)}>
+                  {bundle.edition.name}
+                </a>
+              </th>
+              <td class="num">{coverage.participants}</td>
+              <td class="num">{coverage.series}</td>
+              <td class="num">
+                {coverage.games}
+                {coverage.games < coverage.expectedGames && (
+                  <span class="text-muted"> / {coverage.expectedGames}</span>
+                )}
+              </td>
+              <td class="num">{pct(coverage.gamesWithDraft, coverage.games)}</td>
+              <td class="num">{pct(coverage.gamesWithStats, coverage.games)}</td>
+              <td class="num">{coverage.gaps}</td>
+              <td>
+                <a class="link" href={`${repo}/blob/main/rulesets/${rules.id}.json`}>
+                  {rules.id}
+                </a>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section aria-labelledby="gaps" class="mt-10 space-y-3">
+    <h2 id="gaps" class="text-2xl font-semibold tracking-tight">
+      Known gaps
+    </h2>
+    <ul class="list-disc space-y-1 pl-5">
+      <li>
+        <strong>No drafts before 2017.</strong> Leaguepedia's picks-and-bans table starts in 2017.
+        Earlier games still show which champion each player played, but not the pick and ban order.
+      </li>
+      <li>
+        <strong>Some series lack game records</strong>, including five Worlds 2011 playoff series
+        and the Worlds 2023 quarterfinals. Their results are complete.
+      </li>
+      <li>
+        <strong>Draw rules aren't recorded.</strong> Seeding pools and region protection in draws,
+        and how byes in three-way tiebreakers were chosen (by game times), are taken from what
+        happened in replays and drawn randomly in simulations.
+      </li>
+      <li>
+        <strong>Team lineage across rebrands</strong> (for example SK Telecom T1 becoming T1) isn't
+        linked yet. Each name is its own team page.
+      </li>
+    </ul>
+  </section>
+</BaseLayout>

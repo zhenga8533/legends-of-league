@@ -59,11 +59,14 @@ const auditedPages = [
   "/players/faker/",
   "/regions/",
   "/regions/lck/",
+  "/data/",
   "/search/",
 ];
 
 for (const scheme of ["light", "dark"] as const) {
   test.describe(`accessibility (${scheme})`, () => {
+    // Index pages list every player in the archive; auditing hundreds of rows takes a while.
+    test.describe.configure({ timeout: 90_000 });
     for (const path of auditedPages) {
       test(path, async ({ page }) => {
         await page.emulateMedia({ colorScheme: scheme });
@@ -76,3 +79,10 @@ for (const scheme of ["light", "dark"] as const) {
     }
   });
 }
+
+test("shows coverage for every edition", async ({ page }) => {
+  await page.goto("/data/");
+  const rows = page.getByRole("table", { name: "Data coverage by edition" }).locator("tbody tr");
+  await expect(rows).toHaveCount(28);
+  await expect(page.getByRole("link", { name: "2011 World Championship" })).toBeVisible();
+});

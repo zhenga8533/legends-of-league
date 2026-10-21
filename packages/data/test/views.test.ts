@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import {
+  editionCoverage,
   editionStages,
   editionStandings,
   editionSummary,
@@ -88,5 +89,24 @@ describe("team and player views", () => {
     expect(placeText([3, 4])).toBe("3rd–4th");
     expect(placeText([11, 12])).toBe("11th–12th");
     expect(placeText([22, 22])).toBe("22nd");
+  });
+});
+
+describe("coverage", () => {
+  it("counts recorded games, drafts and stats against what the scores imply", () => {
+    const coverage = editionCoverage(worlds);
+    expect(coverage.series).toBe(worlds.series.length);
+    expect(coverage.games).toBe(coverage.expectedGames);
+    expect(coverage.gamesWithDraft).toBe(coverage.games);
+    expect(coverage.gamesWithStats).toBe(coverage.games);
+    expect(coverage.gaps).toBe(0);
+  });
+
+  it("shows the known gaps of older editions", () => {
+    const old = archive.editions.find((b) => b.edition.id === "ed:worlds-2016");
+    if (!old) return;
+    const coverage = editionCoverage(old);
+    expect(coverage.gamesWithDraft).toBe(0);
+    expect(coverage.gaps).toBeGreaterThan(0);
   });
 });

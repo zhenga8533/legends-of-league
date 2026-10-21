@@ -12,6 +12,7 @@ export { type Entities, idSlug, loadEntities, playerHandle } from "./entities";
 export {
   type Archive,
   type ChampionLine,
+  type EditionCoverage,
   type EditionSummary,
   type GameView,
   type MatchView,
@@ -20,6 +21,7 @@ export {
   type Standing,
   type StageView,
   type TeamAppearance,
+  editionCoverage,
   editionStages,
   editionStandings,
   editionSummary,

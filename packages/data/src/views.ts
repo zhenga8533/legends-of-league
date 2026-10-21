@@ -313,6 +313,40 @@ function ordinal(n: number): string {
   return `${n}${suffix}`;
 }
 
+export interface EditionCoverage {
+  series: number;
+  /** Games implied by the series scores (forfeits excluded). */
+  expectedGames: number;
+  games: number;
+  gamesWithDraft: number;
+  gamesWithStats: number;
+  rosterEntries: number;
+  placements: number;
+  participants: number;
+  gaps: number;
+}
+
+/** How complete an edition's data is, for the coverage page. */
+export function editionCoverage(bundle: EditionBundle): EditionCoverage {
+  const statsPerGame = new Map<string, number>();
+  for (const row of bundle.playerStats)
+    statsPerGame.set(row.game, (statsPerGame.get(row.game) ?? 0) + 1);
+  return {
+    series: bundle.series.length,
+    expectedGames: bundle.series.reduce(
+      (sum, s) => sum + (s.score && !s.forfeit ? s.score[0] + s.score[1] : 0),
+      0,
+    ),
+    games: bundle.games.length,
+    gamesWithDraft: bundle.games.filter((g) => g.draft).length,
+    gamesWithStats: bundle.games.filter((g) => statsPerGame.get(g.id) === 10).length,
+    rosterEntries: bundle.rosters.length,
+    placements: bundle.placements.length,
+    participants: bundle.edition.participants.length,
+    gaps: (bundle.provenance.gaps ?? []).length,
+  };
+}
+
 export function formatDuration(seconds: number | null | undefined): string {
   if (seconds == null) return "—";
   return `${Math.floor(seconds / 60)}:${String(seconds % 60).padStart(2, "0")}`;
