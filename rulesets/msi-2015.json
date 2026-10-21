@@ -1,0 +1,69 @@
+{
+  "id": "msi-2015",
+  "name": "Mid-Season Invitational 2015",
+  "editions": ["ed:msi-2015"],
+  "sources": ["https://lol.fandom.com/wiki/2015_Mid-Season_Invitational"],
+  "notes": [
+    "Group stage: six teams, single round robin, Bo1; the top four advance to Bo5 semifinals (1st vs 4th, 2nd vs 3rd) and a Bo5 final. Ties split by head-to-head; ties still spanning 1st/2nd or 4th/5th are played off.",
+    "Formats, series lengths, tiebreaker games and placements are verified by replaying the recorded results."
+  ],
+  "stages": [
+    {
+      "id": "groups",
+      "name": "Group Stage",
+      "format": {
+        "type": "roundRobin",
+        "legs": 1,
+        "bestOf": 1,
+        "tiebreakers": ["headToHead"],
+        "advance": 4,
+        "tiebreakerGames": {
+          "positions": [1, 4]
+        }
+      },
+      "entrants": [
+        {
+          "entry": true
+        }
+      ]
+    },
+    {
+      "id": "knockout",
+      "name": "Knockout Stage",
+      "format": {
+        "type": "singleElimination",
+        "bestOf": [5, 5],
+        "seeding": "standard"
+      },
+      "entrants": [
+        {
+          "stage": "groups",
+          "bucket": "qualified"
+        }
+      ]
+    }
+  ],
+  "placements": [
+    {
+      "stage": "knockout",
+      "bucket": "champion",
+      "place": [1, 1]
+    },
+    {
+      "stage": "knockout",
+      "bucket": "eliminated:final",
+      "place": [2, 2]
+    },
+    {
+      "stage": "knockout",
+      "bucket": "eliminated:semifinal",
+      "place": [3, 4]
+    },
+    {
+      "stage": "groups",
+      "bucket": "eliminated",
+      "place": [5, 6],
+      "split": "rank"
+    }
+  ]
+}

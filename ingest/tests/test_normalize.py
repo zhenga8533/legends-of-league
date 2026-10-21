@@ -148,3 +148,17 @@ def test_flex_players_get_a_roster_entry_per_role(
 
     roles = sorted(e.role for e in result.data.rosters if e.player == "player:faker")
     assert roles == ["mid", "top"]
+
+
+def test_games_with_unknown_match_ids_fall_back_to_teams_and_date(
+    snapshot: Snapshot, spec: EditionSpec, store: EntityStore
+) -> None:
+    for row in snapshot.tables["games"]:
+        if "Finals" in row["MatchId"]:
+            row["MatchId"] = "Bracket Stage_9"
+
+    result = normalize(snapshot, spec, store)
+
+    final_games = [g for g in result.data.games if g.series == FINAL]
+    assert len(final_games) == 5
+    assert sum(i.code == "game-matched-by-teams" for i in result.issues) == 5

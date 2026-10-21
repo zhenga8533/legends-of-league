@@ -5,6 +5,7 @@ same pull request for review). Nothing is guessed: unknown values stay empty and
 """
 
 from collections import defaultdict
+from collections.abc import Iterable
 from dataclasses import dataclass, field
 from datetime import UTC, date, datetime
 
@@ -270,9 +271,12 @@ class _Normalizer:
         """Games keyed by Leaguepedia GameId."""
         drafts = {row["GameId"]: row for row in self.tables["drafts"]}
         by_game: dict[str, Game] = {}
+        assigned: dict[str, int] = defaultdict(int)
         for row in self.tables["games"]:
             game_ref = row["GameId"]
-            series = series_by_match.get(row["MatchId"])
+            series = series_by_match.get(row["MatchId"]) or self.series_for_unlinked_game(
+                row, series_by_match.values(), assigned
+            )
             number = _int(row["NGameInMatch"])
             if series is None or number is None:
                 self.issue("error", "game-orphan", f"{game_ref}: no matching series")
@@ -304,8 +308,39 @@ class _Normalizer:
                 external_refs=refs,
             )
             by_game[game_ref] = game
+            assigned[series.id] += 1
             self.out.refs[record_key(game)] = game_ref
         return by_game
+
+    def series_for_unlinked_game(
+        self, row: Row, series: Iterable[Series], assigned: dict[str, int]
+    ) -> Series | None:
+        """Some old scoreboards (Worlds 2011) use match IDs the schedule doesn't. Fall back to
+        the series between the same teams on the same day that still has games unaccounted for."""
+        teams = {self.team(row["Team1"]), self.team(row["Team2"])}
+        played = _datetime(row["DateTimeUTC"])
+        if played is None:
+            return None
+        candidates = [
+            s
+            for s in series
+            if set(s.teams) == teams
+            and s.score is not None
+            and assigned[s.id] < sum(s.score)
+            and s.start is not None
+            and s.start.date() == played.date()
+        ]
+        if not candidates:
+            return None
+        # The same teams can meet twice in a day (an upper final, then the grand final), and old
+        # schedule times are approximate: take the series scheduled closest to the game.
+        match = min(candidates, key=lambda s: abs(((s.start or played) - played).total_seconds()))
+        self.issue(
+            "warning",
+            "game-matched-by-teams",
+            f"{row['GameId']}: no series with match ID {row['MatchId']!r}; matched to {match.id}",
+        )
+        return match
 
     def missing_games(self, series_by_match: dict[str, Series], games: dict[str, Game]) -> None:
         recorded: dict[str, int] = defaultdict(int)

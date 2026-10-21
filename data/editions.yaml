@@ -405,3 +405,127 @@ editions:
             "Day *": groups
             "Tiebreakers": groups
             "*": knockout
+
+  - tournament: worlds
+    year: 2011
+    name: 2011 World Championship
+    status: completed
+    stages:
+      - { id: groups, name: Group Stage }
+      - { id: round-1, name: Playoff Round 1 }
+      - { id: fifth-place, name: Fifth Place Match }
+      - { id: playoffs, name: Playoffs }
+    leaguepedia:
+      basePage: Season 1 World Championship
+      pages:
+        - page: Season 1 World Championship
+          tabs:
+            "Group Stage": groups
+            "Round 1": round-1
+            "5th Place": fifth-place
+            "*": playoffs
+
+  - tournament: worlds
+    year: 2012
+    name: 2012 World Championship
+    status: completed
+    stages:
+      - { id: groups, name: Group Stage }
+      - { id: knockout, name: Knockout Stage }
+    leaguepedia:
+      basePage: Season 2 World Championship
+      pages:
+        - page: Season 2 World Championship
+          tabs:
+            "Group Stage": groups
+            "*": knockout
+
+  - tournament: worlds
+    year: 2013
+    name: 2013 World Championship
+    status: completed
+    stages:
+      - { id: groups, name: Group Stage }
+      - { id: knockout, name: Knockout Stage }
+    leaguepedia:
+      basePage: Season 3 World Championship
+      pages:
+        - page: Season 3 World Championship
+          tabs:
+            "Day *": groups
+            "*": knockout
+
+  - tournament: worlds
+    year: 2014
+    name: 2014 World Championship
+    status: completed
+    stages:
+      - { id: groups, name: Group Stage }
+      - { id: knockout, name: Knockout Stage }
+    leaguepedia:
+      basePage: 2014 Season World Championship
+      pages:
+        - page: 2014 Season World Championship
+          tabs:
+            "Day *": groups
+            "*": knockout
+
+  - tournament: worlds
+    year: 2015
+    name: 2015 World Championship
+    status: completed
+    stages:
+      - { id: groups, name: Group Stage }
+      - { id: knockout, name: Knockout Stage }
+    leaguepedia:
+      basePage: 2015 Season World Championship
+      pages:
+        - page: 2015 Season World Championship
+          tabs:
+            "Day *": groups
+            "*": knockout
+
+  - tournament: worlds
+    year: 2016
+    name: 2016 World Championship
+    status: completed
+    stages:
+      - { id: groups, name: Group Stage }
+      - { id: knockout, name: Knockout Stage }
+    leaguepedia:
+      basePage: 2016 Season World Championship
+      pages:
+        - page: 2016 Season World Championship
+          tabs:
+            "Day *": groups
+            "*": knockout
+
+  - tournament: msi
+    year: 2015
+    name: 2015 Mid-Season Invitational
+    status: completed
+    stages:
+      - { id: groups, name: Group Stage }
+      - { id: knockout, name: Knockout Stage }
+    leaguepedia:
+      basePage: 2015 Mid-Season Invitational
+      pages:
+        - page: 2015 Mid-Season Invitational
+          tabs:
+            "Day *": groups
+            "*": knockout
+
+  - tournament: msi
+    year: 2016
+    name: 2016 Mid-Season Invitational
+    status: completed
+    stages:
+      - { id: groups, name: Group Stage }
+      - { id: knockout, name: Knockout Stage }
+    leaguepedia:
+      basePage: 2016 Mid-Season Invitational
+      pages:
+        - page: 2016 Mid-Season Invitational
+          tabs:
+            "Day *": groups
+            "*": knockout
