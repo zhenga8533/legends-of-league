@@ -1,0 +1,64 @@
+{
+  "run": "msi-2025-20261021T144452Z",
+  "at": "2026-10-21T14:44:52.348817+00:00",
+  "operation": "import",
+  "force": false,
+  "summary": {
+    "edition": "msi-2025",
+    "operation": "import",
+    "provider": "leaguepedia",
+    "snapshotSha256": "1dc55bfc434508e09a2392657a0f09e47561b43f37cb0aab44bfe50615d1f303",
+    "filesChanged": true,
+    "counts": {
+      "edition": {
+        "added": 1
+      },
+      "series": {
+        "added": 19
+      },
+      "game": {
+        "added": 80
+      },
+      "stats": {
+        "added": 800
+      },
+      "roster": {
+        "added": 74
+      },
+      "placement": {
+        "added": 10
+      }
+    },
+    "unchanged": 0,
+    "blocked": [],
+    "errors": [],
+    "warnings": 0,
+    "gaps": 0,
+    "newEntities": [
+      "org:anyone-s-legend",
+      "org:furia",
+      "org:movistar-koi",
+      "player:aress",
+      "player:ayu-andrey-saraiva",
+      "player:beichuan",
+      "player:duro",
+      "player:flandre",
+      "player:furyz",
+      "player:guigo",
+      "player:hope-wang-jie",
+      "player:jojo-gabriel-dzelme",
+      "player:jojopyun",
+      "player:kael-kim-jin-hong",
+      "player:mata",
+      "player:memento",
+      "player:shanks",
+      "player:skewmond",
+      "player:tatu-pedro-seixas",
+      "player:tutsz",
+      "player:xiaobai",
+      "team:anyone-s-legend",
+      "team:furia",
+      "team:movistar-koi"
+    ]
+  }
+}

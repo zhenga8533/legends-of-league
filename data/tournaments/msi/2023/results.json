@@ -1,0 +1,15 @@
+[
+{"team":"team:bilibili-gaming","placeFrom":2,"placeTo":2,"prizeUsd":37500.0},
+{"team":"team:cloud9","placeFrom":5,"placeTo":6,"prizeUsd":20000.0},
+{"team":"team:detonation-focusme","placeFrom":12,"placeTo":13,"prizeUsd":5000.0},
+{"team":"team:g2-esports","placeFrom":5,"placeTo":6,"prizeUsd":20000.0},
+{"team":"team:gam-esports","placeFrom":12,"placeTo":13,"prizeUsd":5000.0},
+{"team":"team:gen-g","placeFrom":4,"placeTo":4,"prizeUsd":25000.0},
+{"team":"team:golden-guardians","placeFrom":7,"placeTo":8,"prizeUsd":15000.0},
+{"team":"team:jd-gaming","placeFrom":1,"placeTo":1,"prizeUsd":50000.0},
+{"team":"team:loud","placeFrom":10,"placeTo":11,"prizeUsd":7500.0},
+{"team":"team:mad-lions","placeFrom":7,"placeTo":8,"prizeUsd":15000.0},
+{"team":"team:movistar-r7","placeFrom":10,"placeTo":11,"prizeUsd":7500.0},
+{"team":"team:psg-talon","placeFrom":9,"placeTo":9,"prizeUsd":12500.0},
+{"team":"team:t1","placeFrom":3,"placeTo":3,"prizeUsd":30000.0}
+]

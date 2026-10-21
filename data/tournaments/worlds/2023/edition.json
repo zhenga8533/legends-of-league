@@ -1,0 +1,148 @@
+{
+  "id": "ed:worlds-2023",
+  "tournament": "tour:worlds",
+  "year": 2023,
+  "name": "2023 World Championship",
+  "status": "completed",
+  "dates": {
+    "start": "2023-10-10",
+    "end": "2023-11-19"
+  },
+  "stages": [
+    {
+      "id": "play-in",
+      "name": "Play-In"
+    },
+    {
+      "id": "qualifiers",
+      "name": "Play-In Qualifiers"
+    },
+    {
+      "id": "swiss",
+      "name": "Swiss Stage"
+    },
+    {
+      "id": "knockout",
+      "name": "Knockout Stage"
+    }
+  ],
+  "participants": [
+    {
+      "team": "team:bilibili-gaming",
+      "region": "region:lpl",
+      "entryStage": "swiss"
+    },
+    {
+      "team": "team:cloud9",
+      "region": "region:lcs",
+      "entryStage": "swiss"
+    },
+    {
+      "team": "team:ctbc-flying-oyster",
+      "region": "region:pcs",
+      "entryStage": "play-in"
+    },
+    {
+      "team": "team:detonation-focusme",
+      "region": "region:ljl",
+      "entryStage": "play-in"
+    },
+    {
+      "team": "team:dplus-kia",
+      "region": "region:lck",
+      "entryStage": "swiss"
+    },
+    {
+      "team": "team:fnatic",
+      "region": "region:lec",
+      "entryStage": "swiss"
+    },
+    {
+      "team": "team:g2-esports",
+      "region": "region:lec",
+      "entryStage": "swiss"
+    },
+    {
+      "team": "team:gam-esports",
+      "region": "region:vcs",
+      "entryStage": "play-in"
+    },
+    {
+      "team": "team:gen-g",
+      "region": "region:lck",
+      "entryStage": "swiss"
+    },
+    {
+      "team": "team:jd-gaming",
+      "region": "region:lpl",
+      "entryStage": "swiss"
+    },
+    {
+      "team": "team:kt-rolster",
+      "region": "region:lck",
+      "entryStage": "swiss"
+    },
+    {
+      "team": "team:lng-esports",
+      "region": "region:lpl",
+      "entryStage": "swiss"
+    },
+    {
+      "team": "team:loud",
+      "region": "region:cblol",
+      "entryStage": "play-in"
+    },
+    {
+      "team": "team:mad-lions",
+      "region": "region:lec",
+      "entryStage": "swiss"
+    },
+    {
+      "team": "team:movistar-r7",
+      "region": "region:lla",
+      "entryStage": "play-in"
+    },
+    {
+      "team": "team:nrg",
+      "region": "region:lcs",
+      "entryStage": "swiss"
+    },
+    {
+      "team": "team:psg-talon",
+      "region": "region:pcs",
+      "entryStage": "play-in"
+    },
+    {
+      "team": "team:t1",
+      "region": "region:lck",
+      "entryStage": "swiss"
+    },
+    {
+      "team": "team:team-bds",
+      "region": "region:lec",
+      "entryStage": "play-in"
+    },
+    {
+      "team": "team:team-liquid",
+      "region": "region:lcs",
+      "entryStage": "swiss"
+    },
+    {
+      "team": "team:team-whales",
+      "region": "region:vcs",
+      "entryStage": "play-in"
+    },
+    {
+      "team": "team:weibo-gaming",
+      "region": "region:lpl",
+      "entryStage": "swiss"
+    }
+  ],
+  "externalRefs": [
+    {
+      "provider": "leaguepedia",
+      "key": "OverviewPage",
+      "value": "2023 Season World Championship"
+    }
+  ]
+}

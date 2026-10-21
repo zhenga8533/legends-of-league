@@ -1,0 +1,74 @@
+{
+  "run": "worlds-2025-20261021T144452Z",
+  "at": "2026-10-21T14:44:52.348817+00:00",
+  "operation": "import",
+  "force": false,
+  "summary": {
+    "edition": "worlds-2025",
+    "operation": "import",
+    "provider": "leaguepedia",
+    "snapshotSha256": "5619f325d46427b1d1bc13b1b83b93a1817f8cbf9d07e0e20997266f6921fdbe",
+    "filesChanged": true,
+    "counts": {
+      "edition": {
+        "added": 1
+      },
+      "series": {
+        "added": 41
+      },
+      "game": {
+        "added": 84
+      },
+      "stats": {
+        "added": 840
+      },
+      "roster": {
+        "added": 132
+      },
+      "placement": {
+        "added": 17
+      }
+    },
+    "unchanged": 0,
+    "blocked": [],
+    "errors": [],
+    "warnings": 0,
+    "gaps": 0,
+    "newEntities": [
+      "org:invictus-gaming",
+      "org:team-secret-whales",
+      "org:vivo-keyd-stars",
+      "player:benvi",
+      "player:boal",
+      "player:deokdam",
+      "player:dire",
+      "player:disamis",
+      "player:eddie",
+      "player:grabbz",
+      "player:hiro02",
+      "player:hizto",
+      "player:kakao",
+      "player:karsa",
+      "player:lvmao",
+      "player:lyn",
+      "player:morttheus",
+      "player:museong",
+      "player:naul",
+      "player:perfect-lee-seung-min",
+      "player:peter-jeong-yoon-su",
+      "player:poby",
+      "player:pun",
+      "player:rookie",
+      "player:seeel",
+      "player:shad0w",
+      "player:shine-shin-dong-wook",
+      "player:smiley-ludvig-granquist",
+      "player:sonstar",
+      "player:taki-inh-anh-tai",
+      "player:upset",
+      "team:invictus-gaming",
+      "team:team-secret-whales",
+      "team:vivo-keyd-stars"
+    ]
+  }
+}

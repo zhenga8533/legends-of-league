@@ -1,0 +1,67 @@
+{
+  "run": "first-stand-2026-20261021T144452Z",
+  "at": "2026-10-21T14:44:52.348817+00:00",
+  "operation": "import",
+  "force": false,
+  "summary": {
+    "edition": "first-stand-2026",
+    "operation": "import",
+    "provider": "leaguepedia",
+    "snapshotSha256": "9f7c3338c5b2312e4e3fde2f68057afcbcdeace8d9a1fed723547cb632090ef8",
+    "filesChanged": true,
+    "counts": {
+      "edition": {
+        "added": 1
+      },
+      "series": {
+        "added": 13
+      },
+      "game": {
+        "added": 45
+      },
+      "stats": {
+        "added": 450
+      },
+      "roster": {
+        "added": 62
+      },
+      "placement": {
+        "added": 8
+      }
+    },
+    "unchanged": 0,
+    "blocked": [],
+    "errors": [],
+    "warnings": 0,
+    "gaps": 0,
+    "newEntities": [
+      "org:bnk-fearx",
+      "org:lyon",
+      "player:bull",
+      "player:chieh",
+      "player:clear-song-hyeon-min",
+      "player:diable",
+      "player:edo-park-jun-seok",
+      "player:envy-bruno-farias",
+      "player:isles",
+      "player:lira",
+      "player:nova-park-chan-ho",
+      "player:raise",
+      "player:raptor-jeon-eo-jin",
+      "player:rather",
+      "player:rigby",
+      "player:ryu",
+      "player:saint-kang-sung-in",
+      "player:vampire",
+      "player:vicla",
+      "player:warhorse",
+      "player:xiaoxu",
+      "player:xyno",
+      "player:youngjae",
+      "player:zoom",
+      "player:zyb",
+      "team:bnk-fearx",
+      "team:lyon"
+    ]
+  }
+}

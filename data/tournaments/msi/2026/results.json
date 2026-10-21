@@ -1,0 +1,13 @@
+[
+{"team":"team:bilibili-gaming","placeFrom":2,"placeTo":2,"prizeUsd":300000.0},
+{"team":"team:deep-cross-gaming","placeFrom":11,"placeTo":11,"prizeUsd":60000.0},
+{"team":"team:furia","placeFrom":7,"placeTo":8,"prizeUsd":110000.0},
+{"team":"team:g2-esports","placeFrom":4,"placeTo":4,"prizeUsd":200000.0},
+{"team":"team:hanwha-life-esports","placeFrom":1,"placeTo":1,"prizeUsd":500000.0},
+{"team":"team:karmine-corp","placeFrom":10,"placeTo":10,"prizeUsd":70000.0},
+{"team":"team:lyon","placeFrom":3,"placeTo":3,"prizeUsd":240000.0},
+{"team":"team:t1","placeFrom":5,"placeTo":6,"prizeUsd":160000.0},
+{"team":"team:team-liquid","placeFrom":9,"placeTo":9,"prizeUsd":90000.0},
+{"team":"team:team-secret-whales","placeFrom":5,"placeTo":6,"prizeUsd":160000.0},
+{"team":"team:top-esports","placeFrom":7,"placeTo":8,"prizeUsd":110000.0}
+]

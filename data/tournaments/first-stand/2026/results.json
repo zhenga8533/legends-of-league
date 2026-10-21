@@ -1,0 +1,10 @@
+[
+{"team":"team:bilibili-gaming","placeFrom":1,"placeTo":1,"prizeUsd":250000.0},
+{"team":"team:bnk-fearx","placeFrom":5,"placeTo":6,"prizeUsd":100000.0},
+{"team":"team:g2-esports","placeFrom":2,"placeTo":2,"prizeUsd":150000.0},
+{"team":"team:gen-g","placeFrom":3,"placeTo":4,"prizeUsd":125000.0},
+{"team":"team:jd-gaming","placeFrom":3,"placeTo":4,"prizeUsd":125000.0},
+{"team":"team:loud","placeFrom":7,"placeTo":8,"prizeUsd":75000.0},
+{"team":"team:lyon","placeFrom":5,"placeTo":6,"prizeUsd":100000.0},
+{"team":"team:team-secret-whales","placeFrom":7,"placeTo":8,"prizeUsd":75000.0}
+]

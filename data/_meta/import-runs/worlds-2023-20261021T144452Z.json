@@ -1,0 +1,93 @@
+{
+  "run": "worlds-2023-20261021T144452Z",
+  "at": "2026-10-21T14:44:52.348817+00:00",
+  "operation": "import",
+  "force": false,
+  "summary": {
+    "edition": "worlds-2023",
+    "operation": "import",
+    "provider": "leaguepedia",
+    "snapshotSha256": "d1da094ddd8fcede395c4b27d61a484b939ef08062d08ad12a52f1c6c54a9b22",
+    "filesChanged": true,
+    "counts": {
+      "edition": {
+        "added": 1
+      },
+      "series": {
+        "added": 52
+      },
+      "game": {
+        "added": 95
+      },
+      "stats": {
+        "added": 950
+      },
+      "roster": {
+        "added": 153
+      },
+      "placement": {
+        "added": 22
+      }
+    },
+    "unchanged": 0,
+    "blocked": [],
+    "errors": [],
+    "warnings": 4,
+    "gaps": 4,
+    "newEntities": [
+      "org:kt-rolster",
+      "org:nrg",
+      "org:team-bds",
+      "org:team-whales",
+      "player:achie",
+      "player:acorn",
+      "player:adam-adam-maanane",
+      "player:apamen",
+      "player:artemis-tran-quoc-hung",
+      "player:bdd",
+      "player:beanj",
+      "player:ciel-tran-tien-thinh",
+      "player:contractz",
+      "player:croissant",
+      "player:crownie",
+      "player:cuzz",
+      "player:deft",
+      "player:dhokla",
+      "player:dodo",
+      "player:fbi",
+      "player:gemini",
+      "player:gismo",
+      "player:gloryy",
+      "player:gotoone",
+      "player:hiiva",
+      "player:hirai",
+      "player:ignar",
+      "player:jimien",
+      "player:kellin",
+      "player:koala-lin-chih-chiang",
+      "player:labrov",
+      "player:nuc",
+      "player:palafox",
+      "player:palette",
+      "player:poppy-chang-po-hao",
+      "player:pyosik",
+      "player:rapidstar",
+      "player:sephis",
+      "player:sheo",
+      "player:shiauc",
+      "player:shunn",
+      "player:slayder",
+      "player:sparda",
+      "player:striker-yanis-kella",
+      "player:theshy",
+      "player:thinkcard",
+      "player:trymbi",
+      "player:viking-jake-ainsworth",
+      "player:yuna",
+      "team:kt-rolster",
+      "team:nrg",
+      "team:team-bds",
+      "team:team-whales"
+    ]
+  }
+}

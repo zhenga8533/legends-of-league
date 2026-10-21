@@ -1,0 +1,91 @@
+{
+  "run": "msi-2023-20261021T144452Z",
+  "at": "2026-10-21T14:44:52.348817+00:00",
+  "operation": "import",
+  "force": false,
+  "summary": {
+    "edition": "msi-2023",
+    "operation": "import",
+    "provider": "leaguepedia",
+    "snapshotSha256": "e71420d69c0c13fa9c9b21b61295c2f80fe7e273fa1f78891dbb269ecac55654",
+    "filesChanged": true,
+    "counts": {
+      "edition": {
+        "added": 1
+      },
+      "series": {
+        "added": 25
+      },
+      "game": {
+        "added": 76
+      },
+      "stats": {
+        "added": 760
+      },
+      "roster": {
+        "added": 89
+      },
+      "placement": {
+        "added": 13
+      }
+    },
+    "unchanged": 0,
+    "blocked": [],
+    "errors": [],
+    "warnings": 0,
+    "gaps": 0,
+    "newEntities": [
+      "org:cloud9",
+      "org:detonation-focusme",
+      "org:golden-guardians",
+      "org:jd-gaming",
+      "org:mad-lions",
+      "player:aria-lee-ga-eul",
+      "player:beellzy",
+      "player:bengi",
+      "player:berserker-kim-min-cheol",
+      "player:blaber",
+      "player:bong-cho-bo-woong",
+      "player:carzzy",
+      "player:ceos",
+      "player:chasy",
+      "player:chuz",
+      "player:duffman",
+      "player:emenes",
+      "player:fudge",
+      "player:gori",
+      "player:harp",
+      "player:huhi",
+      "player:hylissang",
+      "player:kazu",
+      "player:kun-kwon-oh-seong",
+      "player:licorice",
+      "player:mac",
+      "player:mafa",
+      "player:mireu",
+      "player:missing",
+      "player:nisqy",
+      "player:pad",
+      "player:rei",
+      "player:ruler",
+      "player:score",
+      "player:steal-mun-geon-yeong",
+      "player:stixxay",
+      "player:sty1e",
+      "player:tabe",
+      "player:tol2",
+      "player:uniboy",
+      "player:viod-lu-fan",
+      "player:wako",
+      "player:yagao",
+      "player:yutapon",
+      "player:zin",
+      "player:zven",
+      "team:cloud9",
+      "team:detonation-focusme",
+      "team:golden-guardians",
+      "team:jd-gaming",
+      "team:mad-lions"
+    ]
+  }
+}
