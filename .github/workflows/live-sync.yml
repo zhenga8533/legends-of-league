@@ -1,7 +1,9 @@
 name: Live sync
 
 # Keeps editions marked `status: live` or `upcoming` in data/editions.yaml up to date: upcoming
-# ones show their schedule and go live with their first result.
+# ones show their schedule and go live with their first result. Runs every 30 minutes, but
+# imports that often only while an edition is live or due to start; editions that are only
+# upcoming are imported once a day (06:07 UTC), sparing Leaguepedia weeks of identical queries.
 on:
   schedule:
     - cron: "7,37 * * * *"
@@ -23,7 +25,7 @@ jobs:
       actions: write
       pull-requests: read
     outputs:
-      sync: ${{ steps.live.outputs.live == 'true' && steps.pending.outputs.pending != 'true' }}
+      sync: ${{ steps.live.outputs.live == 'true' && steps.due.outputs.due == 'true' && steps.pending.outputs.pending != 'true' }}
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -36,6 +38,24 @@ jobs:
           else
             echo "No live or upcoming editions; nothing to do."
           fi
+      - name: Due for an import?
+        id: due
+        if: steps.live.outputs.live == 'true'
+        env:
+          EVENT: ${{ github.event_name }}
+        run: |
+          today=$(date -u +%F)
+          # Imported editions record their status and dates; a draft not imported yet has neither.
+          due_now='map(select(.status == "live" or (.status == "upcoming" and (.dates.start // "9999") <= $today)))'
+          frequent=$(jq -rs --arg today "$today" "$due_now | length" data/tournaments/*/*/edition.json)
+          if [[ "$EVENT" == workflow_dispatch || "$frequent" != 0 ]]; then
+            echo "due=true" >> "$GITHUB_OUTPUT"
+          elif [[ "$(date -u +%H)" == 06 && "$(date -u +%M)" -lt 30 ]]; then
+            echo "due=true" >> "$GITHUB_OUTPUT"
+            echo "Daily import of upcoming editions."
+          else
+            echo "Only upcoming editions, not started yet; they're imported daily at 06:07 UTC."
+          fi
       # A finished edition's PR waits for review; a new sync would supersede (close) it.
       - name: Waiting on a finished edition?
         id: pending
@@ -43,7 +63,8 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          prs=$(gh pr list --repo "$GITHUB_REPOSITORY" --state open --label edition-completed             --json url --jq '.[].url')
+          prs=$(gh pr list --repo "$GITHUB_REPOSITORY" --state open --label edition-completed \
+            --json url --jq '.[].url')
           if [[ -n "$prs" ]]; then
             echo "pending=true" >> "$GITHUB_OUTPUT"
             echo "Paused until this is reviewed: $prs"

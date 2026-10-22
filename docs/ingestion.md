@@ -93,9 +93,15 @@ rounds being drawn and places being decided all apply as ordinary updates.
 
 - Series whose teams aren't decided yet (`TBD` or empty on Leaguepedia) are skipped and listed
   as gaps, and so are placements without a team. They arrive on a later run.
-- The **Live sync** workflow (`.github/workflows/live-sync.yml`) runs twice an hour. If any
-  edition is live or upcoming, it calls the import workflow with status `active`, operation
-  `refresh` and auto-merge on. Live PRs use the `data/live-<run>` branches and supersede each other.
+- The **Live sync** workflow (`.github/workflows/live-sync.yml`) runs twice an hour. It calls
+  the import workflow with status `active`, operation `refresh` and auto-merge on:
+  - every run while an edition is live, or upcoming with its start date reached;
+  - once a day (06:07 UTC) while editions are only upcoming, since a schedule posted weeks
+    ahead rarely changes and each import is a dozen Leaguepedia queries;
+  - and whenever it is started by hand.
+
+  Live PRs use the `data/live-<run>` branches and supersede each other.
+
 - Auto-merges are made with the default token, whose pushes don't trigger the deploy workflow,
   so each live sync run also dispatches a deploy when `main` has changed since the last one.
   The site, its live forecast included, is at most about half an hour behind the data.
