@@ -2,7 +2,15 @@
 import { idSlug, placeText, teamHistory } from "@lol/data";
 import type { TeamIdentity } from "@lol/schema";
 import BaseLayout from "../../layouts/BaseLayout.astro";
-import { archive, paths, playerName, regionAbbr, stageName } from "../../lib/archive";
+import {
+  archive,
+  formatDate,
+  orgName,
+  paths,
+  playerName,
+  regionAbbr,
+  stageName,
+} from "../../lib/archive";
 import { withBase } from "../../lib/paths";
 
 export function getStaticPaths() {
@@ -20,6 +28,16 @@ const { team } = Astro.props;
 const history = teamHistory(archive, team.id);
 const org = archive.entities.organizations.get(team.org);
 const titles = history.filter((a) => a.standing.place?.[0] === 1).length;
+// The organization's other identities (rebrands), and spots it took over or that were taken over.
+const otherIdentities = [...archive.entities.teams.values()].filter(
+  (t) => t.org === team.org && t.id !== team.id,
+);
+const acquired = (org?.lineage ?? []).filter((link) => link.relation === "acquisition");
+const acquiredBy = [...archive.entities.organizations.values()].flatMap((other) =>
+  (other.lineage ?? [])
+    .filter((link) => link.relation === "acquisition" && link.org === team.org)
+    .map((link) => ({ org: other.id, date: link.date })),
+);
 ---
 
 <BaseLayout
@@ -35,8 +53,43 @@ const titles = history.filter((a) => a.standing.place?.[0] === 1).length;
       <a class="link" href={paths.region(team.region)}>
         {regionAbbr(team.region)}
       </a>
-      {org && org.name !== team.name && <> · Organization: {org.name}</>}
     </p>
+    {otherIdentities.length > 0 && (
+      <p class="text-sm text-muted">
+        Same organization as{" "}
+        {otherIdentities.map((other, i) => (
+          <>
+            {i > 0 && ", "}
+            <a class="link" href={paths.team(other.id)}>
+              {other.name}
+            </a>
+          </>
+        ))}
+        ; titles and records count together on the{" "}
+        <a class="link" href={withBase("/stats/")}>
+          stats page
+        </a>
+        .
+      </p>
+    )}
+    {acquired.map((link) => (
+      <p class="text-sm text-muted">
+        Took over the spot of{" "}
+        <a class="link" href={paths.org(link.org)}>
+          {orgName(link.org)}
+        </a>
+        {link.date && <> ({formatDate(link.date)})</>}.
+      </p>
+    ))}
+    {acquiredBy.map((link) => (
+      <p class="text-sm text-muted">
+        Its spot was taken over by{" "}
+        <a class="link" href={paths.org(link.org)}>
+          {orgName(link.org)}
+        </a>
+        {link.date && <> ({formatDate(link.date)})</>}.
+      </p>
+    ))}
     <p>
       {history.length} international {history.length === 1 ? "appearance" : "appearances"}
       {titles > 0 && (

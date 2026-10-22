@@ -68,6 +68,7 @@ const auditedPages = [
   "/regions/",
   "/regions/lck/",
   "/data/",
+  "/stats/",
   "/search/",
 ];
 

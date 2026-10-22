@@ -41,6 +41,25 @@ export function regionAbbr(id: string): string {
   return entities.regions.get(id)?.abbreviation ?? idSlug(id);
 }
 
+/** Each organization's most recent team identity at an international event. */
+const latestIdentity = new Map<string, string>();
+for (const bundle of archive.editions) {
+  for (const { team } of bundle.edition.participants) {
+    latestIdentity.set(entities.teams.get(team)?.org ?? team, team);
+  }
+}
+
+/** An organization is shown, and linked, as its most recent team identity. */
+export function orgTeam(org: string): string {
+  const team = latestIdentity.get(org);
+  if (!team) throw new Error(`no team identity for ${org}`);
+  return team;
+}
+
+export function orgName(org: string): string {
+  return teamName(orgTeam(org));
+}
+
 export function tournamentName(id: string): string {
   return entities.tournaments.get(id)?.name ?? idSlug(id);
 }
@@ -57,6 +76,7 @@ export const paths = {
   team: (id: string) => withBase(`/teams/${idSlug(id)}/`),
   player: (id: string) => withBase(`/players/${idSlug(id)}/`),
   region: (id: string) => withBase(`/regions/${idSlug(id)}/`),
+  org: (id: string) => withBase(`/teams/${idSlug(orgTeam(id))}/`),
 };
 
 /** Finds which edition a series belongs to. */
