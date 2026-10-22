@@ -46,7 +46,8 @@ export function MatchBox({
         key={i}
         type="button"
         className={`${rowClass} hover:bg-surface-2`}
-        aria-label={`Pick ${name(team)} to win: ${summary}`}
+        // Starts with the visible tag, so voice control can target it by what's on screen.
+        aria-label={`${tag(team)}: pick ${name(team)} to win (${summary})`}
         aria-pressed={match.source === "picked" && won}
         onClick={() => onPick?.(match, team)}
       >
@@ -91,13 +92,11 @@ export function MatchBox({
 
   if (match.href) {
     return (
-      <a
-        href={match.href}
-        className={`${boxClass} transition-colors hover:border-accent`}
-        aria-label={summary}
-      >
+      <a href={match.href} className={`${boxClass} transition-colors hover:border-accent`}>
         {rows}
         {footer}
+        {/* The link's name is its visible text plus this, so it includes what's on screen. */}
+        <span className="sr-only">{summary}</span>
       </a>
     );
   }
