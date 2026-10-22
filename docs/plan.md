@@ -265,7 +265,7 @@ GitHub Pages serves the site under the base path `/legends-of-league/` unless we
 - **Git:**
   - Trunk-based: short-lived `feat/…`, `fix/…` and `data/…` branches and squash-merged PRs.
   - Conventional Commits; branch protection on `main`.
-  - Releases via release-please, which handles tags and the changelog. Deploys follow `main`.
+  - No versioned releases: nothing consumes a version, and deploys follow `main`. A tag can still mark a dataset snapshot if someone needs one to cite.
 - **Tooling:**
   - pnpm through corepack, Node version pinned in `.nvmrc`/`engines`.
   - uv with `pyproject.toml` and a lockfile.
@@ -296,7 +296,8 @@ GitHub Pages serves the site under the base path `/legends-of-league/` unless we
 | **M5 Simulation Studio** | Interactive bracket, manual picks, rating editor, Web Worker Monte Carlo, comparison with actual results, URL share, export/import, precomputed pre-event odds | Scenarios round-trip through the URL exactly. 10k runs in the browser don't block the UI. Simulated content is always visually labelled. |
 | **M6 Live events** | lolesports provider, `live.json` windows, `live-sync.yml`, additive-only auto-merge, "forecast the rest of the event" | A dry run against a recorded live-event fixture produces correct additive PRs, and a modifying diff blocks auto-merge. |
 | | *As built (October 2026):* editions are marked live by `status: live` in `editions.yaml` instead of `live.json`, and auto-merge requires the report's `autoMergeSafe`. The lolesports provider was dropped: Leaguepedia alone kept up with Worlds 2026, and a second, unofficial source would have added mixed provenance for little gain. | |
-| **M7 Stats → v1.0** | Head-to-head, records, titles, finals appearances, win rates, trend charts | Stats are cross-checked against Leaguepedia totals for a sample. v1.0 is tagged. |
+| **M7 Stats** | Head-to-head, records, titles, finals appearances, win rates, trend charts | Stats are cross-checked against Leaguepedia totals for a sample. |
+| | *As built (October 2026):* stats count rebrands together through organization lineage from Leaguepedia's renames. The cross-check covered every completed edition (champions and per-organization game records). No v1.0 tag: see §8. | |
 
 ---
 
