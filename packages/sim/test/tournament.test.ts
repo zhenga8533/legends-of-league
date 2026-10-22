@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { eloModel } from "../src/model";
 import { runMonteCarlo } from "../src/montecarlo";
-import { replayTournament } from "../src/replay";
+import { type ScheduledSeries, replayTournament } from "../src/replay";
 import { createRng } from "../src/rng";
 import { parseRuleset } from "../src/ruleset";
 import { type TournamentInput, simulateTournament } from "../src/tournament";
@@ -89,6 +89,21 @@ describe("simulateTournament", () => {
 describe("replayTournament", () => {
   it("fails when the record is missing a match the ruleset requires", () => {
     expect(() => replayTournament(input, [])).toThrow(/never played/);
+  });
+
+  it("plays out an event in progress past what has been recorded", () => {
+    const [a, b, c] = teams(3) as [string, string, string];
+    const series: ScheduledSeries[] = [
+      { stage: "groups", teams: [a, b], bestOf: 1, score: [1, 0] },
+      { stage: "groups", teams: [a, c], bestOf: 1 },
+    ];
+
+    expect(() => replayTournament(input, series)).toThrow(/not played yet/);
+    const { result, unused } = replayTournament(input, series, { inProgress: true });
+    expect(unused).toEqual([]);
+    const actual = result.matches.filter((m) => m.source === "actual");
+    expect(actual).toEqual([expect.objectContaining({ teams: [a, b], winner: a })]);
+    expect(result.placements.size).toBe(6);
   });
 });
 

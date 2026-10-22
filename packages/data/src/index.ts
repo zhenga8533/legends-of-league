@@ -7,7 +7,14 @@ export {
   loadRulesets,
   rulesetFor,
 } from "./load";
-export { actualPlacements, actualSeries, ratedGames, tournamentInput } from "./sim";
+export {
+  actualPlacements,
+  actualSeries,
+  inProgress,
+  knownSeries,
+  ratedGames,
+  tournamentInput,
+} from "./sim";
 export { type Entities, idSlug, loadEntities, playerHandle } from "./entities";
 export {
   type Archive,

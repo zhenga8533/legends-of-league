@@ -1,19 +1,24 @@
 import { SimulationError, must } from "./context";
-import type { MatchupModel } from "./model";
+import { type MatchupModel, coinFlip } from "./model";
 import { createRng } from "./rng";
 import { pairKey } from "./formats/swiss";
 import { type TournamentInput, type TournamentResult, simulateTournament } from "./tournament";
 import type { GroupsRequest, MatchSpec, PairingRequest, Resolver, Score, TeamId } from "./types";
 
-/** A series that really happened, as recorded in the archive. */
-export interface ActualSeries {
+/** A series whose teams are known, played or not. */
+export interface ScheduledSeries {
   stage: string;
   teams: [TeamId, TeamId];
-  score: Score;
   bestOf: number;
   /** Used to order series; earlier series are matched first. */
   start?: string;
   number?: number;
+  score?: Score;
+}
+
+/** A series that really happened, as recorded in the archive. */
+export interface ActualSeries extends ScheduledSeries {
+  score: Score;
 }
 
 const neverSimulate: MatchupModel = {
@@ -27,14 +32,14 @@ const neverSimulate: MatchupModel = {
  * engine's request, so a ruleset that disagrees with history fails loudly.
  *
  * In lenient mode (an event still in progress), anything not yet recorded is left to the
- * simulation instead of being an error.
+ * simulation instead of being an error. Scheduled series without a score fix pairings only.
  */
 export class ReplayResolver implements Resolver {
-  private readonly byStage = new Map<string, ActualSeries[]>();
-  private readonly used = new Set<ActualSeries>();
+  private readonly byStage = new Map<string, ScheduledSeries[]>();
+  private readonly used = new Set<ScheduledSeries>();
 
   constructor(
-    private readonly series: readonly ActualSeries[],
+    private readonly series: readonly ScheduledSeries[],
     private readonly options: { lenient?: boolean } = {},
   ) {
     const ordered = [...series].sort(
@@ -47,23 +52,29 @@ export class ReplayResolver implements Resolver {
     return new ReplayResolver(this.series, this.options);
   }
 
-  unused(): ActualSeries[] {
-    return [...this.byStage.values()].flat().filter((s) => !this.used.has(s));
+  /** Played series the simulation never asked for. */
+  unused(): ScheduledSeries[] {
+    return [...this.byStage.values()].flat().filter((s) => s.score && !this.used.has(s));
   }
 
-  private pending(stage: string): ActualSeries[] {
+  private pending(stage: string): ScheduledSeries[] {
     return (this.byStage.get(stage) ?? []).filter((s) => !this.used.has(s));
   }
 
   result(match: MatchSpec): { score: Score; source: "actual" } | undefined {
     const key = pairKey(...match.teams);
     const series = this.pending(match.stage).find((s) => pairKey(...s.teams) === key);
-    if (!series && this.options.lenient) return undefined;
-    if (!series) {
+    if (!series?.score && this.options.lenient) {
+      // A scheduled series is simulated now, so it must not be offered as a later pairing.
+      if (series) this.used.add(series);
+      return undefined;
+    }
+    if (!series?.score) {
       throw new SimulationError(
-        `${match.stage} ${match.label}: ${match.teams.join(" vs ")} never played`,
+        `${match.stage} ${match.label}: ${match.teams.join(" vs ")} ${series ? "not played yet" : "never played"}`,
       );
     }
+    const { score } = series;
     if (series.bestOf !== match.bestOf) {
       throw new SimulationError(
         `${match.stage} ${match.label}: ruleset expects Bo${match.bestOf}, ` +
@@ -72,7 +83,7 @@ export class ReplayResolver implements Resolver {
     }
     this.used.add(series);
     const aligned = series.teams[0] === match.teams[0];
-    return { score: aligned ? series.score : [series.score[1], series.score[0]], source: "actual" };
+    return { score: aligned ? score : [score[1], score[0]], source: "actual" };
   }
 
   /**
@@ -81,7 +92,7 @@ export class ReplayResolver implements Resolver {
    */
   pairing(request: PairingRequest): [TeamId, TeamId][] {
     const pending = this.pending(request.stage);
-    const pairs: [ActualSeries, [TeamId, TeamId]][] = [];
+    const pairs: [ScheduledSeries, [TeamId, TeamId]][] = [];
     const paired = new Set<TeamId>();
     for (const team of request.teams) {
       if (paired.has(team)) continue;
@@ -165,18 +176,23 @@ export class ReplayResolver implements Resolver {
   }
 }
 
-const winnerOf = (s: ActualSeries): TeamId => s.teams[s.score[0] > s.score[1] ? 0 : 1];
+const winnerOf = (s: ScheduledSeries): TeamId | undefined =>
+  s.score && s.teams[s.score[0] > s.score[1] ? 0 : 1];
 
 /**
  * Orders a round's series so that the winners of series 2k and 2k+1 meet in a later series,
  * recursively. Returns the input order if the later rounds don't pin it down.
  */
-function bracketOrder(round: ActualSeries[], later: ActualSeries[]): ActualSeries[] {
+function bracketOrder(round: ScheduledSeries[], later: ScheduledSeries[]): ScheduledSeries[] {
   if (round.length <= 1) return round;
-  const meeting = (a: ActualSeries, b: ActualSeries) =>
-    later.find((s) => pairKey(...s.teams) === pairKey(winnerOf(a), winnerOf(b)));
+  const meeting = (a: ScheduledSeries, b: ScheduledSeries) => {
+    const [winnerA, winnerB] = [winnerOf(a), winnerOf(b)];
+    return winnerA && winnerB
+      ? later.find((s) => pairKey(...s.teams) === pairKey(winnerA, winnerB))
+      : undefined;
+  };
   const remaining = [...round];
-  const pairs: [ActualSeries, ActualSeries, ActualSeries][] = [];
+  const pairs: [ScheduledSeries, ScheduledSeries, ScheduledSeries][] = [];
   while (remaining.length > 0) {
     const first = remaining.shift();
     if (!first) break;
@@ -184,7 +200,7 @@ function bracketOrder(round: ActualSeries[], later: ActualSeries[]): ActualSerie
     // winners meet earliest.
     const candidates = remaining
       .map((other) => ({ other, met: meeting(first, other) }))
-      .filter((c): c is { other: ActualSeries; met: ActualSeries } => c.met !== undefined)
+      .filter((c): c is { other: ScheduledSeries; met: ScheduledSeries } => c.met !== undefined)
       .sort((a, b) => (a.met.start ?? "").localeCompare(b.met.start ?? ""));
     const best = candidates[0];
     if (!best) return round;
@@ -207,21 +223,26 @@ function bracketOrder(round: ActualSeries[], later: ActualSeries[]): ActualSerie
 
 export interface ReplayResult {
   result: TournamentResult;
-  /** Recorded series the ruleset never asked for; should be empty. */
-  unused: ActualSeries[];
+  /** Played series the ruleset never asked for; should be empty. */
+  unused: ScheduledSeries[];
 }
 
-/** Re-runs a tournament from its recorded series and nothing else. */
+/**
+ * Re-runs a tournament from its recorded series and nothing else. An event in progress
+ * (`inProgress`) is played out with coin flips past what has been recorded: only its matches
+ * with source "actual" are real, and only the placements already decided are meaningful.
+ */
 export function replayTournament(
   input: TournamentInput,
-  series: readonly ActualSeries[],
+  series: readonly ScheduledSeries[],
+  { inProgress = false }: { inProgress?: boolean } = {},
 ): ReplayResult {
-  const resolver = new ReplayResolver(series);
+  const resolver = new ReplayResolver(series, { lenient: inProgress });
   const result = simulateTournament(input, {
     rng: createRng("replay"),
-    model: neverSimulate,
+    model: inProgress ? coinFlip : neverSimulate,
     resolver,
-    strict: true,
+    strict: !inProgress,
   });
   return { result, unused: resolver.unused() };
 }

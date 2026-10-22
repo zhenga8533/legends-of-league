@@ -3,6 +3,8 @@ import { describe, expect, it } from "vitest";
 import {
   actualPlacements,
   actualSeries,
+  inProgress,
+  knownSeries,
   loadEditions,
   loadRulesets,
   rulesetFor,
@@ -26,18 +28,39 @@ describe("historical replays", () => {
     (id, bundle) => {
       const ruleset = rulesetFor(id, rulesets);
 
-      it("reproduces every recorded series and the final placements", () => {
+      it.skipIf(inProgress(bundle))(
+        "reproduces every recorded series and the final placements",
+        () => {
+          if (!ruleset) throw new Error(`no ruleset for ${id}`);
+          const { result, unused } = replayTournament(
+            tournamentInput(bundle, ruleset),
+            actualSeries(bundle),
+          );
+
+          expect(unused).toEqual([]);
+          expect(result.matches).toHaveLength(bundle.series.length);
+          expect(Object.fromEntries(result.placements)).toEqual(
+            Object.fromEntries(actualPlacements(bundle)),
+          );
+        },
+      );
+
+      // An event in progress: everything played so far fits the ruleset, the scheduled pairings
+      // are ones it can produce, and the places decided so far are the ones it gives.
+      it.runIf(inProgress(bundle))("fits every series played so far", () => {
         if (!ruleset) throw new Error(`no ruleset for ${id}`);
         const { result, unused } = replayTournament(
           tournamentInput(bundle, ruleset),
-          actualSeries(bundle),
+          knownSeries(bundle),
+          { inProgress: true },
         );
 
         expect(unused).toEqual([]);
-        expect(result.matches).toHaveLength(bundle.series.length);
-        expect(Object.fromEntries(result.placements)).toEqual(
-          Object.fromEntries(actualPlacements(bundle)),
-        );
+        const played = result.matches.filter((m) => m.source === "actual");
+        expect(played).toHaveLength(actualSeries(bundle).length);
+        for (const [team, place] of actualPlacements(bundle)) {
+          expect(result.placements.get(team), team).toEqual(place);
+        }
       });
     },
   );

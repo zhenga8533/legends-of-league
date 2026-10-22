@@ -11,7 +11,7 @@ import {
 } from "@lol/sim";
 import { type Entities, loadEntities } from "./entities";
 import { DATA_DIR, type EditionBundle, RULESETS_DIR, loadEditions, loadRulesets } from "./load";
-import { actualSeries, tournamentInput } from "./sim";
+import { inProgress, knownSeries, tournamentInput } from "./sim";
 
 export interface Archive {
   editions: EditionBundle[];
@@ -32,7 +32,10 @@ export function loadArchive(dirs: { dataDir?: string; rulesetsDir?: string } = {
   };
 }
 
-export interface MatchView extends MatchSummary {
+type Result = "score" | "winner" | "loser" | "source";
+
+/** A match on an edition page; an event in progress also lists its upcoming matches. */
+export interface MatchView extends Omit<MatchSummary, Result>, Partial<Pick<MatchSummary, Result>> {
   seriesId: string;
   start?: string;
 }
@@ -46,9 +49,14 @@ const pairKey = (teams: readonly TeamId[]): string => [...teams].sort().join("|"
 /**
  * Stages as the verified replay sees them. The replay knows each match's real position
  * (bracket slot, Swiss round, group), which Leaguepedia's schedule labels do not encode reliably.
+ * For an event in progress, the played matches come from the replay and the scheduled ones
+ * follow, labelled as Leaguepedia labels them; nothing simulated is shown.
  */
 export function editionStages(bundle: EditionBundle, ruleset: Ruleset): StageView[] {
-  const { result } = replayTournament(tournamentInput(bundle, ruleset), actualSeries(bundle));
+  const live = inProgress(bundle);
+  const { result } = replayTournament(tournamentInput(bundle, ruleset), knownSeries(bundle), {
+    inProgress: live,
+  });
   const remaining = [...bundle.series].sort(
     (a, b) => (a.start ?? "").localeCompare(b.start ?? "") || a.number - b.number,
   );
@@ -60,13 +68,40 @@ export function editionStages(bundle: EditionBundle, ruleset: Ruleset): StageVie
     if (index === -1 || !series) throw new Error(`${stage}: no series for ${teams.join(" vs ")}`);
     return series;
   };
-  return summarizeStages(result, ruleset).map((stage) => ({
+  const stages = summarizeStages(result, ruleset).map((stage) => ({
     ...stage,
-    matches: stage.matches.map((match): MatchView => {
-      const series = take(stage.id, match.teams);
-      return { ...match, seriesId: series.id, ...(series.start ? { start: series.start } : {}) };
-    }),
+    matches: stage.matches
+      .filter((match) => !live || match.source === "actual")
+      .map((match): MatchView => {
+        const series = take(stage.id, match.teams);
+        return { ...match, seriesId: series.id, ...(series.start ? { start: series.start } : {}) };
+      }),
   }));
+  for (const series of remaining) {
+    const stage = stages.find((s) => s.id === series.stage);
+    if (!stage || series.score) throw new Error(`${series.id}: not part of the replay`);
+    const records = stage.format === "swiss" ? swissRecords(stage.matches) : undefined;
+    stage.matches.push({
+      label: series.round,
+      teams: series.teams,
+      bestOf: series.bestOf,
+      seriesId: series.id,
+      ...(series.start ? { start: series.start } : {}),
+      ...(records ? { records: [records(series.teams[0]), records(series.teams[1])] } : {}),
+    });
+  }
+  return stages;
+}
+
+function swissRecords(matches: readonly MatchView[]): (team: TeamId) => WinLoss {
+  const records = new Map<TeamId, WinLoss>();
+  const record = (team: TeamId) => records.get(team) ?? { wins: 0, losses: 0 };
+  for (const { winner, loser } of matches) {
+    if (!winner || !loser) continue;
+    records.set(winner, { ...record(winner), wins: record(winner).wins + 1 });
+    records.set(loser, { ...record(loser), losses: record(loser).losses + 1 });
+  }
+  return record;
 }
 
 export interface Standing {
