@@ -34,11 +34,17 @@ export function loadArchive(dirs: { dataDir?: string; rulesetsDir?: string } = {
 
 type Result = "score" | "winner" | "loser" | "source";
 
-/** A match on an edition page; an event in progress also lists its upcoming matches. */
+/**
+ * A match on an edition page. An event in progress also lists its upcoming matches, and slots
+ * whose teams aren't decided yet: those have empty team IDs ("TBD") and no series.
+ */
 export interface MatchView extends Omit<MatchSummary, Result>, Partial<Pick<MatchSummary, Result>> {
-  seriesId: string;
+  seriesId?: string;
   start?: string;
 }
+
+/** The team ID of an undecided slot. */
+export const TBD = "";
 
 export interface StageView extends Omit<StageSummary, "matches"> {
   matches: MatchView[];
@@ -49,8 +55,12 @@ const pairKey = (teams: readonly TeamId[]): string => [...teams].sort().join("|"
 /**
  * Stages as the verified replay sees them. The replay knows each match's real position
  * (bracket slot, Swiss round, group), which Leaguepedia's schedule labels do not encode reliably.
- * For an event in progress, the played matches come from the replay and the scheduled ones
- * follow, labelled as Leaguepedia labels them; nothing simulated is shown.
+ *
+ * An event in progress is played out with coin flips past what is recorded, which gives the
+ * format's full structure: played matches are real; a simulated match between teams Leaguepedia
+ * has scheduled is shown as upcoming; any other simulated match is shown as a slot with both
+ * teams TBD. Simulated tiebreakers are dropped (they may never be needed), and no simulated
+ * team or result is ever shown.
  */
 export function editionStages(bundle: EditionBundle, ruleset: Ruleset): StageView[] {
   const live = inProgress(bundle);
@@ -60,22 +70,34 @@ export function editionStages(bundle: EditionBundle, ruleset: Ruleset): StageVie
   const remaining = [...bundle.series].sort(
     (a, b) => (a.start ?? "").localeCompare(b.start ?? "") || a.number - b.number,
   );
-  const take = (stage: string, teams: readonly TeamId[]): Series => {
+  const find = (stage: string, teams: readonly TeamId[], played: boolean): Series | undefined => {
     const index = remaining.findIndex(
-      (s) => s.stage === stage && pairKey(s.teams) === pairKey(teams),
+      (s) => s.stage === stage && pairKey(s.teams) === pairKey(teams) && !!s.score === played,
     );
-    const [series] = remaining.splice(index, 1);
-    if (index === -1 || !series) throw new Error(`${stage}: no series for ${teams.join(" vs ")}`);
-    return series;
+    return index === -1 ? undefined : remaining.splice(index, 1)[0];
   };
+  const linked = (series: Series) => ({
+    seriesId: series.id,
+    ...(series.start ? { start: series.start } : {}),
+  });
   const stages = summarizeStages(result, ruleset).map((stage) => ({
     ...stage,
-    matches: stage.matches
-      .filter((match) => !live || match.source === "actual")
-      .map((match): MatchView => {
-        const series = take(stage.id, match.teams);
-        return { ...match, seriesId: series.id, ...(series.start ? { start: series.start } : {}) };
-      }),
+    matches: stage.matches.flatMap((match): MatchView[] => {
+      if (match.source === "actual") {
+        const series = find(stage.id, match.teams, true);
+        if (!series) throw new Error(`${stage.id}: no series for ${match.teams.join(" vs ")}`);
+        return [{ ...match, ...linked(series) }];
+      }
+      if (/tiebreaker/i.test(match.label)) return [];
+      const { label, bestOf, group, records } = match;
+      const slot = { label, bestOf, ...(group ? { group } : {}), ...(records ? { records } : {}) };
+      const scheduled = find(stage.id, match.teams, false);
+      return [
+        scheduled
+          ? { ...slot, teams: match.teams, ...linked(scheduled) }
+          : { ...slot, teams: [TBD, TBD] },
+      ];
+    }),
   }));
   for (const series of remaining) {
     const stage = stages.find((s) => s.id === series.stage);

@@ -10,6 +10,7 @@ import {
   playerCareer,
   rulesetFor,
   seriesGames,
+  TBD,
   teamHistory,
 } from "../src";
 
@@ -22,7 +23,8 @@ describe("edition views", () => {
   it("maps every replayed match back to exactly one series", () => {
     for (const bundle of archive.editions) {
       const stages = editionStages(bundle, rulesetFor(bundle.edition.id, archive.rulesets)!);
-      const ids = stages.flatMap((stage) => stage.matches.map((m) => m.seriesId));
+      const ids = stages.flatMap((stage) => stage.matches.flatMap((m) => m.seriesId ?? []));
+      expect(ids).toHaveLength(bundle.series.length);
       expect(new Set(ids).size).toBe(bundle.series.length);
     }
   });
@@ -51,15 +53,21 @@ describe("edition views", () => {
     const matches = stages.flatMap((stage) => stage.matches);
     expect(matches).toHaveLength(worlds.series.length);
     const upcoming = matches.filter((m) => m.source !== "actual");
-    expect(upcoming).toEqual([expect.objectContaining({ seriesId: final.id, label: "Finals" })]);
+    expect(upcoming).toEqual([
+      expect.objectContaining({ seriesId: final.id, label: expect.stringMatching(/final/i) }),
+    ]);
     expect(upcoming[0]).not.toHaveProperty("score");
   });
 
-  it("shows an upcoming edition as its schedule, with nothing played", () => {
+  it("shows an upcoming edition as its first-round schedule, then TBD slots", () => {
+    // Before an event, Leaguepedia has each stage's first round and nothing played.
+    const scheduled = worlds.series
+      .filter((s) => s.round === "Round 1")
+      .map((s) => ({ ...s, score: null, winner: null }));
     const upcoming = {
       ...worlds,
       edition: { ...worlds.edition, status: "upcoming" as const },
-      series: worlds.series.map((s) => ({ ...s, score: null, winner: null })),
+      series: scheduled,
       games: [],
       playerStats: [],
       placements: [],
@@ -68,8 +76,29 @@ describe("edition views", () => {
       upcoming,
       rulesetFor("ed:worlds-2024", archive.rulesets)!,
     ).flatMap((stage) => stage.matches);
-    expect(matches).toHaveLength(worlds.series.length);
+    const ids = matches.flatMap((m) => m.seriesId ?? []);
+    expect(ids.sort()).toEqual(scheduled.map((s) => s.id).sort());
     expect(matches.every((m) => m.score === undefined)).toBe(true);
+    const tbd = matches.filter((m) => !m.seriesId);
+    expect(tbd.length).toBeGreaterThan(0);
+    expect(tbd.every((m) => m.teams.every((t) => t === TBD))).toBe(true);
+  });
+
+  it("shows the slots of a stage not drawn yet as TBD, and nothing simulated", () => {
+    const live = {
+      ...worlds,
+      edition: { ...worlds.edition, status: "live" as const },
+      series: worlds.series.filter((s) => s.stage !== "knockout"),
+      placements: worlds.placements.filter((p) => p.placeFrom > 8),
+    };
+    const stages = editionStages(live, rulesetFor("ed:worlds-2024", archive.rulesets)!);
+    const knockout = stages.find((stage) => stage.id === "knockout")!;
+    expect(knockout.matches).toHaveLength(7);
+    expect(knockout.matches.every((m) => m.teams.every((t) => t === TBD) && !m.seriesId)).toBe(
+      true,
+    );
+    const shown = stages.flatMap((stage) => stage.matches);
+    expect(shown.filter((m) => m.source === "simulated")).toEqual([]);
   });
 
   it("summarizes champion, runner-up and the final", () => {
