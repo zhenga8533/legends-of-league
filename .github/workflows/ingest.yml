@@ -185,6 +185,7 @@ jobs:
           if [[ "$(jq '.blocked' .cache/reports/report.json)" != 0 ]]; then labels+=(blocked-changes); fi
           if [[ "$(jq '.completed | length' .cache/reports/report.json)" != 0 ]]; then labels+=(edition-completed); fi
           if [[ "$(jq '.drafted // [] | length' .cache/reports/report.json)" != 0 ]]; then labels+=(new-edition); fi
+          if [[ "$OPERATION" == lineage ]]; then labels+=(lineage); fi
           for label in "${labels[@]}"; do gh label create "$label" --force >/dev/null; done
 
           {
