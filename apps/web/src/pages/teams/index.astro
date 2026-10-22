@@ -11,9 +11,9 @@ const teams = [...archive.entities.teams.values()]
 ---
 
 <BaseLayout title="Teams" searchable>
-  <h1 class="mb-6 text-3xl font-bold tracking-tight">Teams</h1>
+  <h1 class="mb-6 text-3xl font-bold tracking-tight sm:text-4xl">Teams</h1>
   <div class="table-scroll" tabindex="0" role="region" aria-label="Scrollable table">
-    <table class="data-table">
+    <table class="data-table" data-sortable>
       <caption class="sr-only">Teams with international appearances</caption>
       <thead>
         <tr>

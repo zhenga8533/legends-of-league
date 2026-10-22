@@ -34,3 +34,20 @@ test("the trend chart has a hover readout and a table view", async ({ page }) =>
     page.getByRole("table", { name: "Cross-region series records by year" }),
   ).toBeVisible();
 });
+
+test("long tables sort by any column", async ({ page }) => {
+  await page.goto("/stats/#win-rates");
+  const table = page.getByRole("table", { name: "International win rates by organization" });
+  const events = table.getByRole("button", { name: "Events" });
+  const column = table.locator("tbody tr td:first-of-type");
+
+  await events.click();
+  await expect(table.locator("thead th").nth(1)).toHaveAttribute("aria-sort", "descending");
+  const values = (await column.allInnerTexts()).map(Number);
+  expect(values).toEqual([...values].sort((a, b) => b - a));
+
+  await events.click();
+  await expect(table.locator("thead th").nth(1)).toHaveAttribute("aria-sort", "ascending");
+  const ascending = (await column.allInnerTexts()).map(Number);
+  expect(ascending).toEqual([...ascending].sort((a, b) => a - b));
+});

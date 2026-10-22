@@ -60,7 +60,7 @@ const pct = (wins: number, games: number) => (games ? `${Math.round((wins / game
       By edition
     </h2>
     <div class="table-scroll" tabindex="0" role="region" aria-label="Scrollable table">
-      <table class="data-table">
+      <table class="data-table" data-sortable>
         <caption class="sr-only">{handle}by edition</caption>
         <thead>
           <tr>
@@ -112,7 +112,7 @@ const pct = (wins: number, games: number) => (games ? `${Math.round((wins / game
         Champions
       </h2>
       <div class="table-scroll" tabindex="0" role="region" aria-label="Scrollable table">
-        <table class="data-table">
+        <table class="data-table" data-sortable>
           <caption class="sr-only">{handle}'s champions</caption>
           <thead>
             <tr>

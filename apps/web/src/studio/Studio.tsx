@@ -146,16 +146,13 @@ export default function Studio({
     <div className="space-y-8">
       <div
         role="note"
-        className="sticky top-0 z-10 rounded border border-dashed border-blue-side bg-surface px-4 py-2 text-sm"
+        className="sticky top-0 z-10 rounded-lg border border-dashed border-blue-side bg-surface px-4 py-2 text-sm"
       >
         <strong className="text-blue-side">Simulated.</strong> Brackets and odds on this page come
         from the simulator, not from real matches, except where marked <em>Real</em>.
       </div>
 
-      <section
-        aria-labelledby="scenario"
-        className="space-y-4 rounded border border-border bg-surface p-4"
-      >
+      <section aria-labelledby="scenario" className="card space-y-4 p-4">
         <h2 id="scenario" className="text-xl font-semibold">
           Scenario
         </h2>
@@ -163,7 +160,7 @@ export default function Studio({
           <label className="flex flex-col gap-1 text-sm">
             Edition
             <select
-              className="rounded border border-border bg-bg px-2 py-1.5"
+              className="input"
               value={scenario.edition}
               onChange={(e) => setScenario(startingScenario(e.target.value))}
             >
@@ -177,7 +174,7 @@ export default function Studio({
           <label className="flex flex-col gap-1 text-sm">
             Simulate from
             <select
-              className="rounded border border-border bg-bg px-2 py-1.5"
+              className="input"
               value={scenario.from ?? ""}
               onChange={(e) => update({ from: e.target.value || null, picks: {} })}
               disabled={!payload}
@@ -195,40 +192,24 @@ export default function Studio({
             Seed
             <span className="flex gap-2">
               <input
-                className="w-full rounded border border-border bg-bg px-2 py-1.5"
+                className="input w-full"
                 value={scenario.seed}
                 maxLength={64}
                 onChange={(e) => e.target.value && update({ seed: e.target.value })}
               />
-              <button
-                type="button"
-                className="rounded border border-border px-2 hover:border-accent"
-                onClick={() => update({ seed: newSeed() })}
-              >
+              <button type="button" className="btn" onClick={() => update({ seed: newSeed() })}>
                 Reroll
               </button>
             </span>
           </label>
           <div className="flex flex-wrap items-end gap-2 text-sm">
-            <button
-              type="button"
-              className="rounded border border-border px-2 py-1.5 hover:border-accent"
-              onClick={share}
-            >
+            <button type="button" className="btn" onClick={share}>
               Copy link
             </button>
-            <button
-              type="button"
-              className="rounded border border-border px-2 py-1.5 hover:border-accent"
-              onClick={exportScenario}
-            >
+            <button type="button" className="btn" onClick={exportScenario}>
               Export
             </button>
-            <button
-              type="button"
-              className="rounded border border-border px-2 py-1.5 hover:border-accent"
-              onClick={() => fileInput.current?.click()}
-            >
+            <button type="button" className="btn" onClick={() => fileInput.current?.click()}>
               Import
             </button>
             <input
@@ -307,7 +288,7 @@ export default function Studio({
               <label className="flex items-center gap-2">
                 Simulations
                 <select
-                  className="rounded border border-border bg-bg px-2 py-1.5"
+                  className="input"
                   value={iterations}
                   onChange={(e) => setIterations(Number(e.target.value))}
                 >
@@ -320,7 +301,7 @@ export default function Studio({
               </label>
               <button
                 type="button"
-                className="rounded bg-accent px-3 py-1.5 font-semibold text-bg hover:bg-accent-strong"
+                className="btn btn-primary"
                 onClick={() => montecarlo.run(payload, scenario, iterations)}
                 disabled={montecarlo.state.status === "running"}
               >
@@ -381,14 +362,14 @@ export default function Studio({
             <ul className="grid gap-2 sm:grid-cols-2 lg:grid-cols-4">
               {payload.participants.map(({ team }) => (
                 <li key={team}>
-                  <label className="flex items-center justify-between gap-2 rounded border border-border bg-surface px-3 py-1.5 text-sm">
+                  <label className="card flex items-center justify-between gap-2 px-3 py-1.5 text-sm">
                     <span className="truncate">{payload.teams[team]?.name ?? team}</span>
                     <input
                       type="number"
                       step={10}
                       min={0}
                       max={4000}
-                      className="w-20 rounded border border-border bg-bg px-1 text-right tabular-nums"
+                      className="input w-20 px-1 text-right tabular-nums"
                       value={ratings[team] ?? ""}
                       onChange={(e) => {
                         const value = Number(e.target.value);

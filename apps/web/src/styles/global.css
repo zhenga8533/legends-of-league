@@ -11,6 +11,7 @@
   --color-accent: #8a6100;
   --color-accent-strong: #6b4b00;
   --color-border: #dcdfe6;
+  --color-line: #aeb4c2;
   --color-win: #0f7a3d;
   --color-loss: #b4232c;
   --color-blue-side: #1d5fc4;
@@ -35,6 +36,7 @@
     --color-accent: #e6b84f;
     --color-accent-strong: #f2cb73;
     --color-border: #2a2f3d;
+    --color-line: #4a5266;
     --color-win: #4cc27f;
     --color-loss: #f0727a;
     --color-blue-side: #6fa3ff;
@@ -58,6 +60,7 @@
   --color-accent: #e6b84f;
   --color-accent-strong: #f2cb73;
   --color-border: #2a2f3d;
+  --color-line: #4a5266;
   --color-win: #4cc27f;
   --color-loss: #f0727a;
   --color-blue-side: #6fa3ff;
@@ -99,6 +102,50 @@ body {
   outline-offset: 2px;
 }
 
+/* Bracket connectors (components/board/StageBoard.tsx). Rounds are 2.5rem apart and the lines
+   meet halfway. */
+.bracket-out::after,
+.bracket-in::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  width: 1.25rem;
+  border-top: 1px solid var(--color-line);
+}
+.bracket-out::after {
+  left: 100%;
+}
+.bracket-in::before {
+  right: 100%;
+}
+.bracket-pair::after {
+  content: "";
+  position: absolute;
+  left: calc(100% + 1.25rem);
+  top: 25%;
+  bottom: 25%;
+  border-left: 1px solid var(--color-line);
+}
+
+/* Shared building blocks, so cards, buttons and inputs look the same everywhere. */
+@layer components {
+  .card {
+    @apply rounded-lg border border-border bg-surface shadow-sm;
+  }
+  .btn {
+    @apply inline-flex items-center justify-center gap-1.5 rounded-md border border-border bg-surface px-3 py-1.5 text-sm font-medium transition-colors hover:border-accent hover:text-accent;
+  }
+  .btn-primary {
+    @apply border-transparent bg-accent text-bg hover:border-transparent hover:bg-accent-strong hover:text-bg;
+  }
+  .btn-lg {
+    @apply px-4 py-2 text-base;
+  }
+  .input {
+    @apply rounded-md border border-border bg-bg px-2 py-1.5;
+  }
+}
+
 /* Data tables share one look. */
 .data-table {
   width: 100%;
@@ -126,6 +173,47 @@ body {
 }
 .data-table .num {
   text-align: right;
+}
+.data-table tbody tr:hover > * {
+  background: var(--color-surface-2);
+}
+/* A table's links are whole cells, so the row hover and colour mark them, not an underline. */
+.data-table a.link {
+  color: inherit;
+  text-decoration-color: transparent;
+}
+.data-table a.link:hover {
+  color: var(--color-accent);
+  text-decoration-color: currentColor;
+}
+/* Sortable headers (scripts/sortable.ts): the header text becomes a button with an arrow. */
+.data-table .sort-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  font: inherit;
+  letter-spacing: inherit;
+  text-transform: inherit;
+  color: inherit;
+  cursor: pointer;
+}
+.data-table .num .sort-button {
+  flex-direction: row-reverse;
+}
+.data-table .sort-button::after {
+  content: "↕";
+  opacity: 0.35;
+}
+.data-table [aria-sort="ascending"] .sort-button::after {
+  content: "↑";
+  opacity: 1;
+}
+.data-table [aria-sort="descending"] .sort-button::after {
+  content: "↓";
+  opacity: 1;
+}
+.data-table .sort-button:hover {
+  color: var(--color-text);
 }
 .table-scroll {
   overflow-x: auto;

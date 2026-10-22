@@ -38,6 +38,12 @@ function MatchList({
   );
 }
 
+/**
+ * Bracket rounds side by side. Every slot in a round gets an equal share of the height, so a
+ * match sits level with the midpoint of the two it follows. Connector lines (CSS, see
+ * global.css) join each pair of matches to the next round's match, or one match to the next
+ * when a round keeps its size (lower brackets). Other shapes are left unconnected.
+ */
 function Columns({
   columns,
   options,
@@ -45,20 +51,51 @@ function Columns({
   columns: { label: string; matches: BoardMatch[] }[];
   options: BoardOptions;
 }) {
+  const sizes = columns.map((column) => column.matches.length);
   return (
-    <div className="flex gap-6">
-      {columns.map((column) => (
-        <div key={column.label} className="flex w-44 shrink-0 flex-col">
-          <p className="mb-2 text-sm text-muted">{capitalize(column.label)}</p>
-          <ul className="flex flex-1 flex-col justify-around gap-3">
-            {column.matches.map((match) => (
-              <li key={match.key}>
-                <MatchBox match={match} {...options} />
-              </li>
-            ))}
-          </ul>
-        </div>
-      ))}
+    <div className="flex">
+      {columns.map((column, c) => {
+        const next = sizes[c + 1];
+        const previous = sizes[c - 1];
+        const pairs = next !== undefined && next * 2 === column.matches.length;
+        const out = pairs || next === column.matches.length;
+        const into =
+          previous !== undefined &&
+          (previous === column.matches.length * 2 || previous === column.matches.length);
+        const slot = (match: BoardMatch) => (
+          <li
+            key={match.key}
+            className={`relative flex flex-1 items-center py-1.5 ${out ? "bracket-out" : ""} ${
+              into ? "bracket-in" : ""
+            }`}
+          >
+            <MatchBox match={match} {...options} />
+          </li>
+        );
+        const groups = pairs
+          ? Array.from({ length: next }, (_, i) => column.matches.slice(i * 2, i * 2 + 2))
+          : [column.matches];
+        return (
+          <div
+            key={column.label}
+            className={`flex w-44 shrink-0 flex-col ${c < columns.length - 1 ? "mr-10" : ""}`}
+          >
+            <p className="mb-1 text-xs font-medium uppercase tracking-wide text-muted">
+              {capitalize(column.label)}
+            </p>
+            <div className="flex flex-1 flex-col">
+              {groups.map((group, g) => (
+                <ul
+                  key={g}
+                  className={`relative flex flex-1 flex-col ${pairs ? "bracket-pair" : ""}`}
+                >
+                  {group.map(slot)}
+                </ul>
+              ))}
+            </div>
+          </div>
+        );
+      })}
     </div>
   );
 }
@@ -74,9 +111,9 @@ function GroupTable({ matches, options }: { matches: BoardMatch[]; options: Boar
     { team: string; w: number; l: number; tbWins: number; tbOut: number }
   >();
   const row = (team: string) => rows.get(team) ?? { team, w: 0, l: 0, tbWins: 0, tbOut: Infinity };
-  // Upcoming matches only add their teams.
+  // Upcoming matches only add their teams; undecided slots add nothing.
   for (const match of matches.filter((m) => !isTiebreaker(m))) {
-    for (const team of match.teams) {
+    for (const team of match.teams.filter(Boolean)) {
       const entry = row(team);
       if (match.winner) entry[match.winner === team ? "w" : "l"]++;
       rows.set(team, entry);
@@ -129,12 +166,14 @@ export function StageBoard({
   const columns = byLabel(stage.matches);
   const groups = [...new Set(stage.matches.flatMap((m) => (m.group ? [m.group] : [])))];
   const isRoundRobin = (matches: BoardMatch[]) => matches.some((m) => m.label === "Round robin");
+  // Wide boards scroll sideways on small screens; keyboard users need to reach the scroll area.
+  const scrollable = { tabIndex: 0, role: "region", "aria-label": `${stage.name} board` } as const;
 
   let body;
   switch (stage.format) {
     case "swiss":
       body = (
-        <div className="flex gap-4 overflow-x-auto pb-2">
+        <div className="flex gap-4 overflow-x-auto pb-2" {...scrollable}>
           {columns.map((round) => {
             const pools = new Map<string, BoardMatch[]>();
             for (const match of round.matches) {
@@ -144,11 +183,13 @@ export function StageBoard({
             }
             return (
               <div key={round.label} className="w-44 shrink-0 space-y-3">
-                <h3 className="text-sm font-semibold text-muted">{round.label}</h3>
+                <h3 className="text-xs font-medium uppercase tracking-wide text-muted">
+                  {round.label}
+                </h3>
                 {[...pools].map(([record, matches]) => (
                   <div key={record} className="space-y-2">
                     {record && (
-                      <p className="text-xs uppercase tracking-wide text-muted">{record} pool</p>
+                      <p className="text-xs font-semibold tabular-nums text-text">{record}</p>
                     )}
                     <ul className="space-y-2">
                       {matches.map((match) => (
@@ -196,14 +237,14 @@ export function StageBoard({
       break;
     case "singleElimination":
       body = (
-        <div className="overflow-x-auto pb-2">
+        <div className="overflow-x-auto pb-2" {...scrollable}>
           <Columns columns={columns} options={options} />
         </div>
       );
       break;
     case "doubleElimination":
       body = (
-        <div className="space-y-6 overflow-x-auto pb-2">
+        <div className="space-y-6 overflow-x-auto pb-2" {...scrollable}>
           {[
             { title: "Upper bracket", columns: columns.filter((c) => c.label.startsWith("Upper")) },
             { title: "Lower bracket", columns: columns.filter((c) => c.label.startsWith("Lower")) },

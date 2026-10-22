@@ -18,10 +18,10 @@ const tournaments = [...archive.entities.tournaments.values()]
 ---
 
 <BaseLayout title="Tournaments" searchable>
-  <h1 class="mb-6 text-3xl font-bold tracking-tight">Tournaments</h1>
+  <h1 class="mb-6 text-3xl font-bold tracking-tight sm:text-4xl">Tournaments</h1>
   <div class="grid gap-6 md:grid-cols-3">
     {tournaments.map(({ tournament, editions }) => (
-      <section class="rounded border border-border bg-surface p-4" aria-labelledby={tournament.id}>
+      <section class="card p-4" aria-labelledby={tournament.id}>
         <h2 id={tournament.id} class="text-xl font-semibold">
           <a class="hover:text-accent" href={paths.tournament(tournament.id)}>
             {tournament.name}

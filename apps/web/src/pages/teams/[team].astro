@@ -105,7 +105,7 @@ const acquiredBy = [...archive.entities.organizations.values()].flatMap((other) 
       International history
     </h2>
     <div class="table-scroll" tabindex="0" role="region" aria-label="Scrollable table">
-      <table class="data-table">
+      <table class="data-table" data-sortable>
         <caption class="sr-only">{team.name}by edition</caption>
         <thead>
           <tr>
@@ -151,7 +151,7 @@ const acquiredBy = [...archive.entities.organizations.values()].flatMap((other) 
     </h2>
     <div class="grid gap-4 md:grid-cols-2">
       {[...history].reverse().map(({ bundle, roster }) => (
-        <div class="rounded border border-border bg-surface p-4">
+        <div class="card p-4">
           <h3 class="font-semibold">{bundle.edition.name}</h3>
           {roster.length === 0 ? (
             <p class="text-sm text-muted">No registered roster recorded.</p>

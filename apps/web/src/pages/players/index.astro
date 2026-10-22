@@ -15,10 +15,10 @@ const players = [...archive.entities.players.values()]
 ---
 
 <BaseLayout title="Players" searchable>
-  <h1 class="mb-2 text-3xl font-bold tracking-tight">Players</h1>
+  <h1 class="mb-2 text-3xl font-bold tracking-tight sm:text-4xl">Players</h1>
   <p class="mb-6 text-muted">Players with at least one international game in the archive.</p>
   <div class="table-scroll" tabindex="0" role="region" aria-label="Scrollable table">
-    <table class="data-table">
+    <table class="data-table" data-sortable>
       <caption class="sr-only">Players</caption>
       <thead>
         <tr>

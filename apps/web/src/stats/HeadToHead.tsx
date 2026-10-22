@@ -46,7 +46,7 @@ export default function HeadToHead({ dataUrl }: { dataUrl: string }) {
     <label className="flex flex-col gap-1 text-sm">
       {label}
       <select
-        className="rounded border border-border bg-bg px-2 py-1.5"
+        className="input"
         value={pair[index]}
         onChange={(e) =>
           setPair((current) =>
