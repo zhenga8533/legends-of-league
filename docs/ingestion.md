@@ -100,7 +100,8 @@ rounds being drawn and places being decided all apply as ordinary updates.
     ahead rarely changes and each import is a dozen Leaguepedia queries;
   - and whenever it is started by hand.
 
-  Live PRs use the `data/live-<run>` branches and supersede each other.
+  Live PRs use the `data/live-<run>` branches and supersede each other. Branches of auto-merged PRs
+  aren't deleted by GitHub, so the weekly upkeep deletes `data/` branches without an open PR.
 
 - Auto-merges are made with the default token, whose pushes don't trigger the deploy workflow,
   so each live sync run also dispatches a deploy when `main` has changed since the last one.
