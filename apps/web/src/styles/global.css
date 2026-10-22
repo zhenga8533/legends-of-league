@@ -85,6 +85,10 @@
   --color-red-side: var(--color-red-side);
 }
 
+html {
+  scrollbar-gutter: stable;
+}
+
 body {
   background: var(--color-bg);
   color: var(--color-text);

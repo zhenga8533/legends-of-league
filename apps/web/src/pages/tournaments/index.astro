@@ -5,10 +5,16 @@ import TeamLink from "../../components/TeamLink.astro";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import { archive, editionsNewestFirst, paths } from "../../lib/archive";
 
-const tournaments = [...archive.entities.tournaments.values()].map((tournament) => ({
-  tournament,
-  editions: editionsNewestFirst.filter((b) => b.edition.tournament === tournament.id),
-}));
+// Oldest tournament first (Worlds, MSI, First Stand), as on the stats page.
+const tournaments = [...archive.entities.tournaments.values()]
+  .map((tournament) => ({
+    tournament,
+    editions: editionsNewestFirst.filter((b) => b.edition.tournament === tournament.id),
+  }))
+  .sort(
+    (a, b) =>
+      (a.editions.at(-1)?.edition.year ?? Infinity) - (b.editions.at(-1)?.edition.year ?? Infinity),
+  );
 ---
 
 <BaseLayout title="Tournaments" searchable>

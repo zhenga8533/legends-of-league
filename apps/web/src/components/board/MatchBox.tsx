@@ -19,17 +19,9 @@ export function MatchBox({
 
   const rows = match.teams.map((team, i) => {
     const won = match.winner === team;
-    const record = match.records?.[i];
     const content = (
       <>
-        <span className="truncate">
-          {tag(team)}
-          {record && (
-            <span className="ml-1 text-xs font-normal text-muted">
-              ({record.wins}-{record.losses})
-            </span>
-          )}
-        </span>
+        <span className="min-w-0 truncate">{tag(team)}</span>
         <span className={`tabular-nums ${won ? "text-accent" : ""}`}>
           {match.score?.[i] ?? "–"}
         </span>
@@ -77,7 +69,7 @@ export function MatchBox({
       )}
     </span>
   );
-  const boxClass = `block min-w-44 rounded border bg-surface text-sm ${
+  const boxClass = `block w-full rounded border bg-surface text-sm ${
     simulated ? "border-dashed border-blue-side" : "border-border"
   }`;
 

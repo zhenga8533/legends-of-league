@@ -132,7 +132,19 @@ const status = (bundle.provenance.records ?? []).find(
         ].map(([side, team, rows]) =>
           (rows as typeof blue).length === 0 ? null : (
             <div class="table-scroll" tabindex="0" role="region" aria-label="Scrollable table">
-              <table class="data-table">
+              {/* Fixed column widths, so both teams' tables line up under each other. */}
+              <table class="data-table min-w-[44rem] table-fixed">
+                <colgroup>
+                  <col class="w-[16%]" />
+                  <col class="w-[11%]" />
+                  <col class="w-[16%]" />
+                  <col class="w-[10%]" />
+                  <col class="w-[9%]" />
+                  <col class="w-[8%]" />
+                  <col class="w-[10%]" />
+                  <col class="w-[11%]" />
+                  <col class="w-[9%]" />
+                </colgroup>
                 <caption>
                   {teamName(team as string)} · {side} side
                   {game.winner === team && (
