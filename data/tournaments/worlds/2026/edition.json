@@ -1,0 +1,133 @@
+{
+  "id": "ed:worlds-2026",
+  "tournament": "tour:worlds",
+  "year": 2026,
+  "name": "2026 World Championship",
+  "status": "live",
+  "dates": {
+    "start": "2026-10-15",
+    "end": "2026-11-14"
+  },
+  "stages": [
+    {
+      "id": "play-in",
+      "name": "Play-In"
+    },
+    {
+      "id": "play-in-final",
+      "name": "Play-In Final"
+    },
+    {
+      "id": "swiss",
+      "name": "Swiss Stage"
+    },
+    {
+      "id": "knockout",
+      "name": "Knockout Stage"
+    }
+  ],
+  "participants": [
+    {
+      "team": "team:anyone-s-legend",
+      "region": "region:lpl",
+      "entryStage": "swiss"
+    },
+    {
+      "team": "team:bilibili-gaming",
+      "region": "region:lpl",
+      "entryStage": "swiss"
+    },
+    {
+      "team": "team:cloud9",
+      "region": "region:lcs-2026",
+      "entryStage": "play-in"
+    },
+    {
+      "team": "team:ctbc-flying-oyster",
+      "region": "region:lcp",
+      "entryStage": "swiss"
+    },
+    {
+      "team": "team:dplus-kia",
+      "region": "region:lck",
+      "entryStage": "swiss"
+    },
+    {
+      "team": "team:furia",
+      "region": "region:cblol-2026",
+      "entryStage": "play-in"
+    },
+    {
+      "team": "team:g2-esports",
+      "region": "region:lec",
+      "entryStage": "swiss"
+    },
+    {
+      "team": "team:gen-g",
+      "region": "region:lck",
+      "entryStage": "swiss"
+    },
+    {
+      "team": "team:hanwha-life-esports",
+      "region": "region:lck",
+      "entryStage": "swiss"
+    },
+    {
+      "team": "team:invictus-gaming",
+      "region": "region:lpl",
+      "entryStage": "swiss"
+    },
+    {
+      "team": "team:karmine-corp",
+      "region": "region:lec",
+      "entryStage": "play-in"
+    },
+    {
+      "team": "team:ls",
+      "region": "region:cblol-2026",
+      "entryStage": "swiss"
+    },
+    {
+      "team": "team:lyon",
+      "region": "region:lcs-2026",
+      "entryStage": "swiss"
+    },
+    {
+      "team": "team:movistar-koi",
+      "region": "region:lec",
+      "entryStage": "swiss"
+    },
+    {
+      "team": "team:mvk-esports",
+      "region": "region:lcp",
+      "entryStage": "play-in"
+    },
+    {
+      "team": "team:t1",
+      "region": "region:lck",
+      "entryStage": "swiss"
+    },
+    {
+      "team": "team:team-liquid",
+      "region": "region:lcs-2026",
+      "entryStage": "swiss"
+    },
+    {
+      "team": "team:team-secret-whales",
+      "region": "region:lcp",
+      "entryStage": "swiss"
+    },
+    {
+      "team": "team:top-esports",
+      "region": "region:lpl",
+      "entryStage": "swiss"
+    }
+  ],
+  "externalRefs": [
+    {
+      "provider": "leaguepedia",
+      "key": "OverviewPage",
+      "value": "2026 Season World Championship"
+    }
+  ]
+}
