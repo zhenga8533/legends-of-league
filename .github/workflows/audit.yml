@@ -1,0 +1,45 @@
+name: Dependency audit
+
+# Checks the locked npm and Python dependencies against known vulnerabilities. Kept out of the
+# required CI checks: a newly published advisory would otherwise fail every PR, including the
+# live data PRs that merge themselves. It runs when a lockfile changes and weekly, so a failure
+# here (and the email GitHub sends for it) is what flags a vulnerable dependency.
+on:
+  pull_request:
+    paths: [pnpm-lock.yaml, ingest/uv.lock]
+  push:
+    branches: [main]
+    paths: [pnpm-lock.yaml, ingest/uv.lock]
+  schedule:
+    - cron: "41 6 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  npm:
+    name: npm dependencies
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version-file: .nvmrc
+      - run: pnpm audit
+
+  python:
+    name: Python dependencies
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: ingest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: astral-sh/setup-uv@1c37ad07a6a961277cf70c0d37d6f313000f5884 # v10.3.0
+      # Audits exactly the locked versions (with hashes), without installing anything.
+      - run: uv export --frozen --no-emit-project --format requirements-txt > requirements.txt
+      - run: uvx pip-audit@2.9.0 --requirement requirements.txt --require-hashes --disable-pip
