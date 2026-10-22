@@ -6,6 +6,7 @@ import { PRE_EVENT_ITERATIONS } from "./constants";
 import { OddsTable } from "./OddsTable";
 import type { EditionOption, EditionPayload } from "./payload";
 import {
+  NOW,
   type Scenario,
   defaultScenario,
   encodeScenario,
@@ -30,10 +31,15 @@ export default function Studio({
   editions: EditionOption[];
   dataBase: string;
 }) {
+  const startingScenario = (slug: string) =>
+    defaultScenario(slug, editions.find((e) => e.slug === slug)?.live);
   const [scenario, setScenario] = useState<Scenario>(() => {
-    const fromHash = typeof location === "undefined" ? undefined : scenarioFromHash(location.hash);
+    const fromHash =
+      typeof location === "undefined"
+        ? undefined
+        : scenarioFromHash(location.hash, startingScenario);
     const known = fromHash && editions.some((e) => e.slug === fromHash.edition);
-    return known ? fromHash : defaultScenario(editions[0]?.slug ?? "");
+    return known ? fromHash : startingScenario(editions[0]?.slug ?? "");
   });
   const [payload, setPayload] = useState<EditionPayload | null>(null);
   const [loadError, setLoadError] = useState<string | null>(null);
@@ -159,7 +165,7 @@ export default function Studio({
             <select
               className="rounded border border-border bg-bg px-2 py-1.5"
               value={scenario.edition}
-              onChange={(e) => setScenario(defaultScenario(e.target.value))}
+              onChange={(e) => setScenario(startingScenario(e.target.value))}
             >
               {editions.map((edition) => (
                 <option key={edition.slug} value={edition.slug}>
@@ -182,6 +188,7 @@ export default function Studio({
                   {stage.name} (earlier stages real)
                 </option>
               ))}
+              {payload?.edition.live && <option value={NOW}>Now (every result so far real)</option>}
             </select>
           </label>
           <label className="flex flex-col gap-1 text-sm">
@@ -260,7 +267,13 @@ export default function Studio({
                 <p>
                   Simulated champion:{" "}
                   <strong data-testid="simulated-champion">{teamName(champion)}</strong>
-                  <span className="text-muted"> · Real champion: {teamName(realChampion)}</span>
+                  <span className="text-muted">
+                    {" "}
+                    · Real champion:{" "}
+                    {payload.edition.live && !realChampion
+                      ? "not decided yet"
+                      : teamName(realChampion)}
+                  </span>
                 </p>
                 <p className="text-sm text-muted">
                   Click a team in any simulated match to make it win; later rounds update.{" "}
@@ -334,6 +347,13 @@ export default function Studio({
                 payload={payload}
                 ratings={ratings}
                 caption={`This scenario, ${montecarlo.state.result.iterations.toLocaleString("en")} simulations (seed ${montecarlo.state.scenario.seed})`}
+              />
+            ) : payload.forecast ? (
+              <OddsTable
+                result={payload.forecast}
+                payload={payload}
+                ratings={payload.ratings}
+                caption={`Live forecast: ${PRE_EVENT_ITERATIONS.toLocaleString("en")} simulations from every result so far, with Elo ratings from before the event`}
               />
             ) : (
               <OddsTable

@@ -39,6 +39,22 @@ describe("edition views", () => {
     expect(new Set(playIn.matches.map((m) => m.group))).toEqual(new Set(["Group A", "Group B"]));
   });
 
+  it("shows an event in progress as played so far plus what is scheduled", () => {
+    const final = worlds.series.find((s) => s.stage === "knockout" && s.round === "Finals")!;
+    const live = {
+      ...worlds,
+      edition: { ...worlds.edition, status: "live" as const },
+      series: worlds.series.map((s) => (s === final ? { ...s, score: null, winner: null } : s)),
+      placements: worlds.placements.filter((p) => p.placeFrom > 2),
+    };
+    const stages = editionStages(live, rulesetFor("ed:worlds-2024", archive.rulesets)!);
+    const matches = stages.flatMap((stage) => stage.matches);
+    expect(matches).toHaveLength(worlds.series.length);
+    const upcoming = matches.filter((m) => m.source !== "actual");
+    expect(upcoming).toEqual([expect.objectContaining({ seriesId: final.id, label: "Finals" })]);
+    expect(upcoming[0]).not.toHaveProperty("score");
+  });
+
   it("summarizes champion, runner-up and the final", () => {
     const summary = editionSummary(worlds);
     expect(summary).toMatchObject({ champion: "team:t1", runnerUp: "team:bilibili-gaming" });

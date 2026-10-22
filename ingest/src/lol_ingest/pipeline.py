@@ -34,6 +34,7 @@ class RunOptions:
     year: str
     data_dir: Path
     force: bool = False
+    status: str = "all"
 
 
 def _snapshot_files(directory: Path) -> dict[str, bytes]:
@@ -43,7 +44,9 @@ def _snapshot_files(directory: Path) -> dict[str, bytes]:
 
 
 def run(options: RunOptions, fetch: Fetch, now: datetime) -> list[EditionReport]:
-    specs = load_registry(options.data_dir).select(options.tournament, options.year)
+    specs = load_registry(options.data_dir).select(options.tournament, options.year, options.status)
+    if not specs and options.status == "live":
+        return []  # The scheduled live sync runs even when no event is live.
     if not specs:
         raise UsageError(
             f"no editions in data/editions.yaml match tournament={options.tournament} "

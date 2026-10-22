@@ -1,0 +1,66 @@
+name: Live sync
+
+# Keeps editions marked `status: live` in data/editions.yaml up to date while they are played.
+on:
+  schedule:
+    - cron: "7,37 * * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: live-sync
+  cancel-in-progress: false
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: read
+      actions: write
+    outputs:
+      live: ${{ steps.live.outputs.live }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Any live editions?
+        id: live
+        run: |
+          if grep -qE '^\s+status: live\s*$' data/editions.yaml; then
+            echo "live=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "No live editions; nothing to do."
+          fi
+      # Auto-merges are made with the default token, whose pushes don't trigger the deploy
+      # workflow, so the latest main is deployed from here.
+      - name: Deploy main if it hasn't been
+        if: steps.live.outputs.live == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          head=$(git rev-parse HEAD)
+          deployed=$(gh run list --repo "$GITHUB_REPOSITORY" --workflow deploy.yml --branch main \
+            --limit 1 --json headSha --jq '.[0].headSha // ""')
+          if [[ "$deployed" != "$head" ]]; then
+            gh workflow run deploy.yml --repo "$GITHUB_REPOSITORY" --ref main
+            echo "Dispatched a deploy of $head."
+          fi
+
+  sync:
+    needs: check
+    if: needs.check.outputs.live == 'true'
+    permissions:
+      contents: write
+      pull-requests: write
+      actions: write
+    uses: ./.github/workflows/ingest.yml
+    with:
+      tournament: all
+      year: all
+      operation: refresh
+      status: live
+      auto_merge: true
+    secrets: inherit

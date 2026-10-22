@@ -62,8 +62,8 @@ see provider updates. Reports are written to `.cache/reports/report.{md,json}`.
 ## GitHub Actions
 
 The **Data import** workflow (`.github/workflows/ingest.yml`, manual trigger) takes these
-inputs: tournament, year, operation, provider, and force (which requires typing a confirmation
-phrase).
+inputs: tournament, year, operation, provider, force (which requires typing a confirmation
+phrase), status (only editions with that status) and auto-merge.
 
 - It runs the CLI with the `LEAGUEPEDIA_BOT_*` secrets, without a response cache, so it
   always sees current provider data.
@@ -73,9 +73,35 @@ phrase).
   using the report as the description, and closes older open PRs for the same selection.
 - Labels: `data`, plus `blocked-changes` or `modifies-verified` when they apply.
 
-PRs opened with the default `GITHUB_TOKEN` don't trigger CI. Configure a GitHub App by setting
-the `DATA_BOT_APP_ID` variable and the `DATA_BOT_PRIVATE_KEY` secret, so data PRs get their
-required checks.
+PRs opened with the default `GITHUB_TOKEN` don't trigger CI on their own, so the workflow
+dispatches CI on the PR branch (`workflow_dispatch` is allowed for that token), and the required
+checks report on the PR. A GitHub App (the `DATA_BOT_APP_ID` variable and `DATA_BOT_PRIVATE_KEY`
+secret) is used instead when configured.
+
+With auto-merge on, the PR merges itself once CI passes, but only if the report's
+`autoMergeSafe` is true: no errors, no blocked changes and nothing forced. Anything else waits
+for review.
+
+## Live events
+
+An edition being played has `status: live` in `data/editions.yaml`. Its records are imported as
+`provisional`, so results filling in, rounds being drawn and places being decided all apply as
+ordinary updates.
+
+- Series whose teams aren't decided yet (`TBD` or empty on Leaguepedia) are skipped and listed
+  as gaps, and so are placements without a team. They arrive on a later run.
+- The **Live sync** workflow (`.github/workflows/live-sync.yml`) runs twice an hour. If any
+  edition is live, it calls the import workflow with status `live`, operation `refresh` and
+  auto-merge on. Live PRs use the `data/live-<run>` branches and supersede each other.
+- Auto-merges are made with the default token, whose pushes don't trigger the deploy workflow,
+  so each live sync run also dispatches a deploy when `main` has changed since the last one.
+  The site, its live forecast included, is at most about half an hour behind the data.
+- When the event is over, set its status to `completed` by hand and run an import. Unchanged
+  records are promoted to `verified`. From then on, changes need review like any other
+  verified data.
+
+The repository needs **Allow auto-merge** enabled in its settings for live PRs to merge
+themselves.
 
 ## Adding an edition
 
@@ -84,3 +110,5 @@ required checks.
 2. Make sure every Leaguepedia region code it uses maps to exactly one region in
    `data/entities/regions.json` for that date. Unmapped codes fail the import.
 3. Run a `dry-run`, review the report, then `import`.
+4. Add its ruleset under `rulesets/`. For an edition still being played, the replay test checks
+   what has been played so far (see `docs/simulation.md`).

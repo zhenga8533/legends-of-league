@@ -1,21 +1,21 @@
 /** Turns a scenario into engine inputs. Shared by the page and the Monte Carlo worker. */
 import {
-  type ActualSeries,
   type MatchupModel,
   ReplayResolver,
   type Resolver,
+  type ScheduledSeries,
   type TournamentInput,
   eloModel,
   winsNeeded,
 } from "@lol/sim";
 import type { EditionPayload } from "./payload";
-import { type Scenario, pickKey } from "./scenario";
+import { NOW, type Scenario, pickKey } from "./scenario";
 
 /**
  * Real results for kept stages come first (and can't be overridden), then the user's picks;
  * everything else is simulated.
  */
-function scenarioResolver(series: ActualSeries[], picks: Record<string, string>): Resolver {
+function scenarioResolver(series: ScheduledSeries[], picks: Record<string, string>): Resolver {
   const replay = new ReplayResolver(series, { lenient: true });
   return {
     result: (match) => {
@@ -43,14 +43,18 @@ export interface ScenarioSetup {
 
 export function setupScenario(payload: EditionPayload, scenario: Scenario): ScenarioSetup {
   const stageIds = payload.ruleset.stages.map((stage) => stage.id);
-  const fromIndex = scenario.from === null ? 0 : stageIds.indexOf(scenario.from);
+  const now = scenario.from === NOW;
+  const fromIndex =
+    scenario.from === null ? 0 : now ? stageIds.length : stageIds.indexOf(scenario.from);
   const keptStages = new Set(stageIds.slice(0, Math.max(fromIndex, 0)));
+  // Upcoming series' pairings are real too; picks can still decide their results.
+  const known = now ? [...payload.actualSeries, ...payload.scheduledSeries] : payload.actualSeries;
   const ratings = { ...payload.ratings, ...scenario.ratings };
   return {
     input: { ruleset: payload.ruleset, participants: payload.participants },
     model: eloModel(new Map(Object.entries(ratings))),
     resolver: scenarioResolver(
-      payload.actualSeries.filter((series) => keptStages.has(series.stage)),
+      known.filter((series) => keptStages.has(series.stage)),
       scenario.picks,
     ),
     ratings,

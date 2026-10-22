@@ -1,10 +1,12 @@
 ---
-import { editionSummary } from "@lol/data";
+import { editionSummary, idSlug } from "@lol/data";
+import LiveBadge from "../components/LiveBadge.astro";
 import TeamLink from "../components/TeamLink.astro";
 import BaseLayout from "../layouts/BaseLayout.astro";
 import { archive, dateRange, editionsNewestFirst, paths } from "../lib/archive";
 import { withBase } from "../lib/paths";
 
+const live = archive.editions.filter((bundle) => bundle.edition.status === "live");
 const totals = {
   editions: archive.editions.length,
   series: archive.editions.reduce((sum, b) => sum + b.series.length, 0),
@@ -35,6 +37,39 @@ const totals = {
       </a>
     </p>
   </section>
+
+  {live.length > 0 && (
+    <section aria-labelledby="live" class="space-y-3 py-4">
+      <h2 id="live" class="text-2xl font-semibold tracking-tight">
+        Happening now
+      </h2>
+      <ul class="grid gap-4 md:grid-cols-2">
+        {live.map((bundle) => (
+          <li class="space-y-2 rounded border border-loss bg-surface p-4">
+            <h3 class="font-semibold">
+              <a class="hover:text-accent" href={paths.edition(bundle)}>
+                {bundle.edition.name}
+              </a>{" "}
+              <LiveBadge />
+            </h3>
+            <p class="text-sm text-muted">
+              {dateRange(bundle.edition.dates.start, bundle.edition.dates.end)} ·{" "}
+              {bundle.series.filter((s) => s.score).length} of {bundle.series.length} scheduled
+              series played
+            </p>
+            <p class="flex flex-wrap gap-3 text-sm">
+              <a class="link" href={paths.edition(bundle)}>
+                Results and upcoming matches
+              </a>
+              <a class="link" href={withBase(`/simulate/#ed=${idSlug(bundle.edition.id)}`)}>
+                Forecast the rest
+              </a>
+            </p>
+          </li>
+        ))}
+      </ul>
+    </section>
+  )}
 
   <section aria-labelledby="totals" class="py-4">
     <h2 id="totals" class="sr-only">

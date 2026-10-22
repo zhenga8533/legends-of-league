@@ -4,6 +4,7 @@ import type {
   Participant,
   RatedGame,
   Ruleset,
+  ScheduledSeries,
   TeamId,
   TournamentInput,
 } from "@lol/sim";
@@ -33,6 +34,23 @@ export function actualSeries(bundle: EditionBundle): ActualSeries[] {
         ]
       : [],
   );
+}
+
+/** Every series whose teams are known, with its score once played. */
+export function knownSeries(bundle: EditionBundle): ScheduledSeries[] {
+  return bundle.series.map((s) => ({
+    stage: s.stage,
+    teams: s.teams,
+    bestOf: s.bestOf,
+    ...(s.start ? { start: s.start } : {}),
+    number: s.number,
+    ...(s.score ? { score: s.score } : {}),
+  }));
+}
+
+/** Live and upcoming editions are still being played; only completed ones are final. */
+export function inProgress(bundle: EditionBundle): boolean {
+  return bundle.edition.status !== "completed";
 }
 
 export function actualPlacements(bundle: EditionBundle): Map<TeamId, [number, number]> {

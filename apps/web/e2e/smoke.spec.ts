@@ -1,5 +1,13 @@
 import AxeBuilder from "@axe-core/playwright";
+import { readdirSync } from "node:fs";
 import { expect, test } from "@playwright/test";
+
+// One directory per imported edition: data/tournaments/<tournament>/<year>/.
+const tournamentsDir = new URL("../../../data/tournaments/", import.meta.url);
+const importedEditions = readdirSync(tournamentsDir).reduce(
+  (sum, tournament) => sum + readdirSync(new URL(`${tournament}/`, tournamentsDir)).length,
+  0,
+);
 
 test("browses from the home page to a final's drafts and player stats", async ({ page }) => {
   await page.goto("/");
@@ -83,6 +91,6 @@ for (const scheme of ["light", "dark"] as const) {
 test("shows coverage for every edition", async ({ page }) => {
   await page.goto("/data/");
   const rows = page.getByRole("table", { name: "Data coverage by edition" }).locator("tbody tr");
-  await expect(rows).toHaveCount(28);
+  await expect(rows).toHaveCount(importedEditions);
   await expect(page.getByRole("link", { name: "2011 World Championship" })).toBeVisible();
 });

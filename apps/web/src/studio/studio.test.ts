@@ -4,6 +4,7 @@ import { archive } from "../lib/archive";
 import { buildPayload } from "../lib/studio-data";
 import { runChunked } from "./montecarlo";
 import {
+  NOW,
   type Scenario,
   decodeScenario,
   defaultScenario,
@@ -13,15 +14,16 @@ import {
 } from "./scenario";
 import { setupScenario } from "./setup";
 
-const payload = buildPayload(archive.editions.find((b) => b.edition.id === "ed:worlds-2024")!);
-const simulate = (scenario: Scenario) => {
-  const setup = setupScenario(payload, scenario);
+const worlds2024 = archive.editions.find((b) => b.edition.id === "ed:worlds-2024")!;
+const payload = buildPayload(worlds2024);
+const simulate = (scenario: Scenario, from = payload) => {
+  const setup = setupScenario(from, scenario);
   const result = simulateTournament(setup.input, {
     rng: createRng(scenario.seed),
     model: setup.model,
     resolver: setup.resolver,
   });
-  return { result, stages: summarizeStages(result, payload.ruleset) };
+  return { result, stages: summarizeStages(result, from.ruleset) };
 };
 
 describe("scenarios", () => {
@@ -108,5 +110,43 @@ describe("chunked Monte Carlo", () => {
     expect(runChunked(payload, scenario, 600)).toEqual(first);
     const champions = Object.values(first.teams).reduce((sum, t) => sum + t.champion, 0);
     expect(champions).toBeCloseTo(1, 9);
+  });
+});
+
+describe("an event in progress", () => {
+  // Worlds 2024 the day before its final: everything played except the final.
+  const final = worlds2024.series.find((s) => s.id.includes("knockout") && s.round === "Finals")!;
+  const live = buildPayload({
+    ...worlds2024,
+    edition: { ...worlds2024.edition, status: "live" },
+    series: worlds2024.series.map((s) => (s === final ? { ...s, score: null, winner: null } : s)),
+    placements: worlds2024.placements.filter((p) => p.placeFrom > 2),
+  });
+
+  it("starts from the results so far, with the known pairings kept", () => {
+    const scenario = defaultScenario(live.edition.slug, live.edition.live);
+    expect(scenario.from).toBe(NOW);
+    expect(live.scheduledSeries).toHaveLength(1);
+    const { stages } = simulate(scenario, live);
+    const matches = stages.flatMap((s) => s.matches);
+    expect(matches.filter((m) => m.source === "actual")).toHaveLength(live.actualSeries.length);
+    const simulated = matches.filter((m) => m.source !== "actual");
+    expect(simulated).toHaveLength(1);
+    expect([...simulated[0]!.teams].sort()).toEqual([...final.teams].sort());
+  });
+
+  it("lets a pick decide an upcoming match", () => {
+    const scenario = {
+      ...defaultScenario(live.edition.slug, true),
+      picks: { [pickKey("knockout", final.teams)]: final.teams[1] },
+    };
+    const { result } = simulate(scenario, live);
+    expect(result.placements.get(final.teams[1])).toEqual([1, 1]);
+  });
+
+  it("precomputes a forecast in which only the finalists can win", () => {
+    const champions = Object.entries(live.forecast!.teams).filter(([, t]) => t.champion > 0);
+    expect(champions.map(([team]) => team).sort()).toEqual([...final.teams].sort());
+    expect(payload.forecast).toBeUndefined();
   });
 });

@@ -14,7 +14,13 @@ export {
   ratingsBefore,
 } from "./model";
 export { type MonteCarloResult, type TeamOutlook, runMonteCarlo } from "./montecarlo";
-export { type ActualSeries, ReplayResolver, type ReplayResult, replayTournament } from "./replay";
+export {
+  type ActualSeries,
+  ReplayResolver,
+  type ReplayResult,
+  type ScheduledSeries,
+  replayTournament,
+} from "./replay";
 export { createRng, type Rng } from "./rng";
 export { type Format, type Ruleset, RulesetSchema, parseRuleset } from "./ruleset";
 export { playSeries, seriesWinProbability, winsNeeded } from "./series";

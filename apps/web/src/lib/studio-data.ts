@@ -4,12 +4,15 @@ import {
   actualPlacements,
   actualSeries,
   idSlug,
+  knownSeries,
   ratedGames,
   tournamentInput,
 } from "@lol/data";
 import { eloModel, ratingsBefore, runMonteCarlo } from "@lol/sim";
 import { PRE_EVENT_ITERATIONS } from "../studio/constants";
+import { runChunked } from "../studio/montecarlo";
 import type { EditionPayload } from "../studio/payload";
+import { defaultScenario } from "../studio/scenario";
 import { archive, paths, regionAbbr, ruleset, teamLabels } from "./archive";
 
 const games = ratedGames(archive.editions);
@@ -33,7 +36,8 @@ export function buildPayload(bundle: EditionBundle): EditionPayload {
     seed: `pre-event:${bundle.edition.id}`,
     model: eloModel(new Map(Object.entries(ratings))),
   });
-  return {
+  const live = bundle.edition.status === "live";
+  const payload: EditionPayload = {
     edition: {
       id: bundle.edition.id,
       slug: editionSlug(bundle),
@@ -41,10 +45,12 @@ export function buildPayload(bundle: EditionBundle): EditionPayload {
       year: bundle.edition.year,
       tournament: bundle.edition.tournament,
       path: paths.edition(bundle),
+      live,
     },
     ruleset: rules,
     participants: input.participants.map((p) => ({ ...p })),
     actualSeries: actualSeries(bundle),
+    scheduledSeries: knownSeries(bundle).filter((series) => !series.score),
     actualPlacements: Object.fromEntries(actualPlacements(bundle)),
     teams: Object.fromEntries(
       bundle.edition.participants.map((p) => [
@@ -58,4 +64,13 @@ export function buildPayload(bundle: EditionBundle): EditionPayload {
     ratings,
     preEvent,
   };
+  if (live) {
+    // Set up exactly like the Studio's default scenario for a live edition.
+    payload.forecast = runChunked(
+      payload,
+      { ...defaultScenario(payload.edition.slug, true), seed: `forecast:${bundle.edition.id}` },
+      PRE_EVENT_ITERATIONS,
+    );
+  }
+  return payload;
 }

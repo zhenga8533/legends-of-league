@@ -1,5 +1,6 @@
 ---
 import { editionSummary } from "@lol/data";
+import LiveBadge from "../../components/LiveBadge.astro";
 import TeamLink from "../../components/TeamLink.astro";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import { archive, editionsNewestFirst, paths } from "../../lib/archive";
@@ -31,7 +32,11 @@ const tournaments = [...archive.entities.tournaments.values()].map((tournament) 
                   <a class="link" href={paths.edition(bundle)}>
                     {bundle.edition.year}
                   </a>
-                  {champion && <TeamLink team={champion} />}
+                  {champion ? (
+                    <TeamLink team={champion} />
+                  ) : (
+                    bundle.edition.status === "live" && <LiveBadge />
+                  )}
                 </li>
               );
             })}

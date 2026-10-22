@@ -72,14 +72,16 @@ function GroupTable({ matches, options }: { matches: BoardMatch[]; options: Boar
     { team: string; w: number; l: number; tbWins: number; tbOut: number }
   >();
   const row = (team: string) => rows.get(team) ?? { team, w: 0, l: 0, tbWins: 0, tbOut: Infinity };
+  // Upcoming matches only add their teams.
   for (const match of matches.filter((m) => !isTiebreaker(m))) {
     for (const team of match.teams) {
       const entry = row(team);
-      entry[match.winner === team ? "w" : "l"]++;
+      if (match.winner) entry[match.winner === team ? "w" : "l"]++;
       rows.set(team, entry);
     }
   }
   matches.filter(isTiebreaker).forEach((match, index) => {
+    if (!match.winner || !match.loser) return;
     const winner = row(match.winner);
     winner.tbWins++;
     rows.set(match.winner, winner);

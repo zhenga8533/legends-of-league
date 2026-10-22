@@ -529,3 +529,26 @@ editions:
           tabs:
             "Day *": groups
             "*": knockout
+
+  # Live: imported provisionally and refreshed by the live sync until it's over; then set to
+  # completed so its records are verified on the next import.
+  - tournament: worlds
+    year: 2026
+    name: 2026 World Championship
+    status: live
+    stages:
+      - { id: play-in, name: Play-In }
+      - { id: play-in-final, name: Play-In Final }
+      - { id: swiss, name: Swiss Stage }
+      - { id: knockout, name: Knockout Stage }
+    leaguepedia:
+      basePage: 2026 Season World Championship
+      pages:
+        - page: 2026 Season World Championship/Play-In
+          tabs:
+            "Round 3": play-in-final
+            "*": play-in
+        - page: 2026 Season World Championship/Main Event
+          tabs:
+            "Round *": swiss
+            "*": knockout

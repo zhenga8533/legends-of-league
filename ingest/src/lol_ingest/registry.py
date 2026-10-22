@@ -83,11 +83,13 @@ class Registry(CanonicalModel):
             raise ValueError(f"duplicate editions: {sorted(duplicates)}")
         return self
 
-    def select(self, tournament: str, year: str) -> list[EditionSpec]:
+    def select(self, tournament: str, year: str, status: str = "all") -> list[EditionSpec]:
         return [
             edition
             for edition in self.editions
-            if tournament in ("all", edition.tournament) and year in ("all", str(edition.year))
+            if tournament in ("all", edition.tournament)
+            and year in ("all", str(edition.year))
+            and status in ("all", edition.status)
         ]
 
 

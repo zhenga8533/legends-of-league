@@ -10,7 +10,9 @@ export function MatchBox({
 }: { match: BoardMatch } & BoardOptions) {
   const name = (team: string) => teams[team]?.name ?? team;
   const tag = (team: string) => teams[team]?.tag ?? team;
-  const summary = `${name(match.teams[0])} ${match.score[0]}–${match.score[1]} ${name(match.teams[1])}, best of ${match.bestOf}`;
+  const summary = match.score
+    ? `${name(match.teams[0])} ${match.score[0]}–${match.score[1]} ${name(match.teams[1])}, best of ${match.bestOf}`
+    : `${name(match.teams[0])} vs ${name(match.teams[1])}, best of ${match.bestOf}, upcoming`;
   const simulated = showSource && match.source !== "actual";
   // Real results can't be overridden.
   const pickable = onPick !== undefined && match.source !== "actual";
@@ -28,11 +30,13 @@ export function MatchBox({
             </span>
           )}
         </span>
-        <span className={`tabular-nums ${won ? "text-accent" : ""}`}>{match.score[i]}</span>
+        <span className={`tabular-nums ${won ? "text-accent" : ""}`}>
+          {match.score?.[i] ?? "–"}
+        </span>
       </>
     );
     const rowClass = `flex w-full items-center justify-between gap-3 px-2.5 py-1.5 text-left ${
-      won ? "font-semibold" : "text-muted"
+      won ? "font-semibold" : match.score ? "text-muted" : ""
     }`;
     return pickable ? (
       <button
@@ -54,7 +58,10 @@ export function MatchBox({
 
   const footer = (
     <span className="flex justify-between border-t border-border px-2.5 py-0.5 text-xs text-muted">
-      <span>Bo{match.bestOf}</span>
+      <span>
+        Bo{match.bestOf}
+        {!match.score && " · Upcoming"}
+      </span>
       {showSource && match.source && (
         <span
           className={`rounded px-1 font-semibold uppercase tracking-wide ${

@@ -30,12 +30,32 @@ on:
         description: 'With force, type "overwrite verified data" to confirm'
         type: string
         default: ""
+      status:
+        description: Only editions with this status (live = what the live sync imports)
+        type: choice
+        options: [all, live, completed, upcoming]
+        default: all
+      auto_merge:
+        description: Auto-merge the PR once CI passes, if the report marks it safe
+        type: boolean
+        default: false
+  # The live sync calls this with status "live".
+  workflow_call:
+    inputs:
+      tournament: { type: string, default: all }
+      year: { type: string, default: all }
+      operation: { type: string, default: refresh }
+      provider: { type: string, default: auto }
+      force: { type: boolean, default: false }
+      force_confirmation: { type: string, default: "" }
+      status: { type: string, default: all }
+      auto_merge: { type: boolean, default: false }
 
 permissions:
   contents: read
 
 concurrency:
-  group: ingest-${{ inputs.tournament }}-${{ inputs.year }}
+  group: ingest-${{ inputs.tournament }}-${{ inputs.year }}-${{ inputs.status }}
   cancel-in-progress: false
 
 jobs:
@@ -45,12 +65,15 @@ jobs:
     permissions:
       contents: write
       pull-requests: write
+      # Dispatches CI on the data branch.
+      actions: write
     env:
       TOURNAMENT: ${{ inputs.tournament }}
       YEAR: ${{ inputs.year }}
       OPERATION: ${{ inputs.operation }}
       PROVIDER: ${{ inputs.provider }}
       FORCE: ${{ inputs.force }}
+      STATUS: ${{ inputs.status }}
     steps:
       - name: Validate inputs
         env:
@@ -61,6 +84,9 @@ jobs:
           fi
           if [[ "$FORCE" == true && "$CONFIRMATION" != "overwrite verified data" ]]; then
             echo "::error::force requires force_confirmation = 'overwrite verified data'"; exit 1
+          fi
+          if [[ ! "$STATUS" =~ ^(all|live|completed|upcoming)$ ]]; then
+            echo "::error::unknown status '$STATUS'"; exit 1
           fi
 
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -82,7 +108,7 @@ jobs:
           LEAGUEPEDIA_BOT_USER: ${{ secrets.LEAGUEPEDIA_BOT_USER }}
           LEAGUEPEDIA_BOT_PASSWORD: ${{ secrets.LEAGUEPEDIA_BOT_PASSWORD }}
         run: |
-          args=(run --tournament "$TOURNAMENT" --year "$YEAR" --op "$OPERATION" --provider "$PROVIDER")
+          args=(run --tournament "$TOURNAMENT" --year "$YEAR" --op "$OPERATION" --provider "$PROVIDER" --status "$STATUS")
           if [[ "$FORCE" == true ]]; then args+=(--force); fi
           set +e
           uv run lol-ingest "${args[@]}"
@@ -113,8 +139,8 @@ jobs:
             echo "No data changes; nothing to propose."
           fi
 
-      # PRs opened with the default GITHUB_TOKEN do not trigger CI, so required checks would
-      # never run. A GitHub App token avoids that; without one we fall back and warn.
+      # PRs opened with the default GITHUB_TOKEN do not trigger CI by themselves; a GitHub App
+      # token avoids that, and without one CI is dispatched on the branch instead.
       - name: GitHub App token
         id: app-token
         if: steps.changes.outputs.changed == 'true' && vars.DATA_BOT_APP_ID != ''
@@ -129,11 +155,10 @@ jobs:
           GH_TOKEN: ${{ steps.app-token.outputs.token || github.token }}
           HAS_APP_TOKEN: ${{ steps.app-token.outputs.token != '' }}
           RUN_ID: ${{ github.run_id }}
+          AUTO_MERGE: ${{ inputs.auto_merge }}
         run: |
-          if [[ "$HAS_APP_TOKEN" != true ]]; then
-            echo "::warning::No GitHub App configured (vars.DATA_BOT_APP_ID); CI will not run on this PR automatically."
-          fi
-          slug="${TOURNAMENT}-${YEAR}"
+          # Live syncs get their own branch prefix, so they only supersede each other.
+          if [[ "$STATUS" == all ]]; then slug="${TOURNAMENT}-${YEAR}"; else slug="${STATUS}"; fi
           # "auto" resolves to a concrete provider; name the one actually used.
           used=$(jq -r '[.editions[].provider // empty] | unique | join(",")' .cache/reports/report.json)
           branch="data/${slug}-${RUN_ID}"
@@ -159,6 +184,19 @@ jobs:
             --title "data(${slug}): ${OPERATION} from ${used}" \
             --body-file pr-body.md $(printf -- '--label %s ' "${labels[@]}"))
           echo "Opened $url"
+
+          if [[ "$HAS_APP_TOKEN" != true ]]; then
+            gh workflow run ci.yml --ref "$branch"
+            echo "Dispatched CI on $branch."
+          fi
+          # Only additive, error-free imports merge themselves, and only after required CI passes.
+          if [[ "$AUTO_MERGE" == true ]]; then
+            if [[ "$(jq '.autoMergeSafe' .cache/reports/report.json)" == true ]]; then
+              gh pr merge "$url" --auto --squash
+            else
+              echo "::warning::Not auto-merging: the report has errors, blocked or forced changes."
+            fi
+          fi
 
           # Older open PRs for the same selection are superseded by this one.
           gh pr list --state open --json number,headRefName \
