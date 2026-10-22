@@ -23,11 +23,13 @@ function MatchList({
   labelled?: boolean;
 }) {
   return (
-    <ul className="grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-4">
+    <ul className="grid grid-cols-[repeat(auto-fill,minmax(10.5rem,1fr))] gap-x-3 gap-y-4">
       {matches.map((match) => (
         <li key={match.key}>
-          {labelled && match.label !== "Round robin" && (
-            <p className="mb-1 text-xs text-muted">{capitalize(match.label)}</p>
+          {labelled && (
+            <p className="mb-1 h-4 truncate text-xs text-muted">
+              {match.label === "Round robin" ? "" : capitalize(match.label)}
+            </p>
           )}
           <MatchBox match={match} {...options} />
         </li>
@@ -46,7 +48,7 @@ function Columns({
   return (
     <div className="flex gap-6">
       {columns.map((column) => (
-        <div key={column.label} className="flex min-w-44 flex-col">
+        <div key={column.label} className="flex w-44 shrink-0 flex-col">
           <p className="mb-2 text-sm text-muted">{capitalize(column.label)}</p>
           <ul className="flex flex-1 flex-col justify-around gap-3">
             {column.matches.map((match) => (
@@ -141,7 +143,7 @@ export function StageBoard({
               pools.set(key, [...(pools.get(key) ?? []), match]);
             }
             return (
-              <div key={round.label} className="space-y-3">
+              <div key={round.label} className="w-44 shrink-0 space-y-3">
                 <h3 className="text-sm font-semibold text-muted">{round.label}</h3>
                 {[...pools].map(([record, matches]) => (
                   <div key={record} className="space-y-2">
@@ -166,7 +168,7 @@ export function StageBoard({
     case "groups":
     case "gsl":
       body = (
-        <div className="grid gap-6 md:grid-cols-2">
+        <div className={groups.length > 1 ? "grid gap-8 lg:grid-cols-2" : ""}>
           {(groups.length > 0 ? groups : [""]).map((group) => {
             const matches = group ? stage.matches.filter((m) => m.group === group) : stage.matches;
             return (
@@ -218,6 +220,10 @@ export function StageBoard({
     case "series":
       body = <MatchList matches={stage.matches} options={options} />;
       break;
+  }
+
+  if (stage.matches.length === 0) {
+    body = <p className="text-sm text-muted">No matches yet: the teams aren't decided.</p>;
   }
 
   return (
