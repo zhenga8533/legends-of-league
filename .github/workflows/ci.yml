@@ -4,9 +4,6 @@ on:
   pull_request:
   push:
     branches: [main]
-  # Data PRs opened with the default token don't trigger pull_request runs; the import
-  # workflow dispatches CI on their branch instead (dispatches are allowed for that token).
-  workflow_dispatch:
 
 permissions:
   contents: read

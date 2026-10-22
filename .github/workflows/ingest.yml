@@ -65,7 +65,7 @@ jobs:
     permissions:
       contents: write
       pull-requests: write
-      # Dispatches CI on the data branch.
+      # Approves CI runs on the data PR.
       actions: write
     env:
       TOURNAMENT: ${{ inputs.tournament }}
@@ -139,8 +139,8 @@ jobs:
             echo "No data changes; nothing to propose."
           fi
 
-      # PRs opened with the default GITHUB_TOKEN do not trigger CI by themselves; a GitHub App
-      # token avoids that, and without one CI is dispatched on the branch instead.
+      # CI runs on PRs opened with the default GITHUB_TOKEN wait for approval; a GitHub App
+      # token avoids that, and without one the runs are approved below.
       - name: GitHub App token
         id: app-token
         if: steps.changes.outputs.changed == 'true' && vars.DATA_BOT_APP_ID != ''
@@ -185,9 +185,27 @@ jobs:
             --body-file pr-body.md $(printf -- '--label %s ' "${labels[@]}"))
           echo "Opened $url"
 
+          # Only the PR's own pull_request runs count as its required checks (a dispatched run
+          # on the same commit does not), so approve those once they appear.
           if [[ "$HAS_APP_TOKEN" != true ]]; then
-            gh workflow run ci.yml --ref "$branch"
-            echo "Dispatched CI on $branch."
+            sha=$(git rev-parse HEAD)
+            approved=false
+            for _ in $(seq 12); do
+              ids=$(gh run list --branch "$branch" --event pull_request --json databaseId,headSha,conclusion \
+                --jq ".[] | select(.headSha == \"$sha\" and .conclusion == \"action_required\") | .databaseId")
+              if [[ -n "$ids" ]]; then
+                for id in $ids; do
+                  gh api -X POST "repos/${GITHUB_REPOSITORY}/actions/runs/${id}/approve" >/dev/null && approved=true
+                done
+                break
+              fi
+              sleep 10
+            done
+            if [[ "$approved" == true ]]; then
+              echo "Approved CI on $url."
+            else
+              echo "::warning::Couldn't approve CI on $url; approve its run by hand."
+            fi
           fi
           # Only additive, error-free imports merge themselves, and only after required CI passes.
           if [[ "$AUTO_MERGE" == true ]]; then
