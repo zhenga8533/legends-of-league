@@ -47,10 +47,17 @@ test("finds a player through search", async ({ page }) => {
 test("remembers the chosen theme", async ({ page }) => {
   await page.emulateMedia({ colorScheme: "light" });
   await page.goto("/");
-  await page.getByRole("button", { name: "Toggle dark mode" }).click();
+  const toggle = page.getByRole("button", { name: "Dark mode" });
+  await expect(toggle).toHaveAttribute("aria-pressed", "false");
+  await toggle.click();
   await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
+  await expect(toggle).toHaveAttribute("aria-pressed", "true");
   await page.goto("/teams/");
   await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
+  await expect(page.getByRole("button", { name: "Dark mode" })).toHaveAttribute(
+    "aria-pressed",
+    "true",
+  );
 });
 
 const auditedPages = [

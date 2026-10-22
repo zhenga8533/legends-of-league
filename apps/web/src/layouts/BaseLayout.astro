@@ -28,6 +28,8 @@ const nav = [
   { label: "Search", href: withBase("/search/") },
 ];
 const current = Astro.url.pathname;
+// The same mark as public/favicon.svg.
+const MARK = `<rect width="32" height="32" rx="7" fill="#0d0f14"/><path d="M9 7h4.5v13.5H23V25H9z" fill="#e6b84f"/><path d="M22.5 5l1.3 3.2 3.2 1.3-3.2 1.3-1.3 3.2-1.3-3.2-3.2-1.3 3.2-1.3z" fill="#e6b84f"/>`;
 ---
 
 <!doctype html>
@@ -36,7 +38,15 @@ const current = Astro.url.pathname;
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content={description} />
+    <meta name="theme-color" content="#f6f6f8" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#0d0f14" media="(prefers-color-scheme: dark)" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Legends of League" />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={description} />
+    <meta name="twitter:card" content="summary" />
     <link rel="icon" type="image/svg+xml" href={withBase("favicon.svg")} />
+    <link rel="apple-touch-icon" href={withBase("apple-touch-icon.png")} />
     <title>{pageTitle}</title>
     <script is:inline>
       // Apply a saved theme before first paint to avoid a flash of the wrong theme.
@@ -60,10 +70,18 @@ const current = Astro.url.pathname;
         class="mx-auto flex max-w-6xl flex-wrap items-center gap-x-6 gap-y-2 px-4 py-3"
         aria-label="Primary"
       >
-        <a href={withBase("/")} class="mr-auto text-lg font-semibold tracking-tight">
-          Legends <span class="text-accent">of</span> League
+        <a
+          href={withBase("/")}
+          class="mr-auto flex items-center gap-2 text-lg font-semibold tracking-tight"
+        >
+          <svg viewBox="0 0 32 32" class="size-7 shrink-0" aria-hidden="true">
+            <Fragment set:html={MARK} />
+          </svg>
+          <span>
+            Legends <span class="text-accent">of</span> League
+          </span>
         </a>
-        <ul class="order-last flex w-full flex-wrap gap-x-5 gap-y-1 text-sm sm:order-none sm:w-auto">
+        <ul class="order-last -mx-4 flex w-[calc(100%+2rem)] gap-x-5 overflow-x-auto whitespace-nowrap px-4 pb-1 text-sm sm:order-none sm:mx-0 sm:w-auto sm:overflow-visible sm:px-0 sm:pb-0 max-sm:[mask-image:linear-gradient(to_right,black_85%,transparent)]">
           {nav.map((item) => (
             <li>
               <a
@@ -79,10 +97,14 @@ const current = Astro.url.pathname;
         <button
           type="button"
           id="theme-toggle"
-          class="rounded border border-border px-2 py-1 text-sm hover:border-accent"
-          aria-label="Toggle dark mode"
+          class="grid size-8 place-items-center rounded border border-border hover:border-accent"
+          aria-label="Dark mode"
+          aria-pressed="false"
         >
-          <span aria-hidden="true">◐</span>
+          <svg viewBox="0 0 24 24" class="size-4" aria-hidden="true">
+            <circle cx="12" cy="12" r="8.5" fill="none" stroke="currentColor" stroke-width="2" />
+            <path d="M12 3.5a8.5 8.5 0 0 1 0 17z" fill="currentColor" />
+          </svg>
         </button>
       </nav>
     </header>
@@ -111,8 +133,8 @@ const current = Astro.url.pathname;
       )}
       <slot />
     </main>
-    <footer class="border-t border-border px-4 py-6 text-sm text-muted">
-      <div class="mx-auto max-w-6xl space-y-1">
+    <footer class="border-t border-border py-6 text-sm text-muted">
+      <div class="mx-auto max-w-6xl space-y-1 px-4">
         <p>
           Tournament data from{" "}
           <a class="underline" href="https://lol.fandom.com/">
@@ -131,13 +153,15 @@ const current = Astro.url.pathname;
     </footer>
     <script>
       const toggle = document.getElementById("theme-toggle");
+      const root = document.documentElement;
+      const isDark = () =>
+        root.dataset.theme === "dark" ||
+        (!root.dataset.theme && matchMedia("(prefers-color-scheme: dark)").matches);
+      toggle?.setAttribute("aria-pressed", String(isDark()));
       toggle?.addEventListener("click", () => {
-        const root = document.documentElement;
-        const dark =
-          root.dataset.theme === "dark" ||
-          (!root.dataset.theme && matchMedia("(prefers-color-scheme: dark)").matches);
-        const next = dark ? "light" : "dark";
+        const next = isDark() ? "light" : "dark";
         root.dataset.theme = next;
+        toggle.setAttribute("aria-pressed", String(next === "dark"));
         try {
           localStorage.setItem("theme", next);
         } catch {

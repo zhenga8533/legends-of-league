@@ -49,7 +49,7 @@ const acquiredBy = [...archive.entities.organizations.values()].flatMap((other) 
   <header class="mb-8 space-y-1">
     <h1 class="text-3xl font-bold tracking-tight sm:text-4xl">{team.name}</h1>
     <p class="text-muted">
-      {team.shortName && <>{team.shortName} · </>}
+      {team.shortName && team.shortName !== team.name && <>{team.shortName} · </>}
       <a class="link" href={paths.region(team.region)}>
         {regionAbbr(team.region)}
       </a>

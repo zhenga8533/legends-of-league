@@ -7,6 +7,11 @@ import { archive, dateRange, editionsNewestFirst, paths } from "../lib/archive";
 import { withBase } from "../lib/paths";
 
 const live = archive.editions.filter((bundle) => bundle.edition.status === "live");
+/** The rest are a click away on the tournaments page. */
+const RECENT_EDITIONS = 6;
+const recent = editionsNewestFirst
+  .filter((bundle) => bundle.edition.status === "completed")
+  .slice(0, RECENT_EDITIONS);
 const totals = {
   editions: archive.editions.length,
   series: archive.editions.reduce((sum, b) => sum + b.series.length, 0),
@@ -47,10 +52,10 @@ const totals = {
       <ul class="grid gap-4 md:grid-cols-2">
         {live.map((bundle) => (
           <li class="space-y-2 rounded border border-loss bg-surface p-4">
-            <h3 class="font-semibold">
+            <h3 class="flex flex-wrap items-center gap-2 font-semibold">
               <a class="hover:text-accent" href={paths.edition(bundle)}>
                 {bundle.edition.name}
-              </a>{" "}
+              </a>
               <LiveBadge />
             </h3>
             <p class="text-sm text-muted">
@@ -96,7 +101,7 @@ const totals = {
       Recent editions
     </h2>
     <ul class="grid gap-4 md:grid-cols-3">
-      {editionsNewestFirst.map((bundle) => {
+      {recent.map((bundle) => {
         const summary = editionSummary(bundle);
         return (
           <li class="rounded border border-border bg-surface p-4">
@@ -126,5 +131,10 @@ const totals = {
         );
       })}
     </ul>
+    <p>
+      <a class="link text-sm" href={withBase("/tournaments/")}>
+        All {totals.editions} editions
+      </a>
+    </p>
   </section>
 </BaseLayout>

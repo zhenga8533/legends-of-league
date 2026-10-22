@@ -212,9 +212,12 @@ export function teamHistory(archive: Archive, team: TeamId): TeamAppearance[] {
   return archive.editions.flatMap((bundle) => {
     const standing = editionStandings(bundle).find((s) => s.team === team);
     if (!standing) return [];
+    // Players in role order (top to support), then coaches.
+    const rank = (role: string) => (ROLE_ORDER.includes(role) ? ROLE_ORDER.indexOf(role) : 5);
     const roster = bundle.rosters
       .filter((entry) => entry.team === team)
-      .map(({ player, role }) => ({ player, role }));
+      .map(({ player, role }) => ({ player, role }))
+      .sort((a, b) => rank(a.role) - rank(b.role));
     return [{ bundle, standing, roster }];
   });
 }
