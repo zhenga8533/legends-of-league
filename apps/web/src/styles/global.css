@@ -16,6 +16,12 @@
   --color-blue-side: #1d5fc4;
   --color-red-side: #b4232c;
   --color-focus: #1d5fc4;
+  /* Chart series, in fixed order; validated for colour-vision deficiency on the surface. */
+  --series-1: #2a78d6;
+  --series-2: #eb6834;
+  --series-3: #1baf7a;
+  --series-4: #eda100;
+  --series-5: #e87ba4;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -34,6 +40,11 @@
     --color-blue-side: #6fa3ff;
     --color-red-side: #f0727a;
     --color-focus: #8fb8ff;
+    --series-1: #3987e5;
+    --series-2: #d95926;
+    --series-3: #199e70;
+    --series-4: #c98500;
+    --series-5: #d55181;
   }
 }
 
@@ -52,6 +63,11 @@
   --color-blue-side: #6fa3ff;
   --color-red-side: #f0727a;
   --color-focus: #8fb8ff;
+  --series-1: #3987e5;
+  --series-2: #d95926;
+  --series-3: #199e70;
+  --series-4: #c98500;
+  --series-5: #d55181;
 }
 
 @theme inline {

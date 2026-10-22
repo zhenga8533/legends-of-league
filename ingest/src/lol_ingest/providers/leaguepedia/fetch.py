@@ -70,7 +70,7 @@ def in_clause(field: str, values: Iterable[str]) -> str:
     return f"{field} IN ({','.join(quote(value) for value in values)})"
 
 
-def _chunked_query(
+def chunked_query(
     client: Client, table: str, fields: Sequence[str], field: str, values: Iterable[str]
 ) -> list[Row]:
     ordered = sorted(set(values))
@@ -113,7 +113,7 @@ def fetch_edition(client: Client, spec: EditionSpec) -> Snapshot:
         for key in keys
         if row[key]
     }
-    tables["teams"] = _chunked_query(client, "Teams", TEAM_FIELDS, "OverviewPage", team_names)
+    tables["teams"] = chunked_query(client, "Teams", TEAM_FIELDS, "OverviewPage", team_names)
 
     player_links = {
         page_title(row["Link"])
@@ -121,12 +121,12 @@ def fetch_edition(client: Client, spec: EditionSpec) -> Snapshot:
         for row in tables[table]
         if row["Link"]
     } | {page_title(row["MVP"]) for row in tables["matches"] if row["MVP"] not in ("", "N/A")}
-    redirects = _chunked_query(
+    redirects = chunked_query(
         client, "PlayerRedirects", PLAYER_REDIRECT_FIELDS, "AllName", player_links
     )
     tables["playerRedirects"] = redirects
     canonical_pages = {row["OverviewPage"] for row in redirects} | player_links
-    tables["players"] = _chunked_query(
+    tables["players"] = chunked_query(
         client, "Players", PLAYER_FIELDS, "OverviewPage", canonical_pages
     )
     return Snapshot(tables)

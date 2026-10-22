@@ -25,8 +25,10 @@ The source of truth is the Pydantic models in `ingest/src/lol_ingest/models/`. T
 | `teams.json`         | `TeamIdentity` | An org's name, tag and region over a `DateRange` (SKT T1 → T1).                         |
 | `players.json`       | `Player`       | Stable ID with handle history, real and native name, and ISO country.                   |
 
-Imports propose new organizations, teams and players. Review them in the PR. In particular,
-merge organizations by hand when a team rebranded, because the importer never guesses lineage.
+Imports propose new organizations, teams and players. Review them in the PR. Each new team
+identity gets its own organization unless Leaguepedia gives an `OrganizationPage`; the
+`lineage` operation (`docs/ingestion.md`) then groups rebrands from Leaguepedia's renames. The
+importer never guesses lineage itself.
 
 ## Per-edition records (`data/tournaments/<tournament>/<year>/`)
 

@@ -31,6 +31,7 @@ A static archive and simulator for international LoL tournaments. The plan and r
 - In `ingest/`: `uv run ruff check`, `uv run ruff format --check`, `uv run mypy`, `uv run pytest`
 - Imports, from `ingest/`: `uv run --env-file ../.env lol-ingest run --tournament worlds --year 2024 --op dry-run`
   (operations `import|refresh|validate|dry-run`). `--op validate` is offline and runs in CI.
+  `lol-ingest lineage [--write]` groups rebranded teams into organizations (`docs/ingestion.md`).
 - Tests never hit the network. Leaguepedia fixtures live in `ingest/tests/fixtures/`.
 
 ## Conventions

@@ -13,9 +13,9 @@ on:
         type: string
         default: all
       operation:
-        description: "dry-run: report only · import: write changes · refresh: re-fetch and write · validate: check committed data"
+        description: "dry-run: report only · import: write changes · refresh: re-fetch and write · validate: check committed data · lineage: group teams into organizations (ignores tournament, year, status)"
         type: choice
-        options: [dry-run, import, refresh, validate]
+        options: [dry-run, import, refresh, validate, lineage]
         default: dry-run
       provider:
         description: Data provider
@@ -108,8 +108,12 @@ jobs:
           LEAGUEPEDIA_BOT_USER: ${{ secrets.LEAGUEPEDIA_BOT_USER }}
           LEAGUEPEDIA_BOT_PASSWORD: ${{ secrets.LEAGUEPEDIA_BOT_PASSWORD }}
         run: |
-          args=(run --tournament "$TOURNAMENT" --year "$YEAR" --op "$OPERATION" --provider "$PROVIDER" --status "$STATUS")
-          if [[ "$FORCE" == true ]]; then args+=(--force); fi
+          if [[ "$OPERATION" == lineage ]]; then
+            args=(lineage --write)
+          else
+            args=(run --tournament "$TOURNAMENT" --year "$YEAR" --op "$OPERATION" --provider "$PROVIDER" --status "$STATUS")
+            if [[ "$FORCE" == true ]]; then args+=(--force); fi
+          fi
           set +e
           uv run lol-ingest "${args[@]}"
           echo "exit_code=$?" >> "$GITHUB_OUTPUT"
@@ -131,7 +135,7 @@ jobs:
 
       - name: Detect data changes
         id: changes
-        if: steps.ingest.outputs.exit_code == '0' && (inputs.operation == 'import' || inputs.operation == 'refresh')
+        if: steps.ingest.outputs.exit_code == '0' && (inputs.operation == 'import' || inputs.operation == 'refresh' || inputs.operation == 'lineage')
         run: |
           if [[ -n "$(git status --porcelain -- data)" ]]; then
             echo "changed=true" >> "$GITHUB_OUTPUT"
@@ -158,7 +162,9 @@ jobs:
           AUTO_MERGE: ${{ inputs.auto_merge }}
         run: |
           # Live syncs get their own branch prefix, so they only supersede each other.
-          if [[ "$STATUS" == all ]]; then slug="${TOURNAMENT}-${YEAR}"; else slug="${STATUS}"; fi
+          if [[ "$OPERATION" == lineage ]]; then slug=lineage
+          elif [[ "$STATUS" == all ]]; then slug="${TOURNAMENT}-${YEAR}"
+          else slug="${STATUS}"; fi
           # "auto" resolves to a concrete provider; name the one actually used.
           used=$(jq -r '[.editions[].provider // empty] | unique | join(",")' .cache/reports/report.json)
           branch="data/${slug}-${RUN_ID}"

@@ -1,0 +1,438 @@
+---
+import {
+  crossRegionRecords,
+  formatDuration,
+  gameRecords,
+  organizationRecords,
+  titlesByOrganization,
+  titlesByPlayer,
+  titlesByRegion,
+} from "@lol/data";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import {
+  archive,
+  editionOfSeries,
+  orgName,
+  paths,
+  playerName,
+  teamName,
+  tournamentShortName,
+} from "../../lib/archive";
+import { withBase } from "../../lib/paths";
+import HeadToHead from "../../stats/HeadToHead";
+import { RegionTrend, type TrendSeries } from "../../stats/RegionTrend";
+
+/** Win rates need a sample: organizations with fewer international series are left out. */
+const MIN_SERIES = 15;
+/** Points on the trend chart need this many cross-region series in the year. */
+const MIN_SERIES_PER_YEAR = 5;
+/** The chart palette has five validated colours. */
+const TREND_REGIONS = 5;
+const TOP_PLAYERS = 15;
+
+// Oldest tournament first: Worlds, MSI, First Stand.
+const firstYear = (tournament: string) =>
+  Math.min(
+    ...archive.editions
+      .filter((b) => b.edition.tournament === tournament)
+      .map((b) => b.edition.year),
+  );
+const tournaments = [...archive.entities.tournaments.keys()].sort(
+  (a, b) => firstYear(a) - firstYear(b),
+);
+const byOrg = titlesByOrganization(archive).filter((row) => row.finals > 0);
+const byRegion = titlesByRegion(archive);
+const players = titlesByPlayer(archive).slice(0, TOP_PLAYERS);
+const winRates = organizationRecords(archive)
+  .filter((row) => row.series.wins + row.series.losses >= MIN_SERIES)
+  .map((row) => ({ ...row, rate: row.series.wins / (row.series.wins + row.series.losses) }))
+  .sort((a, b) => b.rate - a.rate || b.series.wins - a.series.wins);
+const crossRegion = crossRegionRecords(archive);
+const years = archive.editions.map((b) => b.edition.year);
+const span: [number, number] = [Math.min(...years), Math.max(...years)];
+const trend: TrendSeries[] = crossRegion.slice(0, TREND_REGIONS).map((row) => ({
+  label: row.family.label,
+  eras: row.family.abbreviations.join(", "),
+  points: Object.entries(row.byYear)
+    .map(([year, record]) => ({ year: Number(year), ...record }))
+    .filter((p) => p.wins + p.losses >= MIN_SERIES_PER_YEAR)
+    .sort((a, b) => a.year - b.year),
+}));
+const records = gameRecords(archive);
+const percent = (wins: number, losses: number) =>
+  wins + losses === 0 ? "—" : `${((wins / (wins + losses)) * 100).toFixed(1)}%`;
+const regionLabel = (family: { label: string; abbreviations: string[] }) => {
+  const older = family.abbreviations.filter((a) => a !== family.label);
+  return older.length > 0 ? `${family.label} (${older.join(", ")})` : family.label;
+};
+const gameLink = (game: { series: string }) => paths.series(game.series);
+const editionName = (seriesId: string) => editionOfSeries(seriesId).edition.name;
+---
+
+<BaseLayout
+  title="Stats"
+  searchable
+  description="Titles, finals, head-to-head records, win rates and records across every international League of Legends tournament."
+  breadcrumbs={[{ label: "Stats" }]}
+>
+  <h1 class="mb-2 text-3xl font-bold tracking-tight sm:text-4xl">Stats</h1>
+  <p class="mb-8 max-w-3xl text-muted">
+    Across every edition in the archive. Teams are counted by organization, so a rebrand keeps its
+    history (SK Telecom T1 and T1 count together), following Leaguepedia's record of renames.
+    Acquired spots start a new history.
+  </p>
+
+  <nav aria-label="Sections" class="mb-10 flex flex-wrap gap-2 text-sm">
+    {[
+      ["titles", "Titles"],
+      ["regions", "Regions"],
+      ["players", "Players"],
+      ["head-to-head", "Head-to-head"],
+      ["win-rates", "Win rates"],
+      ["records", "Records"],
+    ].map(([id, label]) => (
+      <a class="rounded border border-border px-3 py-1 hover:border-accent" href={`#${id}`}>
+        {label}
+      </a>
+    ))}
+  </nav>
+
+  <div class="space-y-12">
+    <section aria-labelledby="titles" class="space-y-3">
+      <h2 id="titles" class="text-2xl font-semibold tracking-tight">
+        Titles and finals
+      </h2>
+      <div class="table-scroll" tabindex="0" role="region" aria-label="Titles by organization">
+        <table class="data-table">
+          <caption class="sr-only">Titles and finals appearances by organization</caption>
+          <thead>
+            <tr>
+              <th scope="col">Team</th>
+              {tournaments.map((t) => (
+                <th scope="col" class="num">
+                  {tournamentShortName(t)}
+                </th>
+              ))}
+              <th scope="col" class="num">
+                Titles
+              </th>
+              <th scope="col" class="num">
+                Finals
+              </th>
+              <th scope="col">Won as</th>
+            </tr>
+          </thead>
+          <tbody>
+            {byOrg.map((row) => {
+              const names = [...new Set(row.wins.map((w) => w.team))].filter(
+                (team) => teamName(team) !== orgName(row.org),
+              );
+              return (
+                <tr>
+                  <th scope="row" class="font-normal">
+                    <a class="link" href={paths.org(row.org)}>
+                      {orgName(row.org)}
+                    </a>
+                  </th>
+                  {tournaments.map((t) => (
+                    <td class="num">{row.titles[t] ?? "–"}</td>
+                  ))}
+                  <td class="num font-semibold">{row.total}</td>
+                  <td class="num">{row.finals}</td>
+                  <td class="text-muted">
+                    {names.map((team, i) => (
+                      <>
+                        {i > 0 && ", "}
+                        <a class="link" href={paths.team(team)}>
+                          {teamName(team)}
+                        </a>
+                      </>
+                    ))}
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section aria-labelledby="regions" class="space-y-6">
+      <h2 id="regions" class="text-2xl font-semibold tracking-tight">
+        Regions
+      </h2>
+      <p class="max-w-3xl text-sm text-muted">
+        By the team's region at the time. A league is counted across its eras when it was renamed
+        one-to-one (EU, EU LCS and LEC); regions that merged or split are kept apart.
+      </p>
+      <div class="table-scroll" tabindex="0" role="region" aria-label="Titles by region">
+        <table class="data-table">
+          <caption class="sr-only">
+            Titles, finals and cross-region series records by region
+          </caption>
+          <thead>
+            <tr>
+              <th scope="col">Region</th>
+              {tournaments.map((t) => (
+                <th scope="col" class="num">
+                  {tournamentShortName(t)}
+                </th>
+              ))}
+              <th scope="col" class="num">
+                Titles
+              </th>
+              <th scope="col" class="num">
+                Finals
+              </th>
+              <th scope="col" class="num">
+                Series vs other regions
+              </th>
+              <th scope="col" class="num">
+                Win rate
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            {crossRegion.map((row) => {
+              const titles = byRegion.find((r) => r.family.key === row.family.key);
+              return (
+                <tr>
+                  <th scope="row" class="font-normal">
+                    <a class="link" href={paths.region(row.family.key)}>
+                      {regionLabel(row.family)}
+                    </a>
+                  </th>
+                  {tournaments.map((t) => (
+                    <td class="num">{titles?.titles[t] ?? "–"}</td>
+                  ))}
+                  <td class="num font-semibold">{titles?.total ?? 0}</td>
+                  <td class="num">{titles?.finals ?? 0}</td>
+                  <td class="num">
+                    {row.total.wins}–{row.total.losses}
+                  </td>
+                  <td class="num">{percent(row.total.wins, row.total.losses)}</td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
+
+      <h3 class="text-xl font-semibold">Win rate against other regions, by year</h3>
+      <p class="max-w-3xl text-sm text-muted">
+        The {TREND_REGIONS} regions with the most cross-region series. A year is plotted when the
+        region played at least {MIN_SERIES_PER_YEAR} such series.
+      </p>
+      <RegionTrend client:visible series={trend} years={span} />
+      <details>
+        <summary class="cursor-pointer text-sm">Show the numbers</summary>
+        <div class="table-scroll mt-2" tabindex="0" role="region" aria-label="Win rate by year">
+          <table class="data-table">
+            <caption class="sr-only">Cross-region series records by year</caption>
+            <thead>
+              <tr>
+                <th scope="col">Year</th>
+                {trend.map((s) => (
+                  <th scope="col" class="num">
+                    {s.label}
+                  </th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {Array.from({ length: span[1] - span[0] + 1 }, (_, i) => span[0] + i).map((year) => (
+                <tr>
+                  <th scope="row" class="font-normal">
+                    {year}
+                  </th>
+                  {crossRegion.slice(0, TREND_REGIONS).map((row) => {
+                    const record = row.byYear[year];
+                    return (
+                      <td class="num">
+                        {record
+                          ? `${percent(record.wins, record.losses)} (${record.wins}–${record.losses})`
+                          : "—"}
+                      </td>
+                    );
+                  })}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </details>
+    </section>
+
+    <section aria-labelledby="players" class="space-y-3">
+      <h2 id="players" class="text-2xl font-semibold tracking-tight">
+        Most decorated players
+      </h2>
+      <p class="max-w-3xl text-sm text-muted">
+        Everyone on a champion's registered roster or with games for it, substitutes included;
+        coaches are not counted.
+      </p>
+      <div class="table-scroll" tabindex="0" role="region" aria-label="Most decorated players">
+        <table class="data-table">
+          <caption class="sr-only">Players with the most international titles</caption>
+          <thead>
+            <tr>
+              <th scope="col">Player</th>
+              <th scope="col" class="num">
+                Titles
+              </th>
+              <th scope="col">Won</th>
+            </tr>
+          </thead>
+          <tbody>
+            {players.map((row) => (
+              <tr>
+                <th scope="row" class="font-normal">
+                  <a class="link" href={paths.player(row.player)}>
+                    {playerName(row.player)}
+                  </a>
+                </th>
+                <td class="num font-semibold">{row.wins.length}</td>
+                <td class="text-muted">
+                  {row.wins.map((w) => `${tournamentShortName(w.tournament)} ${w.year}`).join(", ")}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section aria-labelledby="head-to-head" class="space-y-3">
+      <h2 id="head-to-head" class="text-2xl font-semibold tracking-tight">
+        Head-to-head
+      </h2>
+      <HeadToHead client:visible dataUrl={withBase("/stats/meetings.json")} />
+      <noscript>
+        <p class="text-muted">The head-to-head tool needs JavaScript.</p>
+      </noscript>
+    </section>
+
+    <section aria-labelledby="win-rates" class="space-y-3">
+      <h2 id="win-rates" class="text-2xl font-semibold tracking-tight">
+        Win rates
+      </h2>
+      <p class="text-sm text-muted">
+        International series and games, for teams with at least {MIN_SERIES} series. Games are
+        counted from series scores, so they include the few games without a recorded scoreboard.
+      </p>
+      <div class="table-scroll" tabindex="0" role="region" aria-label="Win rates">
+        <table class="data-table">
+          <caption class="sr-only">International win rates by organization</caption>
+          <thead>
+            <tr>
+              <th scope="col">Team</th>
+              <th scope="col" class="num">
+                Events
+              </th>
+              <th scope="col" class="num">
+                Series
+              </th>
+              <th scope="col" class="num">
+                Series win rate
+              </th>
+              <th scope="col" class="num">
+                Games
+              </th>
+              <th scope="col" class="num">
+                Game win rate
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            {winRates.map((row) => (
+              <tr>
+                <th scope="row" class="font-normal">
+                  <a class="link" href={paths.org(row.org)}>
+                    {orgName(row.org)}
+                  </a>
+                </th>
+                <td class="num">{row.appearances}</td>
+                <td class="num">
+                  {row.series.wins}–{row.series.losses}
+                </td>
+                <td class="num font-semibold">{percent(row.series.wins, row.series.losses)}</td>
+                <td class="num">
+                  {row.games.wins}–{row.games.losses}
+                </td>
+                <td class="num">{percent(row.games.wins, row.games.losses)}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section aria-labelledby="records" class="space-y-3">
+      <h2 id="records" class="text-2xl font-semibold tracking-tight">
+        Single-game records
+      </h2>
+      <dl class="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+        {records.longestGame && (
+          <div class="rounded border border-border bg-surface p-4">
+            <dt class="text-sm text-muted">Longest game</dt>
+            <dd>
+              <a class="link text-xl font-semibold" href={gameLink(records.longestGame.game)}>
+                {formatDuration(records.longestGame.game.durationSeconds)}
+              </a>
+              <p class="text-sm text-muted">
+                {teamName(records.longestGame.game.blue)} vs{" "}
+                {teamName(records.longestGame.game.red)},{" "}
+                {editionName(records.longestGame.game.series)}
+              </p>
+            </dd>
+          </div>
+        )}
+        {records.shortestGame && (
+          <div class="rounded border border-border bg-surface p-4">
+            <dt class="text-sm text-muted">Shortest game</dt>
+            <dd>
+              <a class="link text-xl font-semibold" href={gameLink(records.shortestGame.game)}>
+                {formatDuration(records.shortestGame.game.durationSeconds)}
+              </a>
+              <p class="text-sm text-muted">
+                {teamName(records.shortestGame.game.blue)} vs{" "}
+                {teamName(records.shortestGame.game.red)},{" "}
+                {editionName(records.shortestGame.game.series)}
+              </p>
+            </dd>
+          </div>
+        )}
+        {(
+          [
+            ["Most kills", records.mostKills, "kills"],
+            ["Most assists", records.mostAssists, "assists"],
+            ["Most deaths", records.mostDeaths, "deaths"],
+          ] as const
+        ).map(
+          ([label, record, stat]) =>
+            record && (
+              <div class="rounded border border-border bg-surface p-4">
+                <dt class="text-sm text-muted">{label} in a game</dt>
+                <dd>
+                  <a class="link text-xl font-semibold" href={gameLink(record.game)}>
+                    {record.stats[stat]}
+                  </a>
+                  <p class="text-sm text-muted">
+                    {playerName(record.stats.player)} ({record.stats.champion}),{" "}
+                    {teamName(record.stats.team)}, {editionName(record.game.series)}
+                  </p>
+                </dd>
+              </div>
+            ),
+        )}
+      </dl>
+      <p class="text-sm text-muted">
+        Only games with a recorded length or player stats count; see the
+        <a class="link" href={withBase("/data/")}>
+          coverage page
+        </a>{" "}
+        for what is missing.
+      </p>
+    </section>
+  </div>
+</BaseLayout>
