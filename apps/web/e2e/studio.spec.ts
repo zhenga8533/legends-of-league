@@ -11,7 +11,7 @@ test("picks reshape the bracket and the scenario survives a reload", async ({ pa
 
   const knockout = page.getByRole("region", { name: "Knockout Stage" });
   const final = knockout.getByRole("group").last();
-  await final.getByRole("button", { name: new RegExp(`^Pick (?!${before} to win)`) }).click();
+  await final.getByRole("button", { name: new RegExp(`pick (?!${before} to win)`) }).click();
   await expect(champion(page)).not.toHaveText(before!);
   await expect(page.getByText("1 pick applied")).toBeVisible();
   const after = await champion(page).textContent();
@@ -89,4 +89,24 @@ test("the Studio is accessible", async ({ page }) => {
     .withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa"])
     .analyze();
   expect(violations.map((v) => `${v.id}: ${v.nodes.length} × ${v.help}`)).toEqual([]);
+});
+
+test("scenarios can be saved in the browser and opened again", async ({ page }) => {
+  await page.goto("/simulate/#ed=msi-2024");
+  const seed = page.getByRole("textbox", { name: /^Seed/ });
+  await seed.fill("saved-seed");
+  await page.getByRole("button", { name: "Save", exact: true }).click();
+  await expect(page.getByText("Saved in this browser.")).toBeVisible();
+
+  await page.getByLabel("Edition").selectOption("worlds-2024");
+  await page.reload();
+  await page.getByText("Saved in this browser (1)").click();
+  await page
+    .getByRole("button", { name: /^2024 Mid-Season Invitational .* seed saved-seed$/ })
+    .click();
+  await expect(page.getByLabel("Edition")).toHaveValue("msi-2024");
+  await expect(seed).toHaveValue("saved-seed");
+
+  await page.getByRole("button", { name: /^Remove/ }).click();
+  await expect(page.getByText(/Saved in this browser \(/)).toHaveCount(0);
 });
