@@ -1,5 +1,6 @@
 """The edition registry: which editions exist and where each provider keeps their data."""
 
+import re
 from fnmatch import fnmatchcase
 from pathlib import Path
 from typing import Literal, Self
@@ -96,3 +97,42 @@ class Registry(CanonicalModel):
 def load_registry(data_dir: Path) -> Registry:
     raw = yaml.safe_load((data_dir / "editions.yaml").read_text(encoding="utf-8"))
     return Registry.model_validate(raw)
+
+
+def set_status(data_dir: Path, tournament: str, year: int, status: str) -> None:
+    """Changes one edition's status in place. The registry is curated by hand, so this edits
+    only that line and keeps everything else (comments, formatting) as it is."""
+    path = data_dir / "editions.yaml"
+    before = load_registry(data_dir)
+    lines = path.read_text(encoding="utf-8").splitlines(keepends=True)
+    start = next(
+        (
+            i
+            for i, line in enumerate(lines)
+            if line.strip() == f"- tournament: {tournament}"
+            and i + 1 < len(lines)
+            and lines[i + 1].strip() == f"year: {year}"
+        ),
+        None,
+    )
+    if start is None:
+        raise ValueError(f"{tournament}-{year} is not in {path}")
+    for i in range(start + 1, len(lines)):
+        if lines[i].lstrip().startswith("- tournament:"):
+            break
+        if match := re.match(r"^(\s+status: )\S+(\s*)$", lines[i]):
+            lines[i] = f"{match.group(1)}{status}{match.group(2)}"
+            break
+    else:
+        raise ValueError(f"{tournament}-{year} has no status line in {path}")
+    path.write_text("".join(lines), encoding="utf-8", newline="")
+
+    # Nothing but that one status may have changed.
+    expected = [
+        spec.model_copy(update={"status": status})
+        if (spec.tournament, spec.year) == (tournament, year)
+        else spec
+        for spec in before.editions
+    ]
+    if load_registry(data_dir).editions != expected:
+        raise ValueError(f"editing {path} changed more than {tournament}-{year}'s status")

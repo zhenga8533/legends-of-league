@@ -20,8 +20,9 @@ jobs:
     permissions:
       contents: read
       actions: write
+      pull-requests: read
     outputs:
-      live: ${{ steps.live.outputs.live }}
+      sync: ${{ steps.live.outputs.live == 'true' && steps.pending.outputs.pending != 'true' }}
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -33,6 +34,18 @@ jobs:
             echo "live=true" >> "$GITHUB_OUTPUT"
           else
             echo "No live editions; nothing to do."
+          fi
+      # A finished edition's PR waits for review; a new sync would supersede (close) it.
+      - name: Waiting on a finished edition?
+        id: pending
+        if: steps.live.outputs.live == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          prs=$(gh pr list --repo "$GITHUB_REPOSITORY" --state open --label edition-completed             --json url --jq '.[].url')
+          if [[ -n "$prs" ]]; then
+            echo "pending=true" >> "$GITHUB_OUTPUT"
+            echo "Paused until this is reviewed: $prs"
           fi
       # Auto-merges are made with the default token, whose pushes don't trigger the deploy
       # workflow, so the latest main is deployed from here.
@@ -51,7 +64,7 @@ jobs:
 
   sync:
     needs: check
-    if: needs.check.outputs.live == 'true'
+    if: needs.check.outputs.sync == 'true'
     permissions:
       contents: write
       pull-requests: write

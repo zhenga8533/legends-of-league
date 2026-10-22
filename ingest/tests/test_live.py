@@ -8,8 +8,8 @@ import pytest
 
 from lol_ingest.pipeline import RunOptions, run
 from lol_ingest.providers.leaguepedia.fetch import Snapshot
-from lol_ingest.registry import EditionSpec
-from lol_ingest.report import EditionReport, render_json
+from lol_ingest.registry import EditionSpec, load_registry
+from lol_ingest.report import EditionReport, render_json, render_markdown
 
 FINAL = "2024 Season World Championship/Main Event_Finals_1"
 
@@ -39,11 +39,22 @@ def before_final(snapshot: Snapshot) -> Snapshot:
     return Snapshot(tables)
 
 
-def run_once(data_dir: Path, snapshot: Snapshot, when: int, **options: object) -> EditionReport:
+def places_pending(snapshot: Snapshot) -> Snapshot:
+    """The final is played, but Leaguepedia hasn't filled in the top two places yet."""
+    tables = copy.deepcopy(snapshot.tables)
+    tables["results"] = [
+        {**r, "Team": ""} if r["Place"] in ("1", "2") else r for r in tables["results"]
+    ]
+    return Snapshot(tables)
+
+
+def run_once(
+    data_dir: Path, snapshot: Snapshot, when: int, operation: str = "refresh", **options: object
+) -> EditionReport:
     def fetch(spec: EditionSpec, use_cache: bool) -> Snapshot:
         return snapshot
 
-    run_options = RunOptions("refresh", "worlds", "2024", data_dir, **options)  # type: ignore[arg-type]
+    run_options = RunOptions(operation, "worlds", "2024", data_dir, **options)  # type: ignore[arg-type]
     [report] = run(run_options, fetch, datetime(2026, 10, when, tzinfo=UTC))
     return report
 
@@ -56,8 +67,9 @@ def test_a_live_edition_updates_and_is_safe_to_auto_merge(
     assert first.errors == []
     assert render_json([first])["autoMergeSafe"] is True
 
-    second = run_once(data_dir, snapshot, 2)
+    second = run_once(data_dir, places_pending(snapshot), 2)
 
+    assert not second.completed
     assert second.merge is not None
     kinds = {(c.key.split(":", 1)[0], c.kind) for c in second.merge.applied}
     assert ("series", "modified") in kinds  # the final's result filled in
@@ -66,20 +78,23 @@ def test_a_live_edition_updates_and_is_safe_to_auto_merge(
     assert render_json([second])["autoMergeSafe"] is True
 
 
-def test_finishing_an_edition_verifies_it_and_later_changes_need_review(
+def test_a_finished_edition_is_completed_and_waits_for_review(
     data_dir: Path, snapshot: Snapshot
 ) -> None:
     set_status(data_dir, "live")
-    run_once(data_dir, snapshot, 1)
-    set_status(data_dir, "completed")  # flipped by hand once the event is over
-    promoted = run_once(data_dir, snapshot, 2)
-    assert promoted.merge is not None
-    # Only the edition record itself changes (its status); everything else is promoted to verified.
-    assert [(c.key, c.kind, c.applied) for c in promoted.merge.changes] == [
-        ("edition:ed:worlds-2024", "modified", True)
-    ]
-    assert {r.status for r in promoted.merge.provenance.records} == {"verified"}
+    run_once(data_dir, places_pending(snapshot), 1)
 
+    finished = run_once(data_dir, snapshot, 2)
+
+    assert finished.completed
+    assert load_registry(data_dir).select("worlds", "2024")[0].status == "completed"
+    assert finished.merge is not None
+    assert {r.status for r in finished.merge.provenance.records} == {"verified"}
+    assert render_json([finished])["autoMergeSafe"] is False
+    assert render_json([finished])["completed"] == ["worlds-2024"]
+    assert "Edition finished" in render_markdown([finished])
+
+    # From then on, provider changes to the verified records need review.
     changed = copy.deepcopy(snapshot.tables)
     changed["matches"][0]["Patch"] = "99.1"
     report = run_once(data_dir, Snapshot(changed), 3)
@@ -123,3 +138,12 @@ def test_the_live_sync_is_a_no_op_without_live_editions(data_dir: Path, snapshot
         run(options, lambda spec, cache: pytest.fail("fetched"), datetime(2026, 1, 1, tzinfo=UTC))
         == []
     )
+
+
+def test_a_dry_run_never_completes_an_edition(data_dir: Path, snapshot: Snapshot) -> None:
+    set_status(data_dir, "live")
+
+    report = run_once(data_dir, snapshot, 1, operation="dry-run")
+
+    assert not report.completed
+    assert load_registry(data_dir).select("worlds", "2024")[0].status == "live"

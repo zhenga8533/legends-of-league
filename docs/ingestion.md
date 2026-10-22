@@ -96,9 +96,12 @@ ordinary updates.
 - Auto-merges are made with the default token, whose pushes don't trigger the deploy workflow,
   so each live sync run also dispatches a deploy when `main` has changed since the last one.
   The site, its live forecast included, is at most about half an hour behind the data.
-- When the event is over, set its status to `completed` by hand and run an import. Unchanged
-  records are promoted to `verified`. From then on, changes need review like any other
-  verified data.
+- When the event is over (every participant placed, every series played), the live import
+  sets its status to `completed` in `data/editions.yaml` and re-imports it, so its records are
+  promoted to `verified`. That PR is labelled `edition-completed` and never auto-merges: review
+  the final results and merge it. The live sync pauses while it is open, so it is not
+  superseded. From then on, changes need review like any other verified data. (Setting the
+  status by hand and running an import does the same.)
 
 The repository needs **Allow auto-merge** enabled in its settings for live PRs to merge
 themselves.
