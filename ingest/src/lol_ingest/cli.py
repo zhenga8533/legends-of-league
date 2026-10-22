@@ -5,6 +5,9 @@ import sys
 from datetime import UTC, datetime
 from pathlib import Path
 
+from lol_ingest.identity import EntityStore
+from lol_ingest.lineage import apply_lineage, fetch_renames
+from lol_ingest.lineage import render_markdown as render_lineage
 from lol_ingest.paths import CACHE_DIR, DATA_DIR
 from lol_ingest.pipeline import Fetch, RunOptions, UsageError, run
 from lol_ingest.providers.leaguepedia.client import CargoClient, LeaguepediaError
@@ -24,16 +27,20 @@ def _schema_export(args: argparse.Namespace) -> int:
     return 0
 
 
+def _client(cache_dir: Path | None) -> CargoClient:
+    return CargoClient(
+        os.environ.get("LEAGUEPEDIA_BOT_USER", ""),
+        os.environ.get("LEAGUEPEDIA_BOT_PASSWORD", ""),
+        cache_dir=cache_dir,
+    )
+
+
 def _leaguepedia_fetcher(cache_dir: Path) -> Fetch:
     clients: dict[bool, CargoClient] = {}
 
     def fetch(spec: EditionSpec, use_cache: bool) -> Snapshot:
         if use_cache not in clients:
-            clients[use_cache] = CargoClient(
-                os.environ.get("LEAGUEPEDIA_BOT_USER", ""),
-                os.environ.get("LEAGUEPEDIA_BOT_PASSWORD", ""),
-                cache_dir=cache_dir if use_cache else None,
-            )
+            clients[use_cache] = _client(cache_dir if use_cache else None)
         return fetch_edition(clients[use_cache], spec)
 
     return fetch
@@ -66,6 +73,38 @@ def _run(args: argparse.Namespace) -> int:
     print(markdown)
     print(f"Reports written to {args.report_dir}")
     return 0 if summary["ok"] else 1
+
+
+def _lineage(args: argparse.Namespace) -> int:
+    store = EntityStore.load(args.data_dir)
+    pages = [
+        ref.value
+        for team in store.teams.values()
+        for ref in team.external_refs
+        if (ref.provider, ref.key) == ("leaguepedia", "OverviewPage")
+    ]
+    try:
+        renames = fetch_renames(_client(None), pages)
+    except LeaguepediaError as error:
+        print(f"error: {error}", file=sys.stderr)
+        return 2
+    report = apply_lineage(store, renames)
+    if args.write and report.changed:
+        store.save(args.data_dir)
+    markdown = render_lineage(report)
+    args.report_dir.mkdir(parents=True, exist_ok=True)
+    (args.report_dir / "report.md").write_text(markdown, encoding="utf-8")
+    # Same shape as an import report, so the import workflow can open the PR the same way.
+    summary = {
+        "ok": True,
+        "editions": [{"provider": "leaguepedia"}],
+        "forced": 0,
+        "blocked": 0,
+        "autoMergeSafe": False,
+    }
+    (args.report_dir / "report.json").write_text(json.dumps(summary, indent=2) + "\n", "utf-8")
+    print(markdown)
+    return 0
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -109,6 +148,19 @@ def build_parser() -> argparse.ArgumentParser:
     run_cmd.add_argument("--cache-dir", type=Path, default=CACHE_DIR / "leaguepedia")
     run_cmd.add_argument("--report-dir", type=Path, default=CACHE_DIR / "reports")
     run_cmd.set_defaults(handler=_run)
+
+    lineage = commands.add_parser(
+        "lineage",
+        help="Group team identities into organizations from Leaguepedia's renames.",
+        description=(
+            "Renames and rebrands put team identities under one organization; acquisitions "
+            "link organizations. Always re-fetches. Without --write, only reports."
+        ),
+    )
+    lineage.add_argument("--write", action="store_true", help="write the changes to data/")
+    lineage.add_argument("--data-dir", type=Path, default=DATA_DIR)
+    lineage.add_argument("--report-dir", type=Path, default=CACHE_DIR / "reports")
+    lineage.set_defaults(handler=_lineage)
 
     schema = commands.add_parser("schema", help="Canonical data schema tools.")
     schema_commands = schema.add_subparsers(dest="schema_command", required=True)

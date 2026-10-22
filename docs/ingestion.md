@@ -103,6 +103,24 @@ ordinary updates.
 The repository needs **Allow auto-merge** enabled in its settings for live PRs to merge
 themselves.
 
+## Organization lineage
+
+Imports create one organization per new team identity, so a rebrand (SK Telecom T1 → T1) starts
+out as two organizations. `lol-ingest lineage` fixes that from Leaguepedia's `TeamRenames`
+table, following chains through names that never played internationally (Samsung Galaxy →
+KSV → Gen.G):
+
+- `rename` and `rebrand` put identities under one organization: the one of the most recently
+  named identity. Organizations left without identities are removed.
+- `acquire` keeps the organizations apart and records an `acquisition` link on the buyer.
+- Other verbs (`partner`) are listed in the report and ignored. The table's misspellings
+  (`acuire`, `reband`) and casing are accepted.
+
+Stats count titles and records per organization, so this decides whose history is whose. Run it
+after importing editions with new teams: locally with `uv run --env-file ../.env lol-ingest
+lineage` (add `--write` to apply), or through the import workflow with operation `lineage`,
+which opens a PR for review like any other import.
+
 ## Adding an edition
 
 1. Add it to `data/editions.yaml`: stages, the Leaguepedia pages, and how each page's schedule
