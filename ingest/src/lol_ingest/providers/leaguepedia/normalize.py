@@ -90,6 +90,10 @@ def _duration(value: str) -> int | None:
     return seconds
 
 
+def _undecided(team: str) -> bool:
+    return team.strip() in ("", "TBD")
+
+
 def _split(value: str, sep: str) -> list[str]:
     return [item.strip() for item in value.split(sep) if item.strip()]
 
@@ -234,6 +238,10 @@ class _Normalizer:
                 self.issue(
                     "error", "stage-unmapped", f"{match_id}: no stage for tab {row['Tab']!r}"
                 )
+                continue
+            # Live editions list future matches with "TBD" until they are drawn.
+            if _undecided(row["Team1"]) or _undecided(row["Team2"]):
+                self.gap(f"series:{match_id}", "teams not decided yet")
                 continue
             team1, team2 = self.team(row["Team1"]), self.team(row["Team2"])
             number = _int(row["NMatchInTab"])
@@ -446,7 +454,8 @@ class _Normalizer:
     def placements(self) -> list[Placement]:
         placements: list[Placement] = []
         for row in self.tables["results"]:
-            if row["Showmatch"] == "1":
+            # Live editions list every place up front, with no team until it's decided.
+            if row["Showmatch"] == "1" or _undecided(row["Team"]):
                 continue
             team = self.team(row["Team"])
             places = [n for part in row["Place"].split("-") if (n := _int(part)) is not None]

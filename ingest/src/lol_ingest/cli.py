@@ -46,6 +46,7 @@ def _run(args: argparse.Namespace) -> int:
         year=args.year,
         data_dir=args.data_dir,
         force=args.force,
+        status=args.status,
     )
     try:
         reports = run(options, _leaguepedia_fetcher(args.cache_dir), datetime.now(UTC))
@@ -53,6 +54,8 @@ def _run(args: argparse.Namespace) -> int:
         print(f"error: {error}", file=sys.stderr)
         return 2
 
+    if not reports:
+        print("No live editions; nothing to do.")
     markdown = render_markdown(reports)
     summary = render_json(reports)
     args.report_dir.mkdir(parents=True, exist_ok=True)
@@ -84,6 +87,12 @@ def build_parser() -> argparse.ArgumentParser:
     )
     run_cmd.add_argument("--tournament", default="all", help="worlds, msi, first-stand or all")
     run_cmd.add_argument("--year", default="all", help="a year such as 2024, or all")
+    run_cmd.add_argument(
+        "--status",
+        choices=("all", "live", "completed", "upcoming"),
+        default="all",
+        help="only editions with this registry status (the live sync uses 'live')",
+    )
     run_cmd.add_argument("--op", choices=OPERATIONS, default="dry-run")
     run_cmd.add_argument(
         "--provider",

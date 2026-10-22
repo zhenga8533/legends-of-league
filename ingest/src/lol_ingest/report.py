@@ -111,6 +111,16 @@ def render_markdown(reports: list[EditionReport]) -> str:
 def render_json(reports: list[EditionReport]) -> dict[str, Any]:
     return {
         "ok": not any(report.errors for report in reports),
+        # Safe to merge without review: nothing failed, and no verified record was changed or
+        # removed (provisional records of live editions may update freely).
+        "autoMergeSafe": not any(report.errors for report in reports)
+        and not any(change for report in reports if report.merge for change in report.merge.blocked)
+        and not any(
+            change.reason == "--force"
+            for report in reports
+            if report.merge
+            for change in report.merge.applied
+        ),
         "filesChanged": any(report.files_changed for report in reports),
         "blocked": sum(len(report.merge.blocked) for report in reports if report.merge),
         "forced": sum(
