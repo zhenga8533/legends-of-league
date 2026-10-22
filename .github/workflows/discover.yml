@@ -1,6 +1,8 @@
-name: Discover editions
+name: Weekly upkeep
 
-# Drafts registry entries for upcoming international events once Leaguepedia dates them.
+# Drafts registry entries for upcoming international events once Leaguepedia dates them, and
+# groups rebranded teams into organizations from Leaguepedia's renames. Each opens a PR for
+# review only when something changed.
 on:
   schedule:
     - cron: "17 6 * * 1"
@@ -20,24 +22,29 @@ jobs:
     permissions:
       pull-requests: read
     outputs:
-      pending: ${{ steps.pending.outputs.pending }}
+      draft-pending: ${{ steps.pending.outputs.draft }}
+      lineage-pending: ${{ steps.pending.outputs.lineage }}
     steps:
-      # A draft under review may carry the reviewer's fixes; a new run would supersede (close) it.
-      - name: Draft already under review?
+      # A PR under review may carry the reviewer's fixes; a new run would supersede (close) it.
+      - name: PRs already under review?
         id: pending
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          prs=$(gh pr list --repo "$GITHUB_REPOSITORY" --state open --label new-edition \
-            --json url --jq '.[].url')
-          if [[ -n "$prs" ]]; then
-            echo "pending=true" >> "$GITHUB_OUTPUT"
-            echo "Skipping until this is reviewed: $prs"
-          fi
+          for pair in draft:new-edition lineage:lineage; do
+            output=${pair%%:*}
+            label=${pair#*:}
+            prs=$(gh pr list --repo "$GITHUB_REPOSITORY" --state open --label "$label" \
+              --json url --jq '.[].url')
+            if [[ -n "$prs" ]]; then
+              echo "${output}=true" >> "$GITHUB_OUTPUT"
+              echo "Skipping $label until this is reviewed: $prs"
+            fi
+          done
 
   discover:
     needs: check
-    if: needs.check.outputs.pending != 'true'
+    if: needs.check.outputs.draft-pending != 'true'
     permissions:
       contents: write
       pull-requests: write
@@ -45,4 +52,17 @@ jobs:
     uses: ./.github/workflows/ingest.yml
     with:
       operation: discover
+    secrets: inherit
+
+  # After the discovery (run or skipped), so the two never push at once.
+  lineage:
+    needs: [check, discover]
+    if: ${{ !cancelled() && needs.check.result == 'success' && needs.check.outputs.lineage-pending != 'true' }}
+    permissions:
+      contents: write
+      pull-requests: write
+      actions: write
+    uses: ./.github/workflows/ingest.yml
+    with:
+      operation: lineage
     secrets: inherit

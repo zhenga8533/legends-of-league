@@ -128,14 +128,15 @@ KSV → Gen.G):
 - Other verbs (`partner`) are listed in the report and ignored. The table's misspellings
   (`acuire`, `reband`) and casing are accepted.
 
-Stats count titles and records per organization, so this decides whose history is whose. Run it
-after importing editions with new teams: locally with `uv run --env-file ../.env lol-ingest
-lineage` (add `--write` to apply), or through the import workflow with operation `lineage`,
-which opens a PR for review like any other import.
+Stats count titles and records per organization, so this decides whose history is whose. It
+runs weekly in the **Weekly upkeep** workflow (`.github/workflows/discover.yml`), which opens a
+PR labelled `lineage` only when Leaguepedia has new renames. That PR never auto-merges, and the
+weekly run skips while it is open. To run it yourself: `uv run --env-file ../.env lol-ingest
+lineage` (add `--write` to apply), or the import workflow with operation `lineage`.
 
 ## Adding an edition
 
-New editions of Worlds, MSI and First Stand are drafted for you. The **Discover editions**
+New editions of Worlds, MSI and First Stand are drafted for you. The **Weekly upkeep**
 workflow (`.github/workflows/discover.yml`, Mondays) runs `lol-ingest discover`, which reads
 Leaguepedia's `Tournaments` table. For each unregistered edition that starts within 60 days, it
 copies the tournament's previous edition: its stages, each page's tab mapping (matched by page
