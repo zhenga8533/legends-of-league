@@ -55,6 +55,23 @@ describe("edition views", () => {
     expect(upcoming[0]).not.toHaveProperty("score");
   });
 
+  it("shows an upcoming edition as its schedule, with nothing played", () => {
+    const upcoming = {
+      ...worlds,
+      edition: { ...worlds.edition, status: "upcoming" as const },
+      series: worlds.series.map((s) => ({ ...s, score: null, winner: null })),
+      games: [],
+      playerStats: [],
+      placements: [],
+    };
+    const matches = editionStages(
+      upcoming,
+      rulesetFor("ed:worlds-2024", archive.rulesets)!,
+    ).flatMap((stage) => stage.matches);
+    expect(matches).toHaveLength(worlds.series.length);
+    expect(matches.every((m) => m.score === undefined)).toBe(true);
+  });
+
   it("summarizes champion, runner-up and the final", () => {
     const summary = editionSummary(worlds);
     expect(summary).toMatchObject({ champion: "team:t1", runnerUp: "team:bilibili-gaming" });

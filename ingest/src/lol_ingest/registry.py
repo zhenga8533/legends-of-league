@@ -85,12 +85,15 @@ class Registry(CanonicalModel):
         return self
 
     def select(self, tournament: str, year: str, status: str = "all") -> list[EditionSpec]:
+        """`status` is a registry status, "all", or "active" (live or upcoming: what the live
+        sync follows)."""
+        statuses = {"all": None, "active": {"live", "upcoming"}}.get(status, {status})
         return [
             edition
             for edition in self.editions
             if tournament in ("all", edition.tournament)
             and year in ("all", str(edition.year))
-            and status in ("all", edition.status)
+            and (statuses is None or edition.status in statuses)
         ]
 
 

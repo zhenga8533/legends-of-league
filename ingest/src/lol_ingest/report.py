@@ -22,6 +22,8 @@ class EditionReport:
     gaps: list[Gap] = field(default_factory=list)
     new_entities: list[str] = field(default_factory=list)
     files_changed: bool = False
+    # An upcoming edition with its first result: its status was set to live.
+    started: bool = False
     # A live edition found finished: its status was set to completed and it was re-imported.
     completed: bool = False
 
@@ -59,6 +61,10 @@ def render_markdown(reports: list[EditionReport]) -> str:
             meta.append(f"snapshot `{report.snapshot_sha256[:12]}`")
         meta.append("**files changed**" if report.files_changed else "no file changes")
         out.append(" · ".join(meta) + "\n")
+        if report.started:
+            out.append(
+                "The first result is in, so its status in `data/editions.yaml` was set to `live`.\n"
+            )
         if report.completed:
             out.append(
                 "### 🏁 Edition finished\n\nEvery participant is placed and every series is "
@@ -133,6 +139,7 @@ def render_json(reports: list[EditionReport]) -> dict[str, Any]:
             for change in report.merge.applied
         ),
         "filesChanged": any(report.files_changed for report in reports),
+        "started": [report.edition for report in reports if report.started],
         "completed": [report.edition for report in reports if report.completed],
         "blocked": sum(len(report.merge.blocked) for report in reports if report.merge),
         "forced": sum(

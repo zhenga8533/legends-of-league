@@ -5,14 +5,16 @@ import sys
 from datetime import UTC, datetime
 from pathlib import Path
 
+from lol_ingest.discover import DRAFT_WINDOW_DAYS, discover, write_draft
+from lol_ingest.discover import render_markdown as render_discovery
 from lol_ingest.identity import EntityStore
 from lol_ingest.lineage import apply_lineage, fetch_renames
 from lol_ingest.lineage import render_markdown as render_lineage
-from lol_ingest.paths import CACHE_DIR, DATA_DIR
+from lol_ingest.paths import CACHE_DIR, DATA_DIR, RULESETS_DIR
 from lol_ingest.pipeline import Fetch, RunOptions, UsageError, run
 from lol_ingest.providers.leaguepedia.client import CargoClient, LeaguepediaError
 from lol_ingest.providers.leaguepedia.fetch import Snapshot, fetch_edition
-from lol_ingest.registry import EditionSpec
+from lol_ingest.registry import EditionSpec, load_registry
 from lol_ingest.report import render_json, render_markdown
 from lol_ingest.schema import render_schema
 
@@ -75,6 +77,12 @@ def _run(args: argparse.Namespace) -> int:
     return 0 if summary["ok"] else 1
 
 
+def _write_reports(report_dir: Path, markdown: str, summary: dict[str, object]) -> None:
+    report_dir.mkdir(parents=True, exist_ok=True)
+    (report_dir / "report.md").write_text(markdown, encoding="utf-8")
+    (report_dir / "report.json").write_text(json.dumps(summary, indent=2) + "\n", "utf-8")
+
+
 def _lineage(args: argparse.Namespace) -> int:
     store = EntityStore.load(args.data_dir)
     pages = [
@@ -92,17 +100,47 @@ def _lineage(args: argparse.Namespace) -> int:
     if args.write and report.changed:
         store.save(args.data_dir)
     markdown = render_lineage(report)
-    args.report_dir.mkdir(parents=True, exist_ok=True)
-    (args.report_dir / "report.md").write_text(markdown, encoding="utf-8")
     # Same shape as an import report, so the import workflow can open the PR the same way.
-    summary = {
+    summary: dict[str, object] = {
         "ok": True,
         "editions": [{"provider": "leaguepedia"}],
         "forced": 0,
         "blocked": 0,
+        "completed": [],
         "autoMergeSafe": False,
     }
-    (args.report_dir / "report.json").write_text(json.dumps(summary, indent=2) + "\n", "utf-8")
+    _write_reports(args.report_dir, markdown, summary)
+    print(markdown)
+    return 0
+
+
+def _discover(args: argparse.Namespace) -> int:
+    try:
+        drafts, skipped = discover(
+            _client(None),
+            load_registry(args.data_dir),
+            EntityStore.load(args.data_dir),
+            datetime.now(UTC).date(),
+            args.within_days,
+        )
+    except LeaguepediaError as error:
+        print(f"error: {error}", file=sys.stderr)
+        return 2
+    if args.write:
+        for draft in drafts:
+            write_draft(draft, args.data_dir, args.rulesets_dir)
+    markdown = render_discovery(drafts, skipped)
+    # Same shape as an import report, so the import workflow can open the PR the same way.
+    summary: dict[str, object] = {
+        "ok": True,
+        "editions": [{"provider": "leaguepedia"}],
+        "forced": 0,
+        "blocked": 0,
+        "completed": [],
+        "drafted": [draft.slug for draft in drafts],
+        "autoMergeSafe": False,
+    }
+    _write_reports(args.report_dir, markdown, summary)
     print(markdown)
     return 0
 
@@ -128,9 +166,9 @@ def build_parser() -> argparse.ArgumentParser:
     run_cmd.add_argument("--year", default="all", help="a year such as 2024, or all")
     run_cmd.add_argument(
         "--status",
-        choices=("all", "live", "completed", "upcoming"),
+        choices=("all", "active", "live", "completed", "upcoming"),
         default="all",
-        help="only editions with this registry status (the live sync uses 'live')",
+        help="only editions with this registry status; active = live or upcoming (the live sync)",
     )
     run_cmd.add_argument("--op", choices=OPERATIONS, default="dry-run")
     run_cmd.add_argument(
@@ -161,6 +199,21 @@ def build_parser() -> argparse.ArgumentParser:
     lineage.add_argument("--data-dir", type=Path, default=DATA_DIR)
     lineage.add_argument("--report-dir", type=Path, default=CACHE_DIR / "reports")
     lineage.set_defaults(handler=_lineage)
+
+    discover_cmd = commands.add_parser(
+        "discover",
+        help="Draft registry entries and rulesets for upcoming editions on Leaguepedia.",
+        description=(
+            "Finds unregistered editions of registered tournaments starting within --within-days "
+            "and drafts each from the tournament's previous edition. Without --write, only reports."
+        ),
+    )
+    discover_cmd.add_argument("--write", action="store_true", help="write the drafts")
+    discover_cmd.add_argument("--within-days", type=int, default=DRAFT_WINDOW_DAYS)
+    discover_cmd.add_argument("--data-dir", type=Path, default=DATA_DIR)
+    discover_cmd.add_argument("--rulesets-dir", type=Path, default=RULESETS_DIR)
+    discover_cmd.add_argument("--report-dir", type=Path, default=CACHE_DIR / "reports")
+    discover_cmd.set_defaults(handler=_discover)
 
     schema = commands.add_parser("schema", help="Canonical data schema tools.")
     schema_commands = schema.add_subparsers(dest="schema_command", required=True)

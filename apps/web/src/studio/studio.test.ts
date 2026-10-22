@@ -150,3 +150,21 @@ describe("an event in progress", () => {
     expect(payload.forecast).toBeUndefined();
   });
 });
+
+describe("an upcoming event", () => {
+  const upcoming = buildPayload({
+    ...worlds2024,
+    edition: { ...worlds2024.edition, status: "upcoming" },
+    series: worlds2024.series.map((s) => ({ ...s, score: null, winner: null })),
+    games: [],
+    playerStats: [],
+    placements: [],
+  });
+
+  it("simulates from the start, with pre-event odds and no live forecast", () => {
+    expect(upcoming.edition.live).toBe(false);
+    expect(upcoming.forecast).toBeUndefined();
+    const { result } = simulate(defaultScenario(upcoming.edition.slug), upcoming);
+    expect(result.placements.size).toBe(upcoming.participants.length);
+  });
+});

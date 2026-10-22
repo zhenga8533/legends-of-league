@@ -45,7 +45,7 @@ def _snapshot_files(directory: Path) -> dict[str, bytes]:
 
 def run(options: RunOptions, fetch: Fetch, now: datetime) -> list[EditionReport]:
     specs = load_registry(options.data_dir).select(options.tournament, options.year, options.status)
-    if not specs and options.status == "live":
+    if not specs and options.status in ("live", "active"):
         return []  # The scheduled live sync runs even when no event is live.
     if not specs:
         raise UsageError(
@@ -65,11 +65,17 @@ def run(options: RunOptions, fetch: Fetch, now: datetime) -> list[EditionReport]
     reports = []
     for spec in specs:
         report = _run_edition(spec, options, fetch_once, store, now)
+        if spec.status == "upcoming" and _started(report):
+            set_status(options.data_dir, spec.tournament, spec.year, "live")
+            spec = spec.model_copy(update={"status": "live"})
+            report = _run_edition(spec, options, fetch_once, store, now)
+            report.started = True
         if spec.status == "live" and _finished(report):
             set_status(options.data_dir, spec.tournament, spec.year, "completed")
             finished = spec.model_copy(update={"status": "completed"})
+            started = report.started
             report = _run_edition(finished, options, fetch_once, store, now)
-            report.completed = True
+            report.started, report.completed = started, True
         reports.append(report)
 
     if options.operation in ("import", "refresh") and store.added:
@@ -77,13 +83,25 @@ def run(options: RunOptions, fetch: Fetch, now: datetime) -> list[EditionReport]
     return reports
 
 
+def _written(report: EditionReport) -> EditionData | None:
+    if report.errors or report.merge is None or report.operation not in ("import", "refresh"):
+        return None
+    return EditionData.from_records(report.merge.records)
+
+
+def _started(report: EditionReport) -> bool:
+    """Whether an upcoming edition just written has its first result."""
+    data = _written(report)
+    return data is not None and any(series.score is not None for series in data.series)
+
+
 def _finished(report: EditionReport) -> bool:
     """Whether a live edition just written is over: every participant has a place and every
     series a result. Leaguepedia fills places in over a few hours after a final, so waiting for
     all of them (not just the champion) avoids verifying a half-updated results table."""
-    if report.errors or report.merge is None or report.operation not in ("import", "refresh"):
+    data = _written(report)
+    if data is None:
         return False
-    data = EditionData.from_records(report.merge.records)
     placed = {placement.team for placement in data.placements}
     return (
         bool(data.series)
