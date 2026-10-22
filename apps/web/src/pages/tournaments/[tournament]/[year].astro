@@ -1,6 +1,7 @@
 ---
 import { type EditionBundle, editionStages, editionSummary, idSlug } from "@lol/data";
 import { StageBoard } from "../../../components/board/StageBoard";
+import LiveBadge from "../../../components/LiveBadge.astro";
 import StandingsTable from "../../../components/StandingsTable.astro";
 import TeamLink from "../../../components/TeamLink.astro";
 import BaseLayout from "../../../layouts/BaseLayout.astro";
@@ -37,6 +38,7 @@ const stages = editionStages(bundle, rules).map((stage) => ({
   })),
 }));
 const summary = editionSummary(bundle);
+const live = edition.status === "live";
 const gaps = bundle.provenance.gaps ?? [];
 
 function sourceLabel(url: string): string {
@@ -62,10 +64,19 @@ function sourceLabel(url: string): string {
   ]}
 >
   <header class="mb-8 space-y-2">
-    <h1 class="text-3xl font-bold tracking-tight sm:text-4xl">{edition.name}</h1>
+    <h1 class="text-3xl font-bold tracking-tight sm:text-4xl">
+      {edition.name}
+      {live && <LiveBadge />}
+    </h1>
     <p class="text-muted">
       {dateRange(edition.dates.start, edition.dates.end)} · {edition.participants.length} teams
     </p>
+    {live && (
+      <p class="text-sm text-muted">
+        In progress. Results are imported from Leaguepedia several times an hour; upcoming matches
+        appear once both teams are known, and places only once they are decided.
+      </p>
+    )}
     {summary.champion && (
       <p class="text-lg">
         <span class="text-muted">Champion:</span>{" "}
@@ -103,7 +114,7 @@ function sourceLabel(url: string): string {
         class="rounded bg-accent px-3 py-1 font-semibold text-bg hover:bg-accent-strong"
         href={withBase(`/simulate/#ed=${idSlug(edition.id)}`)}
       >
-        Simulate this edition
+        {live ? "Forecast the rest" : "Simulate this edition"}
       </a>
     </nav>
   </header>

@@ -8,6 +8,7 @@ import Studio from "../../studio/Studio";
 const editions = editionsNewestFirst.map((bundle) => ({
   slug: editionSlug(bundle),
   name: bundle.edition.name,
+  live: bundle.edition.status === "live",
 }));
 ---
 

@@ -5,7 +5,10 @@ export const ScenarioSchema = z.object({
   v: z.literal(1),
   edition: z.string().regex(/^[a-z0-9-]+$/),
   seed: z.string().min(1).max(64),
-  /** Stage to simulate from; earlier stages keep their real results. Null simulates everything. */
+  /**
+   * Stage to simulate from; earlier stages keep their real results. Null simulates everything,
+   * and `NOW` keeps every real result so far (events in progress).
+   */
   from: z.string().nullable(),
   /** Picked winners by match: `${stage}|${teamA}|${teamB}` with the teams sorted. */
   picks: z.record(z.string(), z.string()),
@@ -15,8 +18,11 @@ export const ScenarioSchema = z.object({
 
 export type Scenario = z.infer<typeof ScenarioSchema>;
 
-export function defaultScenario(edition: string): Scenario {
-  return { v: 1, edition, seed: "1", from: null, picks: {}, ratings: {} };
+/** No ruleset stage has this ID. */
+export const NOW = "now";
+
+export function defaultScenario(edition: string, live = false): Scenario {
+  return { v: 1, edition, seed: "1", from: live ? NOW : null, picks: {}, ratings: {} };
 }
 
 export function pickKey(stage: string, teams: readonly string[]): string {
@@ -49,12 +55,15 @@ export function decodeScenario(text: string): Scenario | undefined {
 }
 
 /** Reads `#s=<scenario>` or `#ed=<edition>` (links from edition pages). */
-export function scenarioFromHash(hash: string): Scenario | undefined {
+export function scenarioFromHash(
+  hash: string,
+  defaults: (edition: string) => Scenario = defaultScenario,
+): Scenario | undefined {
   const params = new URLSearchParams(hash.replace(/^#/, ""));
   const encoded = params.get("s");
   if (encoded) return decodeScenario(encoded);
   const edition = params.get("ed");
-  return edition && /^[a-z0-9-]+$/.test(edition) ? defaultScenario(edition) : undefined;
+  return edition && /^[a-z0-9-]+$/.test(edition) ? defaults(edition) : undefined;
 }
 
 export function parseScenarioFile(text: string): Scenario | undefined {

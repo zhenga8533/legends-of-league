@@ -1,6 +1,7 @@
 ---
 import { editionSummary, idSlug } from "@lol/data";
 import type { Tournament } from "@lol/schema";
+import LiveBadge from "../../../components/LiveBadge.astro";
 import TeamLink from "../../../components/TeamLink.astro";
 import BaseLayout from "../../../layouts/BaseLayout.astro";
 import { archive, dateRange, editionsNewestFirst, paths } from "../../../lib/archive";
@@ -62,7 +63,15 @@ const editions = editionsNewestFirst.filter((b) => b.edition.tournament === tour
                   </a>
                 </th>
                 <td>{dateRange(bundle.edition.dates.start, bundle.edition.dates.end)}</td>
-                <td>{summary.champion ? <TeamLink team={summary.champion} /> : "—"}</td>
+                <td>
+                  {summary.champion ? (
+                    <TeamLink team={summary.champion} />
+                  ) : bundle.edition.status === "live" ? (
+                    <LiveBadge />
+                  ) : (
+                    "—"
+                  )}
+                </td>
                 <td>{summary.runnerUp ? <TeamLink team={summary.runnerUp} /> : "—"}</td>
                 <td class="num">
                   {summary.final && score ? (

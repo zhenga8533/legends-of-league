@@ -5,11 +5,15 @@ export interface TeamLabel {
   tag: string;
 }
 
-export type BoardMatch = MatchSummary & {
-  key: string;
-  /** Archive pages link each match to its page. */
-  href?: string;
-};
+type Result = "score" | "winner" | "loser" | "source";
+
+/** A match to show; without a result it is upcoming (archive pages of an event in progress). */
+export type BoardMatch = Omit<MatchSummary, Result> &
+  Partial<Pick<MatchSummary, Result>> & {
+    key: string;
+    /** Archive pages link each match to its page. */
+    href?: string;
+  };
 
 export interface BoardStage extends Omit<StageSummary, "matches"> {
   matches: BoardMatch[];
