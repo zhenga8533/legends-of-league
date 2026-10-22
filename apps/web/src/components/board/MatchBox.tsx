@@ -46,12 +46,15 @@ export function MatchBox({
         key={i}
         type="button"
         className={`${rowClass} hover:bg-surface-2`}
-        // Starts with the visible tag, so voice control can target it by what's on screen.
-        aria-label={`${tag(team)}: pick ${name(team)} to win (${summary})`}
         aria-pressed={match.source === "picked" && won}
         onClick={() => onPick?.(match, team)}
       >
         {inner}
+        {/* The name is the visible tag and score plus this, so voice control can target what's
+            on screen (WCAG 2.5.3). */}
+        <span className="sr-only">
+          : pick {name(team)} to win ({summary})
+        </span>
       </button>
     ) : (
       <span key={i} className={rowClass}>
