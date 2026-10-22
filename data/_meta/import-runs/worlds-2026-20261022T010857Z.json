@@ -1,0 +1,69 @@
+{
+  "run": "worlds-2026-20261022T010857Z",
+  "at": "2026-10-22T01:08:57.043647+00:00",
+  "operation": "refresh",
+  "force": false,
+  "summary": {
+    "edition": "worlds-2026",
+    "operation": "refresh",
+    "provider": "leaguepedia",
+    "snapshotSha256": "d74f238c78cb354d9ac936810cd90d15cea74b028f5d243803449e48b602579d",
+    "filesChanged": true,
+    "counts": {
+      "edition": {
+        "added": 1
+      },
+      "series": {
+        "added": 14
+      },
+      "game": {
+        "added": 22
+      },
+      "stats": {
+        "added": 220
+      },
+      "roster": {
+        "added": 150
+      },
+      "placement": {
+        "added": 3
+      }
+    },
+    "unchanged": 0,
+    "blocked": [],
+    "errors": [],
+    "warnings": 0,
+    "gaps": 32,
+    "newEntities": [
+      "org:ls",
+      "player:brandao",
+      "player:career",
+      "player:chengz",
+      "player:chika",
+      "player:curse-rai-yamada",
+      "player:duduhh",
+      "player:feisty",
+      "player:hachani",
+      "player:harky",
+      "player:independent",
+      "player:invokid",
+      "player:jiaqi",
+      "player:kratos-ngo-uc-khanh",
+      "player:lanterninho",
+      "player:loki-lee-sang-min",
+      "player:pout",
+      "player:sansan",
+      "player:siuloong",
+      "player:siwoo",
+      "player:smash-shin-geum-jae",
+      "player:suga",
+      "player:teacherma",
+      "player:thanatos-park-seung-gyu",
+      "player:veigar-v2",
+      "player:zest-kim-dong-min",
+      "player:zhuo",
+      "team:ls",
+      "team:mvk-esports"
+    ]
+  }
+}
