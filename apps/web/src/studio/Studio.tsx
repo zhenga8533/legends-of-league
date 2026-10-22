@@ -14,6 +14,7 @@ import {
   pickKey,
   scenarioFromHash,
 } from "./scenario";
+import { type SavedScenario, readSaved, writeSaved } from "./saved";
 import { setupScenario } from "./setup";
 import { useMonteCarlo } from "./useMonteCarlo";
 
@@ -44,6 +45,7 @@ export default function Studio({
   const [payload, setPayload] = useState<EditionPayload | null>(null);
   const [loadError, setLoadError] = useState<string | null>(null);
   const [notice, setNotice] = useState("");
+  const [saved, setSaved] = useState<SavedScenario[]>(readSaved);
   const [iterations, setIterations] = useState(10_000);
   const montecarlo = useMonteCarlo();
   const fileInput = useRef<HTMLInputElement>(null);
@@ -131,6 +133,46 @@ export default function Studio({
     link.click();
     URL.revokeObjectURL(link.href);
   };
+  const saveScenario = () => {
+    const from =
+      scenario.from === null
+        ? "from the start"
+        : scenario.from === NOW
+          ? "from now"
+          : `from ${payload?.ruleset.stages.find((s) => s.id === scenario.from)?.name ?? scenario.from}`;
+    const picks = Object.keys(scenario.picks).length;
+    const entry: SavedScenario = {
+      id: `${Date.now()}-${newSeed()}`,
+      name: [
+        // The edition list is there before the edition's data has loaded.
+        editions.find((e) => e.slug === scenario.edition)?.name ?? scenario.edition,
+        from,
+        `seed ${scenario.seed}`,
+        ...(picks > 0 ? [`${picks} pick${picks === 1 ? "" : "s"}`] : []),
+      ].join(" · "),
+      savedAt: new Date().toISOString(),
+      scenario,
+    };
+    const same = encodeScenario(scenario);
+    const next = [entry, ...saved.filter((s) => encodeScenario(s.scenario) !== same)];
+    if (writeSaved(next)) {
+      setSaved(readSaved());
+      setNotice("Saved in this browser.");
+    } else {
+      setNotice("This browser won't store scenarios. Use Copy link or Export instead.");
+    }
+  };
+  const openSaved = (entry: SavedScenario) => {
+    if (!editions.some((e) => e.slug === entry.scenario.edition)) {
+      setNotice("That saved scenario's edition is no longer available.");
+      return;
+    }
+    setScenario(entry.scenario);
+    setNotice(`Opened “${entry.name}”.`);
+  };
+  const removeSaved = (id: string) => {
+    if (writeSaved(saved.filter((s) => s.id !== id))) setSaved(readSaved());
+  };
   const importScenario = async (file: File | undefined) => {
     if (!file) return;
     const parsed = parseScenarioFile(await file.text());
@@ -203,6 +245,9 @@ export default function Studio({
             </span>
           </label>
           <div className="flex flex-wrap items-end gap-2 text-sm">
+            <button type="button" className="btn" onClick={saveScenario}>
+              Save
+            </button>
             <button type="button" className="btn" onClick={share}>
               Copy link
             </button>
@@ -225,6 +270,35 @@ export default function Studio({
         <p className="text-sm text-muted" aria-live="polite">
           {notice}
         </p>
+        {saved.length > 0 && (
+          <details className="text-sm">
+            <summary className="cursor-pointer">Saved in this browser ({saved.length})</summary>
+            <ul className="mt-2 divide-y divide-border">
+              {saved.map((entry) => (
+                <li key={entry.id} className="flex flex-wrap items-center gap-x-3 gap-y-1 py-1.5">
+                  <button
+                    type="button"
+                    className="text-left font-medium hover:text-accent hover:underline"
+                    onClick={() => openSaved(entry)}
+                  >
+                    {entry.name}
+                  </button>
+                  <span className="text-xs text-muted">
+                    {new Date(entry.savedAt).toLocaleDateString("en", { dateStyle: "medium" })}
+                  </span>
+                  <button
+                    type="button"
+                    className="ml-auto text-xs text-muted hover:text-loss"
+                    aria-label={`Remove “${entry.name}”`}
+                    onClick={() => removeSaved(entry.id)}
+                  >
+                    Remove
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </details>
+        )}
       </section>
 
       {loadError && <p role="alert">Couldn't load this edition's data ({loadError}).</p>}
