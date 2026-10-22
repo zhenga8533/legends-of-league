@@ -2,7 +2,7 @@ name: Weekly upkeep
 
 # Drafts registry entries for upcoming international events once Leaguepedia dates them, and
 # groups rebranded teams into organizations from Leaguepedia's renames. Each opens a PR for
-# review only when something changed.
+# review only when something changed. Also deletes branches left by auto-merged data PRs.
 on:
   schedule:
     - cron: "17 6 * * 1"
@@ -53,6 +53,33 @@ jobs:
     with:
       operation: discover
     secrets: inherit
+
+  # Data PRs merged by the default token keep their branches (GitHub's delete-on-merge doesn't
+  # apply to them). Delete data branches without an open PR, once they're a day old so an
+  # import opening its PR right now is never caught.
+  prune:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: write
+      pull-requests: read
+    steps:
+      - name: Delete finished data branches
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          cutoff=$(date -u -d '1 day ago' +%s)
+          open=$(gh pr list --repo "$GITHUB_REPOSITORY" --state open --limit 200 \
+            --json headRefName --jq '.[].headRefName')
+          gh api --paginate "repos/$GITHUB_REPOSITORY/branches" --jq '.[].name' |
+          { grep '^data/' || true; } |
+          while read -r branch; do
+            if grep -qxF "$branch" <<< "$open"; then continue; fi
+            updated=$(gh api "repos/$GITHUB_REPOSITORY/commits/$branch" --jq '.commit.committer.date')
+            if (( $(date -u -d "$updated" +%s) > cutoff )); then continue; fi
+            gh api -X DELETE "repos/$GITHUB_REPOSITORY/git/refs/heads/$branch"
+            echo "Deleted $branch"
+          done
 
   # After the discovery (run or skipped), so the two never push at once.
   lineage:
