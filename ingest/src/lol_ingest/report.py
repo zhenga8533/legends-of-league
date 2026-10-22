@@ -22,6 +22,8 @@ class EditionReport:
     gaps: list[Gap] = field(default_factory=list)
     new_entities: list[str] = field(default_factory=list)
     files_changed: bool = False
+    # A live edition found finished: its status was set to completed and it was re-imported.
+    completed: bool = False
 
     @property
     def errors(self) -> list[Issue]:
@@ -57,6 +59,13 @@ def render_markdown(reports: list[EditionReport]) -> str:
             meta.append(f"snapshot `{report.snapshot_sha256[:12]}`")
         meta.append("**files changed**" if report.files_changed else "no file changes")
         out.append(" · ".join(meta) + "\n")
+        if report.completed:
+            out.append(
+                "### 🏁 Edition finished\n\nEvery participant is placed and every series is "
+                "played, so its status in `data/editions.yaml` was set to `completed` and its "
+                "records are now verified. Review the final results before merging; later "
+                "changes will need review too.\n"
+            )
 
         if report.merge:
             out.append("| Records | Added | Modified | Removed | Blocked | Unchanged* |")
@@ -114,6 +123,8 @@ def render_json(reports: list[EditionReport]) -> dict[str, Any]:
         # Safe to merge without review: nothing failed, and no verified record was changed or
         # removed (provisional records of live editions may update freely).
         "autoMergeSafe": not any(report.errors for report in reports)
+        # Finishing an edition edits the hand-curated registry and verifies its records.
+        and not any(report.completed for report in reports)
         and not any(change for report in reports if report.merge for change in report.merge.blocked)
         and not any(
             change.reason == "--force"
@@ -122,6 +133,7 @@ def render_json(reports: list[EditionReport]) -> dict[str, Any]:
             for change in report.merge.applied
         ),
         "filesChanged": any(report.files_changed for report in reports),
+        "completed": [report.edition for report in reports if report.completed],
         "blocked": sum(len(report.merge.blocked) for report in reports if report.merge),
         "forced": sum(
             1

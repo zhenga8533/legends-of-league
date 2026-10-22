@@ -179,6 +179,7 @@ jobs:
           labels=(data)
           if [[ "$(jq '.forced' .cache/reports/report.json)" != 0 ]]; then labels+=(modifies-verified); fi
           if [[ "$(jq '.blocked' .cache/reports/report.json)" != 0 ]]; then labels+=(blocked-changes); fi
+          if [[ "$(jq '.completed | length' .cache/reports/report.json)" != 0 ]]; then labels+=(edition-completed); fi
           for label in "${labels[@]}"; do gh label create "$label" --force >/dev/null; done
 
           {
