@@ -29,16 +29,10 @@ const totals = {
       or forecasting events in progress.
     </p>
     <p class="flex flex-wrap gap-3 pt-2">
-      <a
-        href={withBase("/tournaments/")}
-        class="rounded bg-accent px-4 py-2 font-semibold text-bg hover:bg-accent-strong"
-      >
+      <a href={withBase("/tournaments/")} class="btn btn-primary btn-lg">
         Browse tournaments
       </a>
-      <a
-        href={withBase("/search/")}
-        class="rounded border border-border px-4 py-2 hover:border-accent"
-      >
+      <a href={withBase("/search/")} class="btn btn-lg">
         Search teams and players
       </a>
     </p>
@@ -51,7 +45,7 @@ const totals = {
       </h2>
       <ul class="grid gap-4 md:grid-cols-2">
         {live.map((bundle) => (
-          <li class="space-y-2 rounded border border-loss bg-surface p-4">
+          <li class="card space-y-2 border-loss p-4">
             <h3 class="flex flex-wrap items-center gap-2 font-semibold">
               <a class="hover:text-accent" href={paths.edition(bundle)}>
                 {bundle.edition.name}
@@ -88,7 +82,7 @@ const totals = {
         ["Games", totals.games],
         ["Teams", totals.teams],
       ].map(([label, value]) => (
-        <div class="rounded border border-border bg-surface p-4">
+        <div class="card p-4">
           <dt class="text-sm text-muted">{label}</dt>
           <dd class="text-2xl font-semibold tabular-nums">{value}</dd>
         </div>
@@ -104,7 +98,7 @@ const totals = {
       {recent.map((bundle) => {
         const summary = editionSummary(bundle);
         return (
-          <li class="rounded border border-border bg-surface p-4">
+          <li class="card p-4">
             <h3 class="font-semibold">
               <a class="hover:text-accent" href={paths.edition(bundle)}>
                 {bundle.edition.name}

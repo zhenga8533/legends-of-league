@@ -91,7 +91,7 @@ const editionName = (seriesId: string) => editionOfSeries(seriesId).edition.name
       ["win-rates", "Win rates"],
       ["records", "Records"],
     ].map(([id, label]) => (
-      <a class="rounded border border-border px-3 py-1 hover:border-accent" href={`#${id}`}>
+      <a class="btn" href={`#${id}`}>
         {label}
       </a>
     ))}
@@ -103,7 +103,7 @@ const editionName = (seriesId: string) => editionOfSeries(seriesId).edition.name
         Titles and finals
       </h2>
       <div class="table-scroll" tabindex="0" role="region" aria-label="Titles by organization">
-        <table class="data-table">
+        <table class="data-table" data-sortable>
           <caption class="sr-only">Titles and finals appearances by organization</caption>
           <thead>
             <tr>
@@ -166,7 +166,7 @@ const editionName = (seriesId: string) => editionOfSeries(seriesId).edition.name
         one-to-one (EU, EU LCS and LEC); regions that merged or split are kept apart.
       </p>
       <div class="table-scroll" tabindex="0" role="region" aria-label="Titles by region">
-        <table class="data-table">
+        <table class="data-table" data-sortable>
           <caption class="sr-only">
             Titles, finals and cross-region series records by region
           </caption>
@@ -227,7 +227,7 @@ const editionName = (seriesId: string) => editionOfSeries(seriesId).edition.name
       <details>
         <summary class="cursor-pointer text-sm">Show the numbers</summary>
         <div class="table-scroll mt-2" tabindex="0" role="region" aria-label="Win rate by year">
-          <table class="data-table">
+          <table class="data-table" data-sortable>
             <caption class="sr-only">Cross-region series records by year</caption>
             <thead>
               <tr>
@@ -272,7 +272,7 @@ const editionName = (seriesId: string) => editionOfSeries(seriesId).edition.name
         coaches are not counted.
       </p>
       <div class="table-scroll" tabindex="0" role="region" aria-label="Most decorated players">
-        <table class="data-table">
+        <table class="data-table" data-sortable>
           <caption class="sr-only">Players with the most international titles</caption>
           <thead>
             <tr>
@@ -321,7 +321,7 @@ const editionName = (seriesId: string) => editionOfSeries(seriesId).edition.name
         counted from series scores, so they include the few games without a recorded scoreboard.
       </p>
       <div class="table-scroll" tabindex="0" role="region" aria-label="Win rates">
-        <table class="data-table">
+        <table class="data-table" data-sortable>
           <caption class="sr-only">International win rates by organization</caption>
           <thead>
             <tr>
@@ -373,7 +373,7 @@ const editionName = (seriesId: string) => editionOfSeries(seriesId).edition.name
       </h2>
       <dl class="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
         {records.longestGame && (
-          <div class="rounded border border-border bg-surface p-4">
+          <div class="card p-4">
             <dt class="text-sm text-muted">Longest game</dt>
             <dd>
               <a class="link text-xl font-semibold" href={gameLink(records.longestGame.game)}>
@@ -388,7 +388,7 @@ const editionName = (seriesId: string) => editionOfSeries(seriesId).edition.name
           </div>
         )}
         {records.shortestGame && (
-          <div class="rounded border border-border bg-surface p-4">
+          <div class="card p-4">
             <dt class="text-sm text-muted">Shortest game</dt>
             <dd>
               <a class="link text-xl font-semibold" href={gameLink(records.shortestGame.game)}>
@@ -411,7 +411,7 @@ const editionName = (seriesId: string) => editionOfSeries(seriesId).edition.name
         ).map(
           ([label, record, stat]) =>
             record && (
-              <div class="rounded border border-border bg-surface p-4">
+              <div class="card p-4">
                 <dt class="text-sm text-muted">{label} in a game</dt>
                 <dd>
                   <a class="link text-xl font-semibold" href={gameLink(record.game)}>

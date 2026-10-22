@@ -83,10 +83,7 @@ const status = (bundle.provenance.records ?? []).find(
 
   <div class="space-y-10">
     {games.map(({ game, blue, red }) => (
-      <section
-        aria-labelledby={`game-${game.number}`}
-        class="space-y-4 rounded border border-border bg-surface p-4"
-      >
+      <section aria-labelledby={`game-${game.number}`} class="card space-y-4 p-4">
         <h2
           id={`game-${game.number}`}
           class="flex flex-wrap items-baseline gap-x-3 text-xl font-semibold"

@@ -30,12 +30,12 @@ const editions = editionsNewestFirst.filter((b) => b.edition.tournament === tour
     { label: tournament.name },
   ]}
 >
-  <h1 class="mb-6 text-3xl font-bold tracking-tight">{tournament.name}</h1>
+  <h1 class="mb-6 text-3xl font-bold tracking-tight sm:text-4xl">{tournament.name}</h1>
   {editions.length === 0 ? (
     <p class="text-muted">No editions of this tournament have been imported yet.</p>
   ) : (
     <div class="table-scroll" tabindex="0" role="region" aria-label="Scrollable table">
-      <table class="data-table">
+      <table class="data-table" data-sortable>
         <caption class="sr-only">{tournament.name} editions</caption>
         <thead>
           <tr>
@@ -62,7 +62,9 @@ const editions = editionsNewestFirst.filter((b) => b.edition.tournament === tour
                     {bundle.edition.name}
                   </a>
                 </th>
-                <td>{dateRange(bundle.edition.dates.start, bundle.edition.dates.end)}</td>
+                <td data-sort={bundle.edition.dates.start?.replaceAll("-", "") ?? ""}>
+                  {dateRange(bundle.edition.dates.start, bundle.edition.dates.end)}
+                </td>
                 <td>
                   {summary.champion ? (
                     <TeamLink team={summary.champion} />

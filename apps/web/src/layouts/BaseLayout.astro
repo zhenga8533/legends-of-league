@@ -97,7 +97,7 @@ const MARK = `<rect width="32" height="32" rx="7" fill="#0d0f14"/><path d="M9 7h
         <button
           type="button"
           id="theme-toggle"
-          class="grid size-8 place-items-center rounded border border-border hover:border-accent"
+          class="btn size-8 p-0"
           aria-label="Dark mode"
           aria-pressed="false"
         >
@@ -151,6 +151,9 @@ const MARK = `<rect width="32" height="32" rx="7" fill="#0d0f14"/><path d="M9 7h
         </p>
       </div>
     </footer>
+    <script>
+      import "../scripts/sortable";
+    </script>
     <script>
       const toggle = document.getElementById("theme-toggle");
       const root = document.documentElement;

@@ -31,11 +31,12 @@ const { edition } = bundle;
 const rules = ruleset(bundle);
 const stages = editionStages(bundle, rules).map((stage) => ({
   ...stage,
-  matches: stage.matches.map((match) => ({
-    ...match,
-    key: match.seriesId,
-    href: paths.series(match.seriesId),
-  })),
+  // Slots whose teams aren't decided yet have no series, so no page to link to.
+  matches: stage.matches.map((match, index) =>
+    match.seriesId
+      ? { ...match, key: match.seriesId, href: paths.series(match.seriesId) }
+      : { ...match, key: `${stage.id}:${index}` },
+  ),
 }));
 const summary = editionSummary(bundle);
 const live = edition.status === "live";
@@ -103,23 +104,17 @@ function sourceLabel(url: string): string {
     )}
     <nav aria-label="Stages" class="flex flex-wrap gap-2 pt-2 text-sm">
       {stages.map((stage) => (
-        <a
-          class="rounded border border-border px-3 py-1 hover:border-accent"
-          href={`#stage-${stage.id}`}
-        >
+        <a class="btn" href={`#stage-${stage.id}`}>
           {stage.name}
         </a>
       ))}
-      <a class="rounded border border-border px-3 py-1 hover:border-accent" href="#standings">
+      <a class="btn" href="#standings">
         Standings
       </a>
-      <a class="rounded border border-border px-3 py-1 hover:border-accent" href="#format">
+      <a class="btn" href="#format">
         Format
       </a>
-      <a
-        class="rounded bg-accent px-3 py-1 font-semibold text-bg hover:bg-accent-strong"
-        href={withBase(`/simulate/#ed=${idSlug(edition.id)}`)}
-      >
+      <a class="btn btn-primary" href={withBase(`/simulate/#ed=${idSlug(edition.id)}`)}>
         {live ? "Forecast the rest" : "Simulate this edition"}
       </a>
     </nav>
