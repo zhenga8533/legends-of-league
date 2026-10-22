@@ -92,6 +92,13 @@ strict mode, and fails in each of these cases:
 This replaces the "ruleset replay inside the import" from the original plan. The engine is
 TypeScript, so CI checks replays across the whole dataset on every PR, data PRs included.
 
+An edition still being played (`live` or `upcoming`) is replayed with `inProgress`: the
+resolver is lenient, and whatever hasn't been recorded is played out with coin flips. The test
+then checks that every played series was used, and that each place decided so far matches
+`results.json`. Series that are scheduled but not played (`ScheduledSeries`, no score) fix
+pairings only. A simulated match consumes its scheduled series, so it is never offered again as
+a later pairing.
+
 Draws (Swiss rounds, groups, bracket positions) come from the recorded series. A team's next
 unplayed series in a stage defines its pairing, and the engine checks that pairing is legal:
 same record, no rematch, and so on.
@@ -126,6 +133,11 @@ The Studio runs the same engine in the browser, under `apps/web/src/studio/`.
 - **Resolver** (`setup.ts`): stages before the "simulate from" stage replay their real
   results through a lenient `ReplayResolver`. Picks then apply to the remaining matches, and
   can never override a real result. Everything else is simulated.
+- **Live editions:** "simulate from" also offers **Now**, the default for a live edition. It
+  keeps every real result so far plus the known pairings of upcoming series. The payload adds
+  those scheduled series and a precomputed **live forecast**: 2,000 runs of the default
+  scenario, shown until you run your own. Edition pages show played matches from the replay
+  and upcoming ones as Leaguepedia labels them, and never show anything simulated.
 - **Monte Carlo** runs in a Web Worker (`worker.ts`) in chunks of 250 seeded runs. Chunks
   report progress and merge exactly, so the page stays responsive. An e2e test checks that the
   main thread never stalls during a 10,000-run batch.
