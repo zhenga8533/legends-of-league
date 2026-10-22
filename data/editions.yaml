@@ -530,8 +530,8 @@ editions:
             "Day *": groups
             "*": knockout
 
-  # Live: imported provisionally and refreshed by the live sync until it's over; then set to
-  # completed so its records are verified on the next import.
+  # Live: refreshed by the live sync, which sets it to completed (in a PR for review) once every
+  # participant is placed and every series played.
   - tournament: worlds
     year: 2026
     name: 2026 World Championship

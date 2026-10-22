@@ -71,6 +71,12 @@ function sourceLabel(url: string): string {
     <p class="text-muted">
       {dateRange(edition.dates.start, edition.dates.end)} · {edition.participants.length} teams
     </p>
+    {edition.status === "upcoming" && (
+      <p class="text-sm text-muted">
+        Upcoming. The schedule fills in as Leaguepedia publishes it, and results appear once the
+        event starts.
+      </p>
+    )}
     {live && (
       <p class="text-sm text-muted">
         In progress. Results are imported from Leaguepedia several times an hour; upcoming matches

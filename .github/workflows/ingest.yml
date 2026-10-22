@@ -13,9 +13,9 @@ on:
         type: string
         default: all
       operation:
-        description: "dry-run: report only · import: write changes · refresh: re-fetch and write · validate: check committed data · lineage: group teams into organizations (ignores tournament, year, status)"
+        description: "dry-run: report only · import: write changes · refresh: re-fetch and write · validate: check committed data · lineage: group teams into organizations · discover: draft upcoming editions (lineage and discover ignore tournament, year, status)"
         type: choice
-        options: [dry-run, import, refresh, validate, lineage]
+        options: [dry-run, import, refresh, validate, lineage, discover]
         default: dry-run
       provider:
         description: Data provider
@@ -31,15 +31,15 @@ on:
         type: string
         default: ""
       status:
-        description: Only editions with this status (live = what the live sync imports)
+        description: Only editions with this status (active = live or upcoming, what the live sync imports)
         type: choice
-        options: [all, live, completed, upcoming]
+        options: [all, active, live, completed, upcoming]
         default: all
       auto_merge:
         description: Auto-merge the PR once CI passes, if the report marks it safe
         type: boolean
         default: false
-  # The live sync calls this with status "live".
+  # The live sync calls this with status "active"; the weekly discovery with operation "discover".
   workflow_call:
     inputs:
       tournament: { type: string, default: all }
@@ -85,7 +85,7 @@ jobs:
           if [[ "$FORCE" == true && "$CONFIRMATION" != "overwrite verified data" ]]; then
             echo "::error::force requires force_confirmation = 'overwrite verified data'"; exit 1
           fi
-          if [[ ! "$STATUS" =~ ^(all|live|completed|upcoming)$ ]]; then
+          if [[ ! "$STATUS" =~ ^(all|active|live|completed|upcoming)$ ]]; then
             echo "::error::unknown status '$STATUS'"; exit 1
           fi
 
@@ -110,6 +110,8 @@ jobs:
         run: |
           if [[ "$OPERATION" == lineage ]]; then
             args=(lineage --write)
+          elif [[ "$OPERATION" == discover ]]; then
+            args=(discover --write)
           else
             args=(run --tournament "$TOURNAMENT" --year "$YEAR" --op "$OPERATION" --provider "$PROVIDER" --status "$STATUS")
             if [[ "$FORCE" == true ]]; then args+=(--force); fi
@@ -135,9 +137,10 @@ jobs:
 
       - name: Detect data changes
         id: changes
-        if: steps.ingest.outputs.exit_code == '0' && (inputs.operation == 'import' || inputs.operation == 'refresh' || inputs.operation == 'lineage')
+        if: steps.ingest.outputs.exit_code == '0' && (inputs.operation == 'import' || inputs.operation == 'refresh' || inputs.operation == 'lineage' || inputs.operation == 'discover')
         run: |
-          if [[ -n "$(git status --porcelain -- data)" ]]; then
+          # Discovery drafts rulesets too.
+          if [[ -n "$(git status --porcelain -- data rulesets)" ]]; then
             echo "changed=true" >> "$GITHUB_OUTPUT"
           else
             echo "No data changes; nothing to propose."
@@ -162,8 +165,9 @@ jobs:
           AUTO_MERGE: ${{ inputs.auto_merge }}
         run: |
           # Live syncs get their own branch prefix, so they only supersede each other.
-          if [[ "$OPERATION" == lineage ]]; then slug=lineage
+          if [[ "$OPERATION" == lineage || "$OPERATION" == discover ]]; then slug="$OPERATION"
           elif [[ "$STATUS" == all ]]; then slug="${TOURNAMENT}-${YEAR}"
+          elif [[ "$STATUS" == active ]]; then slug=live
           else slug="${STATUS}"; fi
           # "auto" resolves to a concrete provider; name the one actually used.
           used=$(jq -r '[.editions[].provider // empty] | unique | join(",")' .cache/reports/report.json)
@@ -172,7 +176,7 @@ jobs:
           git config user.email "legends-of-league-data@users.noreply.github.com"
           git remote set-url origin "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
           git switch -c "$branch"
-          git add data
+          git add data rulesets
           git commit -m "data(${slug}): ${OPERATION} from ${used}"
           git push -u origin "$branch"
 
@@ -180,6 +184,7 @@ jobs:
           if [[ "$(jq '.forced' .cache/reports/report.json)" != 0 ]]; then labels+=(modifies-verified); fi
           if [[ "$(jq '.blocked' .cache/reports/report.json)" != 0 ]]; then labels+=(blocked-changes); fi
           if [[ "$(jq '.completed | length' .cache/reports/report.json)" != 0 ]]; then labels+=(edition-completed); fi
+          if [[ "$(jq '.drafted // [] | length' .cache/reports/report.json)" != 0 ]]; then labels+=(new-edition); fi
           for label in "${labels[@]}"; do gh label create "$label" --force >/dev/null; done
 
           {

@@ -1,6 +1,7 @@
 name: Live sync
 
-# Keeps editions marked `status: live` in data/editions.yaml up to date while they are played.
+# Keeps editions marked `status: live` or `upcoming` in data/editions.yaml up to date: upcoming
+# ones show their schedule and go live with their first result.
 on:
   schedule:
     - cron: "7,37 * * * *"
@@ -27,13 +28,13 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
-      - name: Any live editions?
+      - name: Any live or upcoming editions?
         id: live
         run: |
-          if grep -qE '^\s+status: live\s*$' data/editions.yaml; then
+          if grep -qE '^\s+status: (live|upcoming)\s*$' data/editions.yaml; then
             echo "live=true" >> "$GITHUB_OUTPUT"
           else
-            echo "No live editions; nothing to do."
+            echo "No live or upcoming editions; nothing to do."
           fi
       # A finished edition's PR waits for review; a new sync would supersede (close) it.
       - name: Waiting on a finished edition?
@@ -74,6 +75,6 @@ jobs:
       tournament: all
       year: all
       operation: refresh
-      status: live
+      status: active
       auto_merge: true
     secrets: inherit

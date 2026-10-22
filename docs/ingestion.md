@@ -84,15 +84,18 @@ for review.
 
 ## Live events
 
-An edition being played has `status: live` in `data/editions.yaml`. Its records are imported as
-`provisional`, so results filling in, rounds being drawn and places being decided all apply as
-ordinary updates.
+An edition's lifecycle in `data/editions.yaml` is `upcoming` → `live` → `completed`. Upcoming and
+live editions are imported as `provisional`, so the schedule appearing, results filling in,
+rounds being drawn and places being decided all apply as ordinary updates.
+
+- An `upcoming` edition becomes `live` when an import finds its first result. That PR can
+  auto-merge: it is the expected next step.
 
 - Series whose teams aren't decided yet (`TBD` or empty on Leaguepedia) are skipped and listed
   as gaps, and so are placements without a team. They arrive on a later run.
 - The **Live sync** workflow (`.github/workflows/live-sync.yml`) runs twice an hour. If any
-  edition is live, it calls the import workflow with status `live`, operation `refresh` and
-  auto-merge on. Live PRs use the `data/live-<run>` branches and supersede each other.
+  edition is live or upcoming, it calls the import workflow with status `active`, operation
+  `refresh` and auto-merge on. Live PRs use the `data/live-<run>` branches and supersede each other.
 - Auto-merges are made with the default token, whose pushes don't trigger the deploy workflow,
   so each live sync run also dispatches a deploy when `main` has changed since the last one.
   The site, its live forecast included, is at most about half an hour behind the data.
@@ -125,6 +128,25 @@ lineage` (add `--write` to apply), or through the import workflow with operation
 which opens a PR for review like any other import.
 
 ## Adding an edition
+
+New editions of Worlds, MSI and First Stand are drafted for you. The **Discover editions**
+workflow (`.github/workflows/discover.yml`, Mondays) runs `lol-ingest discover`, which reads
+Leaguepedia's `Tournaments` table. For each unregistered edition that starts within 60 days, it
+copies the tournament's previous edition: its stages, each page's tab mapping (matched by page
+name, such as `/Main Event`) and its ruleset, marked as a draft. It opens a PR labelled
+`new-edition` that lists the tabs Leaguepedia has so far, against the copied mapping. Formats
+change most years, so review it:
+
+- Fix the stages, the tab mapping and the ruleset where the format changed, and remove the
+  ruleset's DRAFT note.
+- Pages with no counterpart in the previous edition get a guessed mapping and are flagged.
+- Run a `dry-run` of the edition to catch new region spellings.
+
+The PR never auto-merges, and discovery skips its weekly run while it is open, so your fixes on
+its branch are kept. Locally: `uv run --env-file ../.env lol-ingest discover` (add `--write` to
+apply). Once merged, the live sync takes it from there.
+
+To add an edition by hand (or another tournament):
 
 1. Add it to `data/editions.yaml`: stages, the Leaguepedia pages, and how each page's schedule
    tabs map onto stages.

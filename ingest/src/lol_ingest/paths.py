@@ -4,6 +4,7 @@ from pathlib import Path
 # editable mode from the repo (uv sync), so this resolves to the checkout.
 REPO_ROOT = Path(__file__).resolve().parents[3]
 DATA_DIR = REPO_ROOT / "data"
+RULESETS_DIR = REPO_ROOT / "rulesets"
 CACHE_DIR = REPO_ROOT / ".cache"
 
 

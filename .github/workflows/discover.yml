@@ -1,0 +1,48 @@
+name: Discover editions
+
+# Drafts registry entries for upcoming international events once Leaguepedia dates them.
+on:
+  schedule:
+    - cron: "17 6 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: discover
+  cancel-in-progress: false
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      pull-requests: read
+    outputs:
+      pending: ${{ steps.pending.outputs.pending }}
+    steps:
+      # A draft under review may carry the reviewer's fixes; a new run would supersede (close) it.
+      - name: Draft already under review?
+        id: pending
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          prs=$(gh pr list --repo "$GITHUB_REPOSITORY" --state open --label new-edition \
+            --json url --jq '.[].url')
+          if [[ -n "$prs" ]]; then
+            echo "pending=true" >> "$GITHUB_OUTPUT"
+            echo "Skipping until this is reviewed: $prs"
+          fi
+
+  discover:
+    needs: check
+    if: needs.check.outputs.pending != 'true'
+    permissions:
+      contents: write
+      pull-requests: write
+      actions: write
+    uses: ./.github/workflows/ingest.yml
+    with:
+      operation: discover
+    secrets: inherit

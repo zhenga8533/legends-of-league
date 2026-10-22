@@ -147,3 +147,33 @@ def test_a_dry_run_never_completes_an_edition(data_dir: Path, snapshot: Snapshot
 
     assert not report.completed
     assert load_registry(data_dir).select("worlds", "2024")[0].status == "live"
+
+
+def before_any_result(snapshot: Snapshot) -> Snapshot:
+    """The same edition before its first match: scheduled, nothing played, nobody placed."""
+    tables = copy.deepcopy(snapshot.tables)
+    for row in tables["matches"]:
+        row.update(Team1Score="", Team2Score="", Winner="", MVP="")
+    for table in ("games", "drafts", "playerStats"):
+        tables[table] = []
+    tables["results"] = [{**r, "Team": ""} for r in tables["results"]]
+    return Snapshot(tables)
+
+
+def test_an_upcoming_edition_goes_live_with_its_first_result(
+    data_dir: Path, snapshot: Snapshot
+) -> None:
+    set_status(data_dir, "upcoming")
+
+    waiting = run_once(data_dir, before_any_result(snapshot), 1, status="active")
+
+    assert not waiting.started and waiting.errors == []
+    assert load_registry(data_dir).select("worlds", "2024")[0].status == "upcoming"
+    assert render_json([waiting])["autoMergeSafe"] is True
+
+    started = run_once(data_dir, before_final(snapshot), 2, status="active")
+
+    assert started.started and not started.completed
+    assert load_registry(data_dir).select("worlds", "2024")[0].status == "live"
+    assert render_json([started])["autoMergeSafe"] is True
+    assert render_json([started])["started"] == ["worlds-2024"]
