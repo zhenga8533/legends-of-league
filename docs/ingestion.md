@@ -73,9 +73,9 @@ phrase), status (only editions with that status) and auto-merge.
   using the report as the description, and closes older open PRs for the same selection.
 - Labels: `data`, plus `blocked-changes` or `modifies-verified` when they apply.
 
-PRs opened with the default `GITHUB_TOKEN` don't trigger CI on their own, so the workflow
-dispatches CI on the PR branch (`workflow_dispatch` is allowed for that token), and the required
-checks report on the PR. A GitHub App (the `DATA_BOT_APP_ID` variable and `DATA_BOT_PRIVATE_KEY`
+CI runs on PRs opened with the default `GITHUB_TOKEN` wait for approval ("action required"), so
+the workflow approves the PR's run once it appears. A run dispatched on the same commit would
+not count as the PR's required checks. A GitHub App (the `DATA_BOT_APP_ID` variable and `DATA_BOT_PRIVATE_KEY`
 secret) is used instead when configured.
 
 With auto-merge on, the PR merges itself once CI passes, but only if the report's
