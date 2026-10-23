@@ -31,7 +31,8 @@
     {"record":"series:2026 Season World Championship/Main Event_Round 5_2","reason":"teams not decided yet"},
     {"record":"series:2026 Season World Championship/Main Event_Round 5_3","reason":"teams not decided yet"},
     {"record":"series:2026 Season World Championship/Main Event_Semifinals_1","reason":"teams not decided yet"},
-    {"record":"series:2026 Season World Championship/Main Event_Semifinals_2","reason":"teams not decided yet"}
+    {"record":"series:2026 Season World Championship/Main Event_Semifinals_2","reason":"teams not decided yet"},
+    {"record":"series:ser:worlds-2026-swiss-round-1-02","reason":"game records for 0 of 1 games"}
   ],
   "records": [
     {"key":"edition:ed:worlds-2026","provider":"leaguepedia","ref":"2026 Season World Championship","hash":"cd830b33d8f4e386","importRun":"worlds-2026-20261022T010857Z","status":"provisional"},
@@ -218,7 +219,7 @@
     {"key":"series:ser:worlds-2026-play-in-round-2-01","provider":"leaguepedia","ref":"2026 Season World Championship/Play-In_Round 2_1","hash":"f496dd2e1ef68c7b","importRun":"worlds-2026-20261022T010857Z","status":"provisional"},
     {"key":"series:ser:worlds-2026-play-in-round-2-02","provider":"leaguepedia","ref":"2026 Season World Championship/Play-In_Round 2_2","hash":"66c01a53cf2258d2","importRun":"worlds-2026-20261022T010857Z","status":"provisional"},
     {"key":"series:ser:worlds-2026-swiss-round-1-01","provider":"leaguepedia","ref":"2026 Season World Championship/Main Event_Round 1_1","hash":"a6ada6bb1983916a","importRun":"worlds-2026-20261023T182802Z","status":"provisional"},
-    {"key":"series:ser:worlds-2026-swiss-round-1-02","provider":"leaguepedia","ref":"2026 Season World Championship/Main Event_Round 1_2","hash":"3872ab007fcf108d","importRun":"worlds-2026-20261022T010857Z","status":"provisional"},
+    {"key":"series:ser:worlds-2026-swiss-round-1-02","provider":"leaguepedia","ref":"2026 Season World Championship/Main Event_Round 1_2","hash":"f37954644e2bf756","importRun":"worlds-2026-20261023T184959Z","status":"provisional"},
     {"key":"series:ser:worlds-2026-swiss-round-1-03","provider":"leaguepedia","ref":"2026 Season World Championship/Main Event_Round 1_3","hash":"1f50337ef2fdaf54","importRun":"worlds-2026-20261022T010857Z","status":"provisional"},
     {"key":"series:ser:worlds-2026-swiss-round-1-04","provider":"leaguepedia","ref":"2026 Season World Championship/Main Event_Round 1_4","hash":"6b545515f3835f68","importRun":"worlds-2026-20261022T010857Z","status":"provisional"},
     {"key":"series:ser:worlds-2026-swiss-round-1-05","provider":"leaguepedia","ref":"2026 Season World Championship/Main Event_Round 1_5","hash":"14e6c8ba394f1c56","importRun":"worlds-2026-20261022T010857Z","status":"provisional"},
