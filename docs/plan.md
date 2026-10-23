@@ -258,6 +258,8 @@ GitHub Pages serves the site under the base path `/legends-of-league/` unless we
 | **Phase 2** | Historical power rankings. Upset-probability analysis. Monte Carlo distribution charts. Format comparisons (the same field run through different formats). Alternative seeding experiments. Cross-era comparisons. Champion meta views. |
 | **Phase 3 / experimental** | Domestic-league ingestion for better ratings, Glicko-2/Bradley–Terry models. Discontinued events (All-Star, Rift Rivals, IWCI, Mid-Season Cup 2020). Prediction challenges and leaderboards (these need a backend and accounts). Internationalization. |
 
+*Since v1 (October 2026):* the backlog lives in [GitHub issues](https://github.com/zhenga8533/legends-of-league/issues), labelled `phase 2` and `phase 3`, along with the data-corrections file and filterable players and teams lists. Prediction challenges and internationalization aren't filed: the first needs a backend, which the static site doesn't have, and there is no demand for the second yet.
+
 ---
 
 ## 8. Engineering workflow
