@@ -1,0 +1,33 @@
+{
+  "run": "worlds-2026-20261024T005140Z",
+  "at": "2026-10-24T00:51:40.193246+00:00",
+  "operation": "refresh",
+  "force": false,
+  "summary": {
+    "edition": "worlds-2026",
+    "operation": "refresh",
+    "provider": "leaguepedia",
+    "snapshotSha256": "fb4f2220b216be3d0ce56b3864a5fe3c210c07be20ad9313188c326800b996c3",
+    "filesChanged": true,
+    "counts": {
+      "edition": {},
+      "series": {
+        "modified": 2
+      },
+      "game": {
+        "added": 1
+      },
+      "stats": {
+        "added": 10
+      },
+      "roster": {},
+      "placement": {}
+    },
+    "unchanged": 474,
+    "blocked": [],
+    "errors": [],
+    "warnings": 1,
+    "gaps": 33,
+    "newEntities": []
+  }
+}
