@@ -15,7 +15,9 @@
     {"record":"series:2026 Season World Championship/Main Event_Round 5_2","reason":"teams not decided yet"},
     {"record":"series:2026 Season World Championship/Main Event_Round 5_3","reason":"teams not decided yet"},
     {"record":"series:2026 Season World Championship/Main Event_Semifinals_1","reason":"teams not decided yet"},
-    {"record":"series:2026 Season World Championship/Main Event_Semifinals_2","reason":"teams not decided yet"}
+    {"record":"series:2026 Season World Championship/Main Event_Semifinals_2","reason":"teams not decided yet"},
+    {"record":"series:ser:worlds-2026-swiss-round-3-06","reason":"game records for 0 of 1 games"},
+    {"record":"series:ser:worlds-2026-swiss-round-3-07","reason":"game records for 0 of 1 games"}
   ],
   "records": [
     {"key":"edition:ed:worlds-2026","provider":"leaguepedia","ref":"2026 Season World Championship","hash":"cd830b33d8f4e386","importRun":"worlds-2026-20261022T010857Z","status":"provisional"},
@@ -53,7 +55,7 @@
     {"key":"game:game:worlds-2026-swiss-round-2-02-g1","provider":"leaguepedia","ref":"2026 Season World Championship/Main Event_Round 2_2_1","hash":"3dc0e8a5719b2f27","importRun":"worlds-2026-20261026T005632Z","status":"provisional"},
     {"key":"game:game:worlds-2026-swiss-round-2-03-g1","provider":"leaguepedia","ref":"2026 Season World Championship/Main Event_Round 2_3_1","hash":"776e1a35191b81c9","importRun":"worlds-2026-20261026T005632Z","status":"provisional"},
     {"key":"game:game:worlds-2026-swiss-round-2-04-g1","provider":"leaguepedia","ref":"2026 Season World Championship/Main Event_Round 2_4_1","hash":"d83f02a1ed0b51fb","importRun":"worlds-2026-20261026T005632Z","status":"provisional"},
-    {"key":"game:game:worlds-2026-swiss-round-2-05-g1","provider":"leaguepedia","ref":"2026 Season World Championship/Main Event_Round 2_5_1","hash":"940fedf0db7fed4c","importRun":"worlds-2026-20261026T005632Z","status":"provisional"},
+    {"key":"game:game:worlds-2026-swiss-round-2-05-g1","provider":"leaguepedia","ref":"2026 Season World Championship/Main Event_Round 2_5_1","hash":"fb56e130eb72dada","importRun":"worlds-2026-20261026T194548Z","status":"provisional"},
     {"key":"game:game:worlds-2026-swiss-round-2-06-g1","provider":"leaguepedia","ref":"2026 Season World Championship/Main Event_Round 2_6_1","hash":"c7b8c97f1ad9cea9","importRun":"worlds-2026-20261026T005632Z","status":"provisional"},
     {"key":"game:game:worlds-2026-swiss-round-2-07-g1","provider":"leaguepedia","ref":"2026 Season World Championship/Main Event_Round 2_7_1","hash":"013ec88716e7fb97","importRun":"worlds-2026-20261026T005632Z","status":"provisional"},
     {"key":"game:game:worlds-2026-swiss-round-2-08-g1","provider":"leaguepedia","ref":"2026 Season World Championship/Main Event_Round 2_8_1","hash":"7ce1e59032616188","importRun":"worlds-2026-20261026T005632Z","status":"provisional"},
@@ -64,6 +66,7 @@
     {"key":"game:game:worlds-2026-swiss-round-3-04-g1","provider":"leaguepedia","ref":"2026 Season World Championship/Main Event_Round 3_4_1","hash":"7a9a793d3c94ded2","importRun":"worlds-2026-20261026T005632Z","status":"provisional"},
     {"key":"game:game:worlds-2026-swiss-round-3-04-g2","provider":"leaguepedia","ref":"2026 Season World Championship/Main Event_Round 3_4_2","hash":"f6645faac41b4185","importRun":"worlds-2026-20261026T005632Z","status":"provisional"},
     {"key":"game:game:worlds-2026-swiss-round-3-04-g3","provider":"leaguepedia","ref":"2026 Season World Championship/Main Event_Round 3_4_3","hash":"e422e29ec24c3f6d","importRun":"worlds-2026-20261026T005632Z","status":"provisional"},
+    {"key":"game:game:worlds-2026-swiss-round-3-05-g1","provider":"leaguepedia","ref":"2026 Season World Championship/Main Event_Round 3_5_1","hash":"993ca2dbc772c273","importRun":"worlds-2026-20261026T194548Z","status":"provisional"},
     {"key":"placement:team:cloud9","provider":"leaguepedia","ref":"2026 Season World Championship/Cloud9","hash":"34f827077801be47","importRun":"worlds-2026-20261022T010857Z","status":"provisional"},
     {"key":"placement:team:furia","provider":"leaguepedia","ref":"2026 Season World Championship/FURIA","hash":"9ccf69da03e90ffa","importRun":"worlds-2026-20261022T010857Z","status":"provisional"},
     {"key":"placement:team:mvk-esports","provider":"leaguepedia","ref":"2026 Season World Championship/MVK Esports","hash":"d51f5571eba738e6","importRun":"worlds-2026-20261022T010857Z","status":"provisional"},
@@ -244,9 +247,9 @@
     {"key":"series:ser:worlds-2026-swiss-round-3-02","provider":"leaguepedia","ref":"2026 Season World Championship/Main Event_Round 3_2","hash":"135f8a8b5d5f80d9","importRun":"worlds-2026-20261026T005632Z","status":"provisional"},
     {"key":"series:ser:worlds-2026-swiss-round-3-03","provider":"leaguepedia","ref":"2026 Season World Championship/Main Event_Round 3_3","hash":"a254a26fe418af3d","importRun":"worlds-2026-20261026T005632Z","status":"provisional"},
     {"key":"series:ser:worlds-2026-swiss-round-3-04","provider":"leaguepedia","ref":"2026 Season World Championship/Main Event_Round 3_4","hash":"3d895375e725fcae","importRun":"worlds-2026-20261026T005632Z","status":"provisional"},
-    {"key":"series:ser:worlds-2026-swiss-round-3-05","provider":"leaguepedia","ref":"2026 Season World Championship/Main Event_Round 3_5","hash":"8caae3c22353f6a9","importRun":"worlds-2026-20261026T005632Z","status":"provisional"},
-    {"key":"series:ser:worlds-2026-swiss-round-3-06","provider":"leaguepedia","ref":"2026 Season World Championship/Main Event_Round 3_6","hash":"517d657106731e14","importRun":"worlds-2026-20261026T005632Z","status":"provisional"},
-    {"key":"series:ser:worlds-2026-swiss-round-3-07","provider":"leaguepedia","ref":"2026 Season World Championship/Main Event_Round 3_7","hash":"77e5290ca381331f","importRun":"worlds-2026-20261026T005632Z","status":"provisional"},
+    {"key":"series:ser:worlds-2026-swiss-round-3-05","provider":"leaguepedia","ref":"2026 Season World Championship/Main Event_Round 3_5","hash":"54d31ba420ca6fad","importRun":"worlds-2026-20261026T194548Z","status":"provisional"},
+    {"key":"series:ser:worlds-2026-swiss-round-3-06","provider":"leaguepedia","ref":"2026 Season World Championship/Main Event_Round 3_6","hash":"c58bebcf5323d364","importRun":"worlds-2026-20261026T194548Z","status":"provisional"},
+    {"key":"series:ser:worlds-2026-swiss-round-3-07","provider":"leaguepedia","ref":"2026 Season World Championship/Main Event_Round 3_7","hash":"5fde9aed6e5b07c5","importRun":"worlds-2026-20261026T194548Z","status":"provisional"},
     {"key":"series:ser:worlds-2026-swiss-round-3-08","provider":"leaguepedia","ref":"2026 Season World Championship/Main Event_Round 3_8","hash":"30d33c31ae513b86","importRun":"worlds-2026-20261026T005632Z","status":"provisional"},
     {"key":"stats:game:worlds-2026-play-in-final-round-3-01-g1/player:busio","provider":"leaguepedia","ref":"2026 Season World Championship/Play-In_Round 3_1_1/Busio","hash":"6a7ca0d7abaca54e","importRun":"worlds-2026-20261022T010857Z","status":"provisional"},
     {"key":"stats:game:worlds-2026-play-in-final-round-3-01-g1/player:caliste","provider":"leaguepedia","ref":"2026 Season World Championship/Play-In_Round 3_1_1/Caliste","hash":"df667311f6f46ff0","importRun":"worlds-2026-20261022T010857Z","status":"provisional"},
@@ -697,6 +700,16 @@
     {"key":"stats:game:worlds-2026-swiss-round-3-04-g3/player:isles","provider":"leaguepedia","ref":"2026 Season World Championship/Main Event_Round 3_4_3/Isles","hash":"2e4a1b0626641c33","importRun":"worlds-2026-20261026T005632Z","status":"provisional"},
     {"key":"stats:game:worlds-2026-swiss-round-3-04-g3/player:kiin","provider":"leaguepedia","ref":"2026 Season World Championship/Main Event_Round 3_4_3/Kiin","hash":"6e2e56ddc5bf4a13","importRun":"worlds-2026-20261026T005632Z","status":"provisional"},
     {"key":"stats:game:worlds-2026-swiss-round-3-04-g3/player:ruler","provider":"leaguepedia","ref":"2026 Season World Championship/Main Event_Round 3_4_3/Ruler","hash":"7783dcf7435abb54","importRun":"worlds-2026-20261026T005632Z","status":"provisional"},
-    {"key":"stats:game:worlds-2026-swiss-round-3-04-g3/player:saint-kang-sung-in","provider":"leaguepedia","ref":"2026 Season World Championship/Main Event_Round 3_4_3/Saint (Kang Sung-in)","hash":"625ab43a9b0de994","importRun":"worlds-2026-20261026T005632Z","status":"provisional"}
+    {"key":"stats:game:worlds-2026-swiss-round-3-04-g3/player:saint-kang-sung-in","provider":"leaguepedia","ref":"2026 Season World Championship/Main Event_Round 3_4_3/Saint (Kang Sung-in)","hash":"625ab43a9b0de994","importRun":"worlds-2026-20261026T005632Z","status":"provisional"},
+    {"key":"stats:game:worlds-2026-swiss-round-3-05-g1/player:doggo","provider":"leaguepedia","ref":"2026 Season World Championship/Main Event_Round 3_5_1/Doggo","hash":"9d366784199e50cc","importRun":"worlds-2026-20261026T194548Z","status":"provisional"},
+    {"key":"stats:game:worlds-2026-swiss-round-3-05-g1/player:doran-choi-hyeon-jun","provider":"leaguepedia","ref":"2026 Season World Championship/Main Event_Round 3_5_1/Doran (Choi Hyeon-jun)","hash":"328572259ae1e99e","importRun":"worlds-2026-20261026T194548Z","status":"provisional"},
+    {"key":"stats:game:worlds-2026-swiss-round-3-05-g1/player:faker","provider":"leaguepedia","ref":"2026 Season World Championship/Main Event_Round 3_5_1/Faker","hash":"b03cb3afb877cf37","importRun":"worlds-2026-20261026T194548Z","status":"provisional"},
+    {"key":"stats:game:worlds-2026-swiss-round-3-05-g1/player:keria","provider":"leaguepedia","ref":"2026 Season World Championship/Main Event_Round 3_5_1/Keria","hash":"137f43c28567545b","importRun":"worlds-2026-20261026T194548Z","status":"provisional"},
+    {"key":"stats:game:worlds-2026-swiss-round-3-05-g1/player:kino","provider":"leaguepedia","ref":"2026 Season World Championship/Main Event_Round 3_5_1/Kino","hash":"32f4f0fdeca613c3","importRun":"worlds-2026-20261026T194548Z","status":"provisional"},
+    {"key":"stats:game:worlds-2026-swiss-round-3-05-g1/player:oner","provider":"leaguepedia","ref":"2026 Season World Championship/Main Event_Round 3_5_1/Oner","hash":"b7d1c2e603e6a9d7","importRun":"worlds-2026-20261026T194548Z","status":"provisional"},
+    {"key":"stats:game:worlds-2026-swiss-round-3-05-g1/player:peyz","provider":"leaguepedia","ref":"2026 Season World Championship/Main Event_Round 3_5_1/Peyz","hash":"2d554c2bc25ea6f8","importRun":"worlds-2026-20261026T194548Z","status":"provisional"},
+    {"key":"stats:game:worlds-2026-swiss-round-3-05-g1/player:pout","provider":"leaguepedia","ref":"2026 Season World Championship/Main Event_Round 3_5_1/POUT","hash":"06bab1e465c6329f","importRun":"worlds-2026-20261026T194548Z","status":"provisional"},
+    {"key":"stats:game:worlds-2026-swiss-round-3-05-g1/player:rest","provider":"leaguepedia","ref":"2026 Season World Championship/Main Event_Round 3_5_1/Rest","hash":"2da7cf1ff7048fda","importRun":"worlds-2026-20261026T194548Z","status":"provisional"},
+    {"key":"stats:game:worlds-2026-swiss-round-3-05-g1/player:shad0w","provider":"leaguepedia","ref":"2026 Season World Championship/Main Event_Round 3_5_1/Shad0w","hash":"38cb8bdf71ee15c6","importRun":"worlds-2026-20261026T194548Z","status":"provisional"}
   ]
 }
