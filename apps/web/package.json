@@ -12,7 +12,7 @@
     "test:e2e": "playwright test"
   },
   "dependencies": {
-    "astro": "^7.4.0",
+    "astro": "^7.4.1",
     "@astrojs/react": "^7.1.0",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
@@ -20,7 +20,7 @@
     "zod": "^4.6.0"
   },
   "devDependencies": {
-    "@astrojs/check": "^0.9.10",
+    "@astrojs/check": "^0.9.11",
     "@axe-core/playwright": "^4.14.0",
     "@lol/data": "workspace:*",
     "@lol/schema": "workspace:*",
