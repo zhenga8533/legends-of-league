@@ -2,7 +2,8 @@
   "gaps": [
     {"record":"series:2026 Season World Championship/Main Event_Finals_1","reason":"teams not decided yet"},
     {"record":"series:2026 Season World Championship/Main Event_Semifinals_1","reason":"teams not decided yet"},
-    {"record":"series:2026 Season World Championship/Main Event_Semifinals_2","reason":"teams not decided yet"}
+    {"record":"series:2026 Season World Championship/Main Event_Semifinals_2","reason":"teams not decided yet"},
+    {"record":"series:ser:worlds-2026-knockout-quarterfinals-01","reason":"game records for 0 of 3 games"}
   ],
   "records": [
     {"key":"edition:ed:worlds-2026","provider":"leaguepedia","ref":"2026 Season World Championship","hash":"cd830b33d8f4e386","importRun":"worlds-2026-20261022T010857Z","status":"provisional"},
@@ -241,7 +242,7 @@
     {"key":"roster:team:top-esports/player:tian/jungle","provider":"leaguepedia","ref":"2026 Season World Championship/Main Event/Top Esports/Tian","hash":"182de5a2ca85bcb7","importRun":"worlds-2026-20261022T010857Z","status":"provisional"},
     {"key":"roster:team:top-esports/player:xiaobai/coach","provider":"leaguepedia","ref":"2026 Season World Championship/Main Event/Top Esports/Xiaobai","hash":"ee5898ab104fa3e7","importRun":"worlds-2026-20261026T005632Z","status":"provisional"},
     {"key":"roster:team:top-esports/player:zhuo/support","provider":"leaguepedia","ref":"2026 Season World Championship/Main Event/Top Esports/Zhuo","hash":"c5cedf237e7fa14a","importRun":"worlds-2026-20261022T010857Z","status":"provisional"},
-    {"key":"series:ser:worlds-2026-knockout-quarterfinals-01","provider":"leaguepedia","ref":"2026 Season World Championship/Main Event_Quarterfinals_1","hash":"1e8b1f2ff51199b3","importRun":"worlds-2026-20261103T171427Z","status":"provisional"},
+    {"key":"series:ser:worlds-2026-knockout-quarterfinals-01","provider":"leaguepedia","ref":"2026 Season World Championship/Main Event_Quarterfinals_1","hash":"7a26b8cc5d038a23","importRun":"worlds-2026-20261104T005018Z","status":"provisional"},
     {"key":"series:ser:worlds-2026-knockout-quarterfinals-02","provider":"leaguepedia","ref":"2026 Season World Championship/Main Event_Quarterfinals_2","hash":"055cc63b7c34ab30","importRun":"worlds-2026-20261103T171427Z","status":"provisional"},
     {"key":"series:ser:worlds-2026-knockout-quarterfinals-03","provider":"leaguepedia","ref":"2026 Season World Championship/Main Event_Quarterfinals_3","hash":"d86f3bfe20eec78e","importRun":"worlds-2026-20261103T171427Z","status":"provisional"},
     {"key":"series:ser:worlds-2026-knockout-quarterfinals-04","provider":"leaguepedia","ref":"2026 Season World Championship/Main Event_Quarterfinals_4","hash":"ac0aa7383a53b40c","importRun":"worlds-2026-20261103T171427Z","status":"provisional"},
