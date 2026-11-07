@@ -1,0 +1,49 @@
+{
+  "run": "worlds-2026-20261107T004820Z",
+  "at": "2026-11-07T00:48:20.274469+00:00",
+  "operation": "refresh",
+  "force": false,
+  "summary": {
+    "edition": "worlds-2026",
+    "operation": "refresh",
+    "provider": "leaguepedia",
+    "snapshotSha256": "0728d2f27096b36e96083abfb37b58ad7bdc53e294c265157348a27f41329594",
+    "filesChanged": true,
+    "counts": {
+      "edition": {},
+      "series": {
+        "modified": 4,
+        "added": 1
+      },
+      "game": {
+        "added": 10
+      },
+      "stats": {
+        "added": 100
+      },
+      "roster": {
+        "blocked": 2
+      },
+      "placement": {
+        "added": 3
+      }
+    },
+    "unchanged": 1003,
+    "blocked": [
+      {
+        "key": "roster:team:anyone-s-legend/player:despa1r/coach",
+        "kind": "removed",
+        "reason": "no longer returned by provider"
+      },
+      {
+        "key": "roster:team:bilibili-gaming/player:flandre/top",
+        "kind": "removed",
+        "reason": "no longer returned by provider"
+      }
+    ],
+    "errors": [],
+    "warnings": 2,
+    "gaps": 3,
+    "newEntities": []
+  }
+}
